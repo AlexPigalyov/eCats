@@ -178,21 +178,6 @@ class LoginBodyWidget extends Center {
           ),
         ),
         Container(
-          height: 30,
-          alignment: Alignment.centerLeft,
-          child: MaterialButton(
-            child: Text(
-              "Resend email confirmation",
-              style: TextStyle(
-                fontFamily: 'Nunito',
-                fontSize: 12.6,
-                color: HexColor.fromHex('#6C757D'),
-              ),
-            ),
-            onPressed: () {},
-          ),
-        ),
-        Container(
           alignment: Alignment.centerLeft,
           margin: const EdgeInsets.only(left: 15, top: 15),
           child: Text(
