@@ -23,6 +23,7 @@ dev_dependencies:
 
 flutter:
   assets:
+    - assets/
     - assets/logo.png
     - assets/google.png
     - assets/facebook.png
