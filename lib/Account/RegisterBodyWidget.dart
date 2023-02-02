@@ -166,7 +166,7 @@ class RegisterBodyWidget extends Center {
         ),
         Container(
           alignment: Alignment.centerLeft,
-          margin: const EdgeInsets.only(left: 15, top: 15),
+          margin: const EdgeInsets.only(left: 15, top: 15, right: 15),
           child: Text(
             "Use another service to register.",
             style: TextStyle(
@@ -183,66 +183,89 @@ class RegisterBodyWidget extends Center {
         ),
         Row(
           children: [
-            Container(
-              padding: const EdgeInsets.only(left: 12),
-              alignment: FractionalOffset.centerLeft,
-              width: 195,
-              height: 35,
-              child: OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  side: const BorderSide(width: 1, color: Colors.black),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(right: 10),
-                      child: const Image(
-                        image: AssetImage('assets/google.png'),
-                        width: 20,
-                        height: 50,
+            Flexible(
+              flex: 1,
+              fit: FlexFit.tight,
+              child: Container(
+                padding: const EdgeInsets.only(left: 12),
+                alignment: FractionalOffset.centerLeft,
+                width: 195,
+                height: 35,
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(width: 1, color: Colors.black),
+                  ),
+                  child: Row(
+                    children: [
+                      Flexible(
+                        flex: 0,
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 10),
+                          child: const Image(
+                            image: AssetImage('assets/google.png'),
+                            width: 20,
+                            height: 50,
+                          ),
+                        ),
                       ),
-                    ),
-                    Text(
-                      "Register with Google",
-                      style: TextStyle(
-                        color: HexColor.fromHex('#6C757D'),
-                        fontFamily: 'Nunito',
-                        fontSize: 12.6,
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          "Register with Google",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: HexColor.fromHex('#6C757D'),
+                            fontFamily: 'Nunito',
+                            fontSize: 12.6,
+                          ),
+                        )
                       ),
-                    )
-                  ],
+
+                    ],
+                  ),
+                  onPressed: () {},
                 ),
-                onPressed: () {},
               ),
             ),
-            Container(
-              padding: const EdgeInsets.only(left: 12),
-              alignment: FractionalOffset.centerLeft,
-              width: 210,
-              height: 35,
-              child: MaterialButton(
-                color: HexColor.fromHex('#1976f2'),
-                child: Row(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(right: 10),
-                      child: const Image(
-                        image: AssetImage('assets/facebook.png'),
-                        width: 20,
-                        height: 50,
+            Flexible(
+              flex: 1,
+              fit: FlexFit.tight,
+              child: Container(
+                padding: const EdgeInsets.only(left: 12, right: 12),
+                alignment: FractionalOffset.centerLeft,
+                width: 210,
+                height: 35,
+                child: MaterialButton(
+                  color: HexColor.fromHex('#1976f2'),
+                  child: Row(
+                    children: [
+                      Flexible(
+                        flex: 0,
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 10),
+                          child: const Image(
+                            image: AssetImage('assets/facebook.png'),
+                            width: 20,
+                            height: 50,
+                          ),
+                        ),
                       ),
-                    ),
-                    const Text(
-                      "Register with Facebook",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Nunito',
-                        fontSize: 12.6,
-                      ),
-                    )
-                  ],
+                      const Expanded(
+                        flex: 1,
+                        child: Text(
+                          "Register with Facebook",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Nunito',
+                            fontSize: 12.6,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  onPressed: () {},
                 ),
-                onPressed: () {},
               ),
             ),
           ],
