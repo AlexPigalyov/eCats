@@ -1,5 +1,6 @@
 enum PageEnum {
   Loading,
   Login,
-  Register
+  Register,
+  Profile
 }

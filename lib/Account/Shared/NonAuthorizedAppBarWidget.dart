@@ -1,10 +1,11 @@
+import 'package:ecats/Models/Enums/AppBarEnum.dart';
 import 'package:flutter/material.dart';
 import '../../Extensions/HexColor.dart';
 import '../../Models/Enums/PageEnum.dart';
 
-class AppBarWidget extends AppBar {
-  final void Function(PageEnum) callback;
-  AppBarWidget({super.key, required this.callback}):super (
+class NonAuthorizedAppBarWidget extends AppBar {
+  final void Function(PageEnum, AppBarEnum) callback;
+  NonAuthorizedAppBarWidget({super.key, required this.callback}):super (
     toolbarHeight: 50,
     backgroundColor: Colors.white,
     foregroundColor: HexColor.fromHex('#8391a2'),
@@ -40,7 +41,7 @@ class AppBarWidget extends AppBar {
             ),
           ),
           onPressed: () {
-            callback(PageEnum.Login);
+            callback(PageEnum.Login, AppBarEnum.NonAuthorized);
           },
         )
       ),
@@ -57,7 +58,7 @@ class AppBarWidget extends AppBar {
             ),
           ),
           onPressed: () {
-            callback(PageEnum.Register);
+            callback(PageEnum.Register, AppBarEnum.NonAuthorized);
           },
         )
       )

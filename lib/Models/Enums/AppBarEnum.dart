@@ -1,0 +1,4 @@
+enum AppBarEnum {
+  Authorized,
+  NonAuthorized
+}

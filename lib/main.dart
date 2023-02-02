@@ -1,7 +1,10 @@
 import 'package:ecats/Account/LoadingBodyWidget.dart';
 import 'package:ecats/Account/LoginBodyWidget.dart';
+import 'package:ecats/Account/ProfileBodyWidget.dart';
 import 'package:ecats/Account/RegisterBodyWidget.dart';
-import 'package:ecats/Account/Shared/AppBarWidget.dart';
+import 'package:ecats/Account/Shared/AuthorizedAppBarWidget.dart';
+import 'package:ecats/Account/Shared/NonAuthorizedAppBarWidget.dart';
+import 'package:ecats/Models/Enums/AppBarEnum.dart';
 import 'package:ecats/Models/Enums/PageEnum.dart';
 import 'package:flutter/material.dart';
 
@@ -17,14 +20,19 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Center currentBodyWidget = const Center();
+  late Widget currentBodyWidget;
+  late AppBar currentAppBarWidget;
   bool _isLoading = true;
+  bool _isAuthorized = false;
 
-  Map bodys = <PageEnum, Center>{
+  Map bodys = <PageEnum, Widget>{
     PageEnum.Loading: LoadingBodyWidget(),
-    PageEnum.Login: LoginBodyWidget(),
-    PageEnum.Register: RegisterBodyWidget()
+    PageEnum.Login: const LoginBodyWidget(),
+    PageEnum.Register: const RegisterBodyWidget(),
+    PageEnum.Profile: const ProfileBodyWidget()
   };
+
+  late Map<AppBarEnum, AppBar> appBars;
 
   @override
   void initState() {
@@ -39,6 +47,7 @@ class _MyAppState extends State<MyApp> {
     });
 
     //Fetch some data
+    //_isAuthorized = false/true
     await Future.delayed(const Duration(seconds: 3));
 
     setState(() {
@@ -47,24 +56,32 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void changeAppBody(PageEnum pageEnum, AppBarEnum appBarEnum)
+  {
+    setState(() {
+      currentBodyWidget = bodys[pageEnum];
+      currentAppBarWidget = appBars[appBarEnum]!;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    void changeAppBody(PageEnum pageEnum)
-    {
-      setState(() {
-        currentBodyWidget = bodys[pageEnum];
-      });
-    }
+    appBars = <AppBarEnum, AppBar>{
+      AppBarEnum.Authorized: AuthorizedAppBarWidget(callback: changeAppBody),
+      AppBarEnum.NonAuthorized: NonAuthorizedAppBarWidget(callback: changeAppBody)
+    };
 
-    AppBar appBarWidget = AppBarWidget(callback: changeAppBody);
+    currentAppBarWidget = (_isAuthorized ?
+        appBars[AppBarEnum.Authorized] :
+        appBars[AppBarEnum.NonAuthorized])!;
 
     return MaterialApp(
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: _isLoading 
+        home: _isLoading
             ? Scaffold(body: currentBodyWidget)
-            : Scaffold(appBar: appBarWidget, body: currentBodyWidget)
+            : Scaffold(appBar: currentAppBarWidget, body: currentBodyWidget)
     );
   }
 

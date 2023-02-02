@@ -1,10 +1,46 @@
-import 'package:ecats/Account/Shared/AppBarWidget.dart';
+import 'package:ecats/Models/LoginModel.dart';
 import 'package:flutter/material.dart';
 import '../Extensions/HexColor.dart';
 
-class LoginBodyWidget extends Center {
-  LoginBodyWidget({super.key, rememberMe = false}):super(
-    child: Column(
+import 'package:http/http.dart' as http;
+
+class LoginBodyWidget extends StatefulWidget {
+  const LoginBodyWidget({super.key});
+
+  @override
+  State<LoginBodyWidget> createState() => _LoginBodyWidgetState();
+}
+
+class _LoginBodyWidgetState extends State<LoginBodyWidget> {
+
+  LoginModel model = LoginModel.createDefault();
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  void onLogInButtonPressed() async {
+    if(emailController.text.trim().isNotEmpty && passwordController.text.trim().isNotEmpty) {
+
+      model = LoginModel(
+          email: emailController.text,
+          password: passwordController.text,
+          rememberMe: model.rememberMe);
+
+      var url = Uri.http('ecats.online', 'Login');
+      var response = await http.post(url, body: model);
+    }
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Center build(BuildContext context) {
+    return Center(child: Column(
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 12, right: 12),
@@ -51,6 +87,7 @@ class LoginBodyWidget extends Center {
                 ),
               ),
               TextField(
+                controller: emailController,
                 style: TextStyle(
                     fontSize: 12.6,
                     color: HexColor.fromHex('#5c6369'),
@@ -84,6 +121,7 @@ class LoginBodyWidget extends Center {
                 ),
               ),
               TextField(
+                controller: passwordController,
                 obscureText: true,
                 autocorrect: false,
                 style: TextStyle(
@@ -124,9 +162,11 @@ class LoginBodyWidget extends Center {
                 width: 0.5,
                 strokeAlign: 1
             ),
-            value: rememberMe,
+            value: model.rememberMe,
             onChanged: (bool? newValue) {
-              rememberMe = newValue ?? false;
+              setState(() {
+                model.rememberMe = newValue ?? false;
+              });
             }
         ),
         Container(
@@ -135,6 +175,7 @@ class LoginBodyWidget extends Center {
           child: MaterialButton(
             color: HexColor.fromHex('#1b6ec2'),
             height: 35,
+            onPressed: onLogInButtonPressed,
             child: const Text(
               "Log in",
               style: TextStyle(
@@ -143,7 +184,6 @@ class LoginBodyWidget extends Center {
                 fontSize: 12.6,
               ),
             ),
-            onPressed: () {},
           ),
         ),
         Container(
@@ -197,47 +237,47 @@ class LoginBodyWidget extends Center {
         Row(
           children: [
             Flexible(
-              flex: 1,
-              fit: FlexFit.tight,
-              child: Container(
-                padding: const EdgeInsets.only(left: 12),
-                alignment: FractionalOffset.centerLeft,
-                width: 185,
-                height: 35,
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(width: 1, color: Colors.black),
-                  ),
-                  child: Row(
-                    children: [
-                      Flexible(
-                        flex: 0,
-                        child: Container(
-                          margin: const EdgeInsets.only(right: 10),
-                          child: const Image(
-                            image: AssetImage('assets/google.png'),
-                            width: 20,
-                            height: 50,
+                flex: 1,
+                fit: FlexFit.tight,
+                child: Container(
+                  padding: const EdgeInsets.only(left: 12),
+                  alignment: FractionalOffset.centerLeft,
+                  width: 185,
+                  height: 35,
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(width: 1, color: Colors.black),
+                    ),
+                    child: Row(
+                      children: [
+                        Flexible(
+                          flex: 0,
+                          child: Container(
+                            margin: const EdgeInsets.only(right: 10),
+                            child: const Image(
+                              image: AssetImage('assets/google.png'),
+                              width: 20,
+                              height: 50,
+                            ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          "Log in with Google",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: HexColor.fromHex('#6C757D'),
-                            fontFamily: 'Nunito',
-                            fontSize: 12.6,
-                          ),
+                        Expanded(
+                            flex: 1,
+                            child: Text(
+                              "Log in with Google",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: HexColor.fromHex('#6C757D'),
+                                fontFamily: 'Nunito',
+                                fontSize: 12.6,
+                              ),
+                            )
                         )
-                      )
-                    ],
+                      ],
+                    ),
+                    onPressed: () {},
                   ),
-                  onPressed: () {},
-                ),
-              )
+                )
             ),
             Flexible(
               flex: 1,
@@ -263,16 +303,16 @@ class LoginBodyWidget extends Center {
                         ),
                       ),
                       const Expanded(
-                        flex: 1,
-                        child: Text(
-                          "Log in with Facebook",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Nunito',
-                            fontSize: 12.6,
-                          ),
-                        )
+                          flex: 1,
+                          child: Text(
+                            "Log in with Facebook",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Nunito',
+                              fontSize: 12.6,
+                            ),
+                          )
                       )
                     ],
                   ),
@@ -283,8 +323,9 @@ class LoginBodyWidget extends Center {
           ],
         )
       ],
-    ),
-  );
+    ));
+  }
+
 }
 
 
