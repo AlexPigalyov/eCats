@@ -1,3 +1,4 @@
+import 'package:ecats/Account/LoadingBodyWidget.dart';
 import 'package:ecats/Account/LoginBodyWidget.dart';
 import 'package:ecats/Account/RegisterBodyWidget.dart';
 import 'package:ecats/Account/Shared/AppBarWidget.dart';
@@ -16,14 +17,42 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  PageEnum currentBodyWidget = PageEnum.Login;
+  Center currentBodyWidget = const Center();
+  bool _isLoading = true;
+
+  Map bodys = <PageEnum, Center>{
+    PageEnum.Loading: LoadingBodyWidget(),
+    PageEnum.Login: LoginBodyWidget(),
+    PageEnum.Register: RegisterBodyWidget()
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    dataLoadFunction();
+  }
+
+  dataLoadFunction() async {
+    setState(() {
+      _isLoading = true;
+      currentBodyWidget = bodys[PageEnum.Loading];
+    });
+
+    //Fetch some data
+    await Future.delayed(const Duration(seconds: 3));
+
+    setState(() {
+      _isLoading = false;
+      currentBodyWidget = bodys[PageEnum.Login];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     void changeAppBody(PageEnum pageEnum)
     {
       setState(() {
-        currentBodyWidget = pageEnum;
+        currentBodyWidget = bodys[pageEnum];
       });
     }
 
@@ -33,10 +62,9 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: Scaffold(
-          appBar: appBarWidget,
-          body: currentBodyWidget == PageEnum.Login ? LoginBodyWidget() : RegisterBodyWidget(),
-        )
+        home: _isLoading 
+            ? Scaffold(body: currentBodyWidget)
+            : Scaffold(appBar: appBarWidget, body: currentBodyWidget)
     );
   }
 
