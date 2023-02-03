@@ -1,21 +1,19 @@
-import 'package:ecats/Models/Enums/AppBarEnum.dart';
 import 'package:flutter/material.dart';
-import '../../Extensions/HexColor.dart';
-import '../../Models/Enums/PageEnum.dart';
+import 'package:ecats/models/enums/app_bar_enum.dart';
+
+
+import '../../extensions/hex_color.dart';
+import '../../models/enums/page_enum.dart';
 
 class NonAuthorizedAppBarWidget extends AppBar {
-  final void Function(PageEnum, AppBarEnum) callback;
-  NonAuthorizedAppBarWidget({super.key, required this.callback}):super (
+  final void Function(PageEnum, AppBarEnum) screenCallback;
+  NonAuthorizedAppBarWidget({super.key, required this.screenCallback}):super (
     toolbarHeight: 50,
     backgroundColor: Colors.white,
     foregroundColor: HexColor.fromHex('#8391a2'),
-    title: Flexible(
-      flex: 0,
-      fit: FlexFit.loose,
-      child: SizedBox(
-        width: 50,
-        child: Image.asset('assets/logo.png', fit: BoxFit.contain, height: 32,)
-      ),
+    title: SizedBox(
+      width: 50,
+      child: Image.asset('assets/logo.png', fit: BoxFit.contain, height: 32,)
     ),
     actions: <Widget>[
       Flexible(
@@ -41,7 +39,7 @@ class NonAuthorizedAppBarWidget extends AppBar {
             ),
           ),
           onPressed: () {
-            callback(PageEnum.Login, AppBarEnum.NonAuthorized);
+            screenCallback(PageEnum.Login, AppBarEnum.NonAuthorized);
           },
         )
       ),
@@ -58,7 +56,7 @@ class NonAuthorizedAppBarWidget extends AppBar {
             ),
           ),
           onPressed: () {
-            callback(PageEnum.Register, AppBarEnum.NonAuthorized);
+            screenCallback(PageEnum.Register, AppBarEnum.NonAuthorized);
           },
         )
       )

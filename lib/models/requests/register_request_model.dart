@@ -1,12 +1,24 @@
+import 'package:ecats/models/requests/request_model.dart';
 import 'package:flutter_model_form_validation/flutter_model_form_validation.dart';
 
-class RegisterModel {
-  RegisterModel({
+class RegisterRequestModel implements RequestModel {
+  RegisterRequestModel({
     required this.email,
     required this.password,
-    required this.passwordConfirm
+    required this.confirmPassword,
+    this.refId
   });
 
+  @override
+  Map<String, dynamic> toJson() =>
+  {
+    'email': email,
+    'password': password,
+    'confirmPassword': confirmPassword,
+    'refId': refId
+  };
+  /*
+  For next patches
   @Required(error: 'Email is required.')
   @Email(error: 'Email should contains domain.')
   String email;
@@ -18,4 +30,9 @@ class RegisterModel {
   @Required(error: 'Confirm password is required.')
   @EqualToString(valueToCompareOnProperty: 'password', error: 'The password and confirmation password do not match.')
   String passwordConfirm;
+  */
+  String email;
+  String password;
+  String confirmPassword;
+  int? refId;
 }

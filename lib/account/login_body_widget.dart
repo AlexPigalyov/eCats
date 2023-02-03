@@ -1,19 +1,30 @@
-import 'package:ecats/Models/LoginModel.dart';
-import 'package:flutter/material.dart';
-import '../Extensions/HexColor.dart';
+import 'dart:convert';
 
-import 'package:http/http.dart' as http;
+import 'package:ecats/services/http_service.dart';
+import 'package:flutter/material.dart';
+import 'package:ecats/models/requests/login_request_model.dart';
+import 'package:ecats/models/enums/page_enum.dart';
+import 'package:ecats/models/enums/app_bar_enum.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import '../extensions/hex_color.dart';
+
+import 'package:ecats/assets/constants.dart' as Constants;
 
 class LoginBodyWidget extends StatefulWidget {
-  const LoginBodyWidget({super.key});
+  final void Function(PageEnum, AppBarEnum) screenCallback;
+
+  const LoginBodyWidget({super.key, required this.screenCallback});
 
   @override
   State<LoginBodyWidget> createState() => _LoginBodyWidgetState();
 }
 
 class _LoginBodyWidgetState extends State<LoginBodyWidget> {
+  final _storage = const FlutterSecureStorage();
+  final _httpService = HttpService();
 
-  LoginModel model = LoginModel.createDefault();
+  LoginRequestModel model = LoginRequestModel.createDefault();
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -21,13 +32,20 @@ class _LoginBodyWidgetState extends State<LoginBodyWidget> {
   void onLogInButtonPressed() async {
     if(emailController.text.trim().isNotEmpty && passwordController.text.trim().isNotEmpty) {
 
-      model = LoginModel(
-          email: emailController.text,
+      model = LoginRequestModel(
+          login: emailController.text,
           password: passwordController.text,
           rememberMe: model.rememberMe);
 
-      var url = Uri.http('ecats.online', 'Login');
-      var response = await http.post(url, body: model);
+      var uri = Uri.https(Constants.SERVER_URL, Constants.ServerApiEndpoints.LOGIN);
+
+      var response = await _httpService.post(uri, model);
+
+      if(response.statusCode == 200) {
+        await _storage.write(key: 'token', value: await response.stream.bytesToString());
+
+        widget.screenCallback(PageEnum.Profile, AppBarEnum.Authorized);
+      }
     }
   }
 

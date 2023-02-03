@@ -1,28 +1,24 @@
-import 'package:ecats/Extensions/HexColor.dart';
-import 'package:ecats/Models/Enums/AppBarEnum.dart';
-import 'package:ecats/Models/Enums/PageEnum.dart';
 import 'package:flutter/material.dart';
+import 'package:ecats/extensions/hex_color.dart';
+import 'package:ecats/models/enums/page_enum.dart';
+import 'package:ecats/models/enums/app_bar_enum.dart';
 
 class AuthorizedAppBarWidget extends AppBar {
-  final void Function(PageEnum, AppBarEnum) callback;
-  AuthorizedAppBarWidget({super.key, required this.callback}):super (
+  final void Function(PageEnum, AppBarEnum) screenCallback;
+  AuthorizedAppBarWidget({super.key, required this.screenCallback}):super (
     toolbarHeight: 50,
     backgroundColor: Colors.white,
     foregroundColor: HexColor.fromHex('#8391a2'),
-    title: Flexible(
-      flex: 2,
-      fit: FlexFit.loose,
-      child: Container(
-        width: 40,
-        alignment: FractionalOffset.centerLeft,
-        child: IconButton(
-          icon: const Icon(
-            Icons.list,
-            color: Colors.black,
-            size: 24.0
-          ),
-          onPressed: () {},
-        )
+    title: Container(
+      width: 40,
+      alignment: FractionalOffset.centerLeft,
+      child: IconButton(
+        icon: const Icon(
+          Icons.list,
+          color: Colors.black,
+          size: 24.0
+        ),
+        onPressed: () {},
       )
     ),
     actions: [

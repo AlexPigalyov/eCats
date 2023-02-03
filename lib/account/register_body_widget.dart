@@ -1,39 +1,64 @@
-import 'package:ecats/Models/RegisterModel.dart';
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
+
+import 'package:ecats/services/http_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:ecats/models/enums/page_enum.dart';
+import 'package:ecats/models/enums/app_bar_enum.dart';
+import 'package:ecats/models/requests/register_request_model.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_model_form_validation/flutter_model_form_validation.dart';
 
-import '../Extensions/HexColor.dart';
+import 'package:ecats/assets/constants.dart' as Constants;
 
-import 'package:http/http.dart' as http;
+import '../Extensions/hex_color.dart';
 
 class RegisterBodyWidget extends StatefulWidget {
-  const RegisterBodyWidget({super.key});
+  final void Function(PageEnum, AppBarEnum) screenCallback;
+
+  const RegisterBodyWidget({super.key, required this.screenCallback});
 
   @override
   State<RegisterBodyWidget> createState() => _RegisterBodyWidgetState();
 }
 
 class _RegisterBodyWidgetState extends State<RegisterBodyWidget> {
+  final _storage = const FlutterSecureStorage();
+  final _httpService = HttpService();
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController passwordConfirmController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController refIdController = TextEditingController();
 
-  late RegisterModel model;
+  late RegisterRequestModel model;
 
   @override
   Center build(BuildContext context) {
     void onRegisterButtonPressed() async {
+      model = RegisterRequestModel(
+        email: emailController.text,
+        password: passwordController.text,
+        confirmPassword: confirmPasswordController.text,
+        refId: int.parse(refIdController.text)
+      );
 
-      model = RegisterModel(
-          email: emailController.text,
-          password: passwordController.text,
-          passwordConfirm: passwordConfirmController.text);
+      var uri = Uri.https(Constants.SERVER_URL, Constants.ServerApiEndpoints.REGISTER);
 
-      if(ModelState.isValid<RegisterModel>(model)) {
-        var url = Uri.http('ecats.online', 'Register');
-        var response = await http.post(url, body: model);
+      var response = await _httpService.post(uri, model);
+
+      if(response.statusCode == 200) {
+        await _storage.write(key: 'token', value: await response.stream.bytesToString());
+
+        widget.screenCallback(PageEnum.Profile, AppBarEnum.Authorized);
+      }
+
+      /*
+      validation template
+      for next patches
+      if(ModelState.isValid<RegisterRequestModel>(model)) {
+
       }
       else {
         showDialog<void>(
@@ -60,7 +85,7 @@ class _RegisterBodyWidgetState extends State<RegisterBodyWidget> {
             );
           }
         );
-      }
+      }*/
     }
 
     return Center(
@@ -181,9 +206,47 @@ class _RegisterBodyWidgetState extends State<RegisterBodyWidget> {
                   ),
                 ),
                 TextField(
-                  controller: passwordConfirmController,
+                  controller: confirmPasswordController,
                   obscureText: true,
                   autocorrect: false,
+                  style: TextStyle(
+                      fontSize: 12.6,
+                      color: HexColor.fromHex('#5c6369'),
+                      decorationThickness: 0),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    isDense: true,
+                    contentPadding: const EdgeInsets.all(9),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: HexColor.fromHex('#bdc0c4'), width: 1.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: HexColor.fromHex('#dee2e6'), width: 1.0),
+                    ),
+                  ),
+                  cursorColor: Colors.black,
+                  cursorWidth: 0.5,
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 15),
+                  alignment: FractionalOffset.centerLeft,
+                  child: Text(
+                    "Referal id",
+                    style: TextStyle(
+                        fontFamily: 'Nunito',
+                        fontSize: 12.6,
+                        color: HexColor.fromHex('#5c6369')),
+                  ),
+                ),
+                TextField(
+                  controller: refIdController,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
                   style: TextStyle(
                       fontSize: 12.6,
                       color: HexColor.fromHex('#5c6369'),
@@ -214,6 +277,7 @@ class _RegisterBodyWidgetState extends State<RegisterBodyWidget> {
             child: MaterialButton(
               color: HexColor.fromHex('#1b6ec2'),
               height: 35,
+              onPressed: onRegisterButtonPressed,
               child: const Text(
                 "Register",
                 style: TextStyle(
@@ -222,7 +286,6 @@ class _RegisterBodyWidgetState extends State<RegisterBodyWidget> {
                   fontSize: 12.6,
                 ),
               ),
-              onPressed: () {},
             ),
           ),
           Container(
