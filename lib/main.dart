@@ -26,29 +26,25 @@ class _MyAppState extends State<MyApp> {
   final _storage = const FlutterSecureStorage();
 
   late Widget currentBodyWidget;
-  late AppBar currentAppBarWidget;
+  late PreferredSizeWidget currentAppBarWidget;
 
   bool _isLoading = true;
   bool _isAuthorized = false;
 
   late Map<PageEnum, Widget> bodies;
-  late Map<AppBarEnum, AppBar> appBars;
+  late Map<AppBarEnum, PreferredSizeWidget> appBars;
 
   @override
   void initState() {
+    dataLoadFunction();
+
     super.initState();
     //Only while develop
     HttpOverrides.global = MyHttpOverrides();
-    dataLoadFunction();
   }
 
   dataLoadFunction() async {
     //Initialization AppBars and Bodies
-    appBars = <AppBarEnum, AppBar>{
-      AppBarEnum.Authorized: AuthorizedAppBarWidget(screenCallback: changeScreen),
-      AppBarEnum.NonAuthorized: NonAuthorizedAppBarWidget(screenCallback: changeScreen)
-    };
-
     bodies = <PageEnum, Widget>{
       PageEnum.Loading: LoadingBodyWidget(),
       PageEnum.Login: LoginBodyWidget(screenCallback: changeScreen),
@@ -56,9 +52,17 @@ class _MyAppState extends State<MyApp> {
       PageEnum.Profile: ProfileBodyWidget(screenCallback: changeScreen)
     };
 
+    appBars = <AppBarEnum, PreferredSizeWidget>{
+      AppBarEnum.Authorized: AuthorizedAppBarWidget(
+          screenCallback: changeScreen),
+      AppBarEnum.NonAuthorized: NonAuthorizedAppBarWidget(
+          screenCallback: changeScreen)
+    };
+
     //Fetch some data
-    await _storage.deleteAll();
+    //await _storage.deleteAll();
     var token = await _storage.read(key: 'token');
+
     setState(() => _isAuthorized = token == null ? false : true);
 
     await Future.delayed(const Duration(seconds: 3));
@@ -78,25 +82,25 @@ class _MyAppState extends State<MyApp> {
     )!;
   }
 
-
-  changeScreen(PageEnum pageEnum, AppBarEnum appBarEnum) => setState(() {
-      currentBodyWidget = bodies[pageEnum]!;
-      currentAppBarWidget = appBars[appBarEnum]!;
-    });
+  changeScreen(PageEnum pageEnum, AppBarEnum appBarEnum) =>
+      setState(() {
+        currentBodyWidget = bodies[pageEnum]!;
+        currentAppBarWidget = appBars[appBarEnum]!;
+      });
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: _isLoading
-            ? Scaffold(body: bodies[PageEnum.Loading])
-            : Scaffold(appBar: currentAppBarWidget, body: currentBodyWidget)
-    );
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: _isLoading
+          ? Scaffold(body: bodies[PageEnum.Loading])
+          : Scaffold(appBar: currentAppBarWidget, body: currentBodyWidget)
+    );   
   }
-
 }
+
 
 class MyHttpOverrides extends HttpOverrides{
   @override

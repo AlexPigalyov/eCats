@@ -1,7 +1,8 @@
 
 import 'package:decimal/decimal.dart';
+import 'package:ecats/models/requests/request_model.dart';
 
-class ProfileResponseModel {
+class ProfileRequestModel implements RequestModel {
   UserInfoTableModel userInfo;
   String username;
   List<EventTableModel>? lastFiveEvents;
@@ -11,7 +12,7 @@ class ProfileResponseModel {
   bool isMyProfile;
   String userNumber;
 
-  ProfileResponseModel({
+  ProfileRequestModel({
     required this.userInfo,
     required this.username,
     this.lastFiveEvents,
@@ -22,7 +23,7 @@ class ProfileResponseModel {
     required this.userNumber
   });
 
-  ProfileResponseModel.fromJson(Map<String, dynamic> json) :
+  ProfileRequestModel.fromJson(Map<String, dynamic> json) :
     userInfo = UserInfoTableModel.fromJson((json['userInfo'] as Map<String, dynamic>)),
     username = json['username'],
     lastFiveEvents = (json['lastFiveEvents'] as List<dynamic>)?.map((event) => EventTableModel.fromJson(event)).toList(),
@@ -31,7 +32,21 @@ class ProfileResponseModel {
     notEmptyWallets = (json['notEmptyWallets'] as List<Map<String, dynamic>>)?.map((wallet) => NotEmptyValueWalletModel.fromJson(wallet)).toList(),
     isMyProfile = json['isMyProfile'],
     userNumber = json['userNumber'];
+
+  @override
+  Map<String, dynamic> toJson() =>
+  {
+    'userInfo': userInfo.toJson(),
+    'username': username,
+    'lastFiveEvents': lastFiveEvents == null ? [] : lastFiveEvents?.map((e) => e.toJson()).toList(),
+    'email': email,
+    'phoneNumber': phoneNumber,
+    'notEmptyWallets': notEmptyWallets == null ? [] : notEmptyWallets?.map((e) => e.toJson()).toList(),
+    'isMyProfile': isMyProfile,
+    'userNumber': userNumber
+  };
 }
+
 
 class UserInfoTableModel {
   String? userId;
@@ -61,6 +76,22 @@ class UserInfoTableModel {
     githubLink = json['githubLink'],
     location = json['location'],
     registrationDate = json['registrationDate'];
+
+  Map<String, dynamic> toJson() =>
+  {
+    'userId': userId,
+    'profilePhotoPath': profilePhotoPath,
+    'fullName': fullName,
+    'aboutMe': aboutMe,
+    'refferalId': refferalId,
+    'facebookLink': facebookLink,
+    'instagramLink': instagramLink,
+    'skypeLink': skypeLink,
+    'twitterLink': twitterLink,
+    'githubLink': githubLink,
+    'location': location,
+    'registrationDate': registrationDate
+  };
 
   UserInfoTableModel({
     this.userId,
@@ -103,6 +134,20 @@ class EventTableModel {
     whenDate = json['whenDate'],
     currencyAccronim = json['currencyAccronim'];
 
+  Map<String, dynamic> toJson() =>
+  {
+    'id': id,
+    'userId': userId,
+    'type': type,
+    'value': value,
+    'startBalance': startBalance,
+    'resultBalance': resultBalance,
+    'platformCommission': platformCommission,
+    'comment': comment,
+    'whenDate': whenDate,
+    'currencyAccronim': currencyAccronim
+  };
+
   EventTableModel({
     required this.id,
     required this.userId,
@@ -126,6 +171,13 @@ class NotEmptyValueWalletModel {
     userId = json['userId'],
     currencyAcronim = json['currencyAcronim'],
     value = json['value'];
+
+  Map<String, dynamic> toJson() =>
+  {
+    'userId': userId,
+    'currencyAcronim': currencyAcronim,
+    'value': value
+  };
 
   NotEmptyValueWalletModel({
     required this.userId,

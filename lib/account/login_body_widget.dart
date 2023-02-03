@@ -13,8 +13,10 @@ import 'package:ecats/assets/constants.dart' as Constants;
 
 class LoginBodyWidget extends StatefulWidget {
   final void Function(PageEnum, AppBarEnum) screenCallback;
-
-  const LoginBodyWidget({super.key, required this.screenCallback});
+  const LoginBodyWidget({
+    super.key,
+    required this.screenCallback
+  });
 
   @override
   State<LoginBodyWidget> createState() => _LoginBodyWidgetState();
@@ -35,7 +37,7 @@ class _LoginBodyWidgetState extends State<LoginBodyWidget> {
       model = LoginRequestModel(
           login: emailController.text,
           password: passwordController.text,
-          rememberMe: model.rememberMe);
+          rememberMe: true);
 
       var uri = Uri.https(Constants.SERVER_URL, Constants.ServerApiEndpoints.LOGIN);
 
@@ -165,27 +167,6 @@ class _LoginBodyWidgetState extends State<LoginBodyWidget> {
               ),
             ],
           ),
-        ),
-        CheckboxListTile(
-            contentPadding: const EdgeInsets.only(left: 6),
-            controlAffinity: ListTileControlAffinity.leading,
-            title: Text(
-              "Remember me?",
-              style: TextStyle(
-                  fontFamily: 'Nunito',
-                  fontSize: 12.6,
-                  color: HexColor.fromHex('#5c6369')),
-            ),
-            side: const BorderSide(
-                width: 0.5,
-                strokeAlign: 1
-            ),
-            value: model.rememberMe,
-            onChanged: (bool? newValue) {
-              setState(() {
-                model.rememberMe = newValue ?? false;
-              });
-            }
         ),
         Container(
           padding: const EdgeInsets.only(left: 12),

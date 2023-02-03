@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:ecats/account/loading_body_widget.dart';
 import 'package:ecats/models/enums/app_bar_enum.dart';
 import 'package:ecats/models/enums/page_enum.dart';
-import 'package:ecats/models/responses/profile_response_model.dart';
+import 'package:ecats/models/requests/profile_request_model.dart';
 import 'package:ecats/services/http_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,20 +24,72 @@ class ProfileBodyWidget extends StatefulWidget {
 class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
   final _httpService = HttpService();
   bool isLoading = true;
-  late ProfileResponseModel model;
+  late ProfileRequestModel model;
+
+  late final TextEditingController usernameTextEditingController;
+  late final TextEditingController fullNameTextEditingController;
+  late final TextEditingController aboutMeTextEditingController;
+  late final TextEditingController faceBookTextEditingController;
+  late final TextEditingController twitterTextEditingController;
+  late final TextEditingController instagramTextEditingController;
+  late final TextEditingController linkedinTextEditingController;
+  late final TextEditingController skypeTextEditingController;
+  late final TextEditingController githubTextEditingController;
 
   @override
   void initState() {
     super.initState();
 
+    _updateData()
+      .then((x) {
+        setState(() {
+          usernameTextEditingController = TextEditingController(text: model.username);
+          fullNameTextEditingController = TextEditingController(text: model.userInfo.fullName);
+          aboutMeTextEditingController = TextEditingController(text: model.userInfo.aboutMe);
+          faceBookTextEditingController = TextEditingController(text: model.userInfo.facebookLink);
+          twitterTextEditingController = TextEditingController(text: model.userInfo.twitterLink);
+          instagramTextEditingController = TextEditingController(text: model.userInfo.instagramLink);
+          linkedinTextEditingController = TextEditingController(text: model.userInfo.linkedinLink);
+          skypeTextEditingController = TextEditingController(text: model.userInfo.skypeLink);
+          githubTextEditingController = TextEditingController(text: model.userInfo.githubLink);
+        });
+      });
+  }
+
+  void updateProfileData() async {
+    setState(() => isLoading = true);
+    var uri = Uri.https(Constants.SERVER_URL, Constants.ServerApiEndpoints.PROFILE_UPDATE);
+
+    model.username = usernameTextEditingController.text;
+    model.userInfo.fullName = fullNameTextEditingController.text;
+    model.userInfo.aboutMe = aboutMeTextEditingController.text;
+    model.userInfo.facebookLink = faceBookTextEditingController.text;
+    model.userInfo.twitterLink = twitterTextEditingController.text;
+    model.userInfo.instagramLink = instagramTextEditingController.text;
+    model.userInfo.linkedinLink = linkedinTextEditingController.text;
+    model.userInfo.skypeLink = skypeTextEditingController.text;
+    model.userInfo.githubLink = githubTextEditingController.text;
+    model.userInfo.profilePhotoPath = '';
+    model.userInfo.location = '';
+    model.userInfo.refferalId = '';
+    model.phoneNumber = '';
+
+    var response = await _httpService.post(uri, model);
+
+    await _updateData();
+    //TODO: else if error
+  }
+
+  Future _updateData() async {
+    setState(() => isLoading = true);
+
     var uri = Uri.https(Constants.SERVER_URL, Constants.ServerApiEndpoints.PROFILE);
-    _httpService.get(uri)
-        .then((response) => response.stream.bytesToString()
-        .then((value) {
-          model = ProfileResponseModel.fromJson(jsonDecode(value));
-          setState(() => isLoading = false);
-        }
-    ));
+    var response = await _httpService.get(uri);
+    var value = await response.stream.bytesToString();
+
+    model = ProfileRequestModel.fromJson(jsonDecode(value));
+
+    setState(() => isLoading = false);
   }
 
   @override
@@ -85,15 +137,17 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                           color: HexColor.fromHex('#6C757D'),
                                         ),
                                       ),
-                                      Text(
-                                        model.userNumber,
-                                        style: TextStyle(
-                                          fontFamily: 'Nunito',
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 13,
-                                          color: HexColor.fromHex('#98a6ad'),
-                                        ),
-                                      ),
+                                      Flexible(
+                                        child: Text(
+                                          model.userNumber,
+                                          style: TextStyle(
+                                            fontFamily: 'Nunito',
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 13,
+                                            color: HexColor.fromHex('#98a6ad'),
+                                          ),
+                                        )
+                                      )
                                     ],
                                   ),
                                   Row(
@@ -108,14 +162,16 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                           color: HexColor.fromHex('#6C757D'),
                                         ),
                                       ),
-                                      Text(
-                                        "https://ecats.online/Register?refid=${model.userNumber}",
-                                        style: TextStyle(
-                                          fontFamily: 'Nunito',
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 13,
-                                          color: HexColor.fromHex('#98a6ad'),
-                                        ),
+                                      Flexible(
+                                        child: Text(
+                                          "https://ecats.online/Register?refid=${model.userNumber}",
+                                          style: TextStyle(
+                                            fontFamily: 'Nunito',
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 13,
+                                            color: HexColor.fromHex('#98a6ad'),
+                                          ),
+                                        )
                                       ),
                                       IconButton(
                                         icon: const Icon(
@@ -138,15 +194,17 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                           color: HexColor.fromHex('#6C757D'),
                                         ),
                                       ),
-                                      Text(
-                                        model.userInfo.fullName ?? "Undefined",
-                                        style: TextStyle(
-                                          fontFamily: 'Nunito',
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 13,
-                                          color: HexColor.fromHex('#98a6ad'),
-                                        ),
-                                      )
+                                      Flexible(
+                                        child: Text(
+                                          model.userInfo.fullName ?? "Undefined",
+                                          style: TextStyle(
+                                            fontFamily: 'Nunito',
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 13,
+                                            color: HexColor.fromHex('#98a6ad'),
+                                          ),
+                                        )
+                                      ),
                                     ],
                                   ),
                                   Row(
@@ -162,14 +220,16 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                           color: HexColor.fromHex('#6C757D'),
                                         ),
                                       ),
-                                      Text(
-                                        model.email,
-                                        style: TextStyle(
-                                          fontFamily: 'Nunito',
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 13,
-                                          color: HexColor.fromHex('#98a6ad'),
-                                        ),
+                                      Flexible(
+                                        child: Text(
+                                          model.email,
+                                          style: TextStyle(
+                                            fontFamily: 'Nunito',
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 13,
+                                            color: HexColor.fromHex('#98a6ad'),
+                                          ),
+                                        )
                                       )
                                     ],
                                   ),
@@ -186,15 +246,17 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                           color: HexColor.fromHex('#6C757D'),
                                         ),
                                       ),
-                                      Text(
-                                        model.userInfo.location ?? "Not selected",
-                                        style: TextStyle(
-                                          fontFamily: 'Nunito',
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 13,
-                                          color: HexColor.fromHex('#98a6ad'),
+                                      Flexible(
+                                        child: Text(
+                                          model.userInfo.location ?? "Not selected",
+                                          style: TextStyle(
+                                            fontFamily: 'Nunito',
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 13,
+                                            color: HexColor.fromHex('#98a6ad'),
+                                          ),
                                         ),
-                                      ),
+                                      )
                                     ],
                                   ),
                                   Container(margin: const EdgeInsets.only(top: 10)),
@@ -322,7 +384,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                   )
                                 ),
                                 TextFormField(
-                                  initialValue: model.username,
+                                  controller: usernameTextEditingController,
                                   style: TextStyle(
                                     fontSize: 12.6,
                                     color: HexColor.fromHex('#5c6369'),
@@ -365,7 +427,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                     )
                                 ),
                                 TextFormField(
-                                  initialValue: model.userInfo.fullName,
+                                  controller: fullNameTextEditingController,
                                   style: TextStyle(
                                       fontSize: 12.6,
                                       color: HexColor.fromHex('#5c6369'),
@@ -408,7 +470,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                     )
                                 ),
                                 TextFormField(
-                                  initialValue: model.userInfo.aboutMe,
+                                  controller: aboutMeTextEditingController,
                                   maxLines: 7,
                                   style: TextStyle(
                                       fontSize: 12.6,
@@ -476,7 +538,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                     )
                                 ),
                                 TextFormField(
-                                  initialValue: model.userInfo.facebookLink,
+                                  controller: faceBookTextEditingController,
                                   style: TextStyle(
                                       fontSize: 12.6,
                                       color: HexColor.fromHex('#5c6369'),
@@ -528,7 +590,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                     )
                                 ),
                                 TextFormField(
-                                  initialValue: model.userInfo.twitterLink,
+                                  controller: twitterTextEditingController,
                                   style: TextStyle(
                                       fontSize: 12.6,
                                       color: HexColor.fromHex('#5c6369'),
@@ -571,7 +633,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                     )
                                 ),
                                 TextFormField(
-                                  initialValue: model.userInfo.instagramLink,
+                                  controller: instagramTextEditingController,
                                   style: TextStyle(
                                       fontSize: 12.6,
                                       color: HexColor.fromHex('#5c6369'),
@@ -604,7 +666,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                     margin: const EdgeInsets.only(top: 20, bottom: 5),
                                     alignment: FractionalOffset.centerLeft,
                                     child: Text(
-                                      "Linkdin",
+                                      "Linkedin",
                                       style: TextStyle(
                                         fontFamily: 'Nunito',
                                         fontWeight: FontWeight.w600,
@@ -614,7 +676,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                     )
                                 ),
                                 TextFormField(
-                                  initialValue: model.userInfo.linkedinLink,
+                                  controller: linkedinTextEditingController,
                                   style: TextStyle(
                                       fontSize: 12.6,
                                       color: HexColor.fromHex('#5c6369'),
@@ -657,7 +719,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                     )
                                 ),
                                 TextFormField(
-                                  initialValue: model.userInfo.skypeLink,
+                                  controller: skypeTextEditingController,
                                   style: TextStyle(
                                       fontSize: 12.6,
                                       color: HexColor.fromHex('#5c6369'),
@@ -700,7 +762,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                     )
                                 ),
                                 TextFormField(
-                                  initialValue: model.userInfo.githubLink,
+                                  controller: githubTextEditingController,
                                   style: TextStyle(
                                       fontSize: 12.6,
                                       color: HexColor.fromHex('#5c6369'),
@@ -728,6 +790,23 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                   ),
                                   cursorColor: Colors.black,
                                   cursorWidth: 0.5,
+                                ),
+                                Container(margin: const EdgeInsets.only(bottom: 20)),
+                                Container(
+                                  alignment: FractionalOffset.centerLeft,
+                                  child: MaterialButton(
+                                    color: HexColor.fromHex('#1b6ec2'),
+                                    height: 35,
+                                    onPressed: updateProfileData,
+                                    child: const Text(
+                                      "Save",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Nunito',
+                                        fontSize: 12.6,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                                 Container(margin: const EdgeInsets.only(bottom: 20)),
                               ],

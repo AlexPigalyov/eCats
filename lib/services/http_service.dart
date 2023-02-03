@@ -30,7 +30,8 @@ class HttpService {
     var request = http.Request(method, uri);
 
     request.headers.addAll(<String, String>{
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
     });
 
     if(token != null && isApiUrl) {

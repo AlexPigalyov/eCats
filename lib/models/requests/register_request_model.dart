@@ -1,5 +1,4 @@
 import 'package:ecats/models/requests/request_model.dart';
-import 'package:flutter_model_form_validation/flutter_model_form_validation.dart';
 
 class RegisterRequestModel implements RequestModel {
   RegisterRequestModel({
