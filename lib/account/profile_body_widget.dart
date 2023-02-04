@@ -1,21 +1,19 @@
 import 'dart:convert';
 
 import 'package:ecats/account/loading_body_widget.dart';
+import 'package:ecats/assets/constants.dart' as Constants;
+import 'package:ecats/extensions/hex_color.dart';
 import 'package:ecats/models/enums/app_bar_enum.dart';
 import 'package:ecats/models/enums/page_enum.dart';
 import 'package:ecats/models/requests/profile_request_model.dart';
 import 'package:ecats/services/http_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:ecats/extensions/hex_color.dart';
-
-import 'package:ecats/assets/constants.dart' as Constants;
+import 'package:flutter/services.dart';
 
 class ProfileBodyWidget extends StatefulWidget {
   final void Function(PageEnum, AppBarEnum) screenCallback;
 
-  const ProfileBodyWidget({
-    super.key, required this.screenCallback});
+  const ProfileBodyWidget({super.key, required this.screenCallback});
 
   @override
   State<ProfileBodyWidget> createState() => _ProfileBodyWidgetState();
@@ -40,25 +38,34 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
   void initState() {
     super.initState();
 
-    _updateData()
-      .then((x) {
-        setState(() {
-          usernameTextEditingController = TextEditingController(text: model.username);
-          fullNameTextEditingController = TextEditingController(text: model.userInfo.fullName);
-          aboutMeTextEditingController = TextEditingController(text: model.userInfo.aboutMe);
-          faceBookTextEditingController = TextEditingController(text: model.userInfo.facebookLink);
-          twitterTextEditingController = TextEditingController(text: model.userInfo.twitterLink);
-          instagramTextEditingController = TextEditingController(text: model.userInfo.instagramLink);
-          linkedinTextEditingController = TextEditingController(text: model.userInfo.linkedinLink);
-          skypeTextEditingController = TextEditingController(text: model.userInfo.skypeLink);
-          githubTextEditingController = TextEditingController(text: model.userInfo.githubLink);
-        });
+    _updateData().then((x) {
+      setState(() {
+        usernameTextEditingController =
+            TextEditingController(text: model.username);
+        fullNameTextEditingController =
+            TextEditingController(text: model.userInfo.fullName);
+        aboutMeTextEditingController =
+            TextEditingController(text: model.userInfo.aboutMe);
+        faceBookTextEditingController =
+            TextEditingController(text: model.userInfo.facebookLink);
+        twitterTextEditingController =
+            TextEditingController(text: model.userInfo.twitterLink);
+        instagramTextEditingController =
+            TextEditingController(text: model.userInfo.instagramLink);
+        linkedinTextEditingController =
+            TextEditingController(text: model.userInfo.linkedinLink);
+        skypeTextEditingController =
+            TextEditingController(text: model.userInfo.skypeLink);
+        githubTextEditingController =
+            TextEditingController(text: model.userInfo.githubLink);
       });
+    });
   }
 
   void updateProfileData() async {
     setState(() => isLoading = true);
-    var uri = Uri.https(Constants.SERVER_URL, Constants.ServerApiEndpoints.PROFILE_UPDATE);
+    var uri = Uri.https(
+        Constants.SERVER_URL, Constants.ServerApiEndpoints.PROFILE_UPDATE);
 
     model.username = usernameTextEditingController.text;
     model.userInfo.fullName = fullNameTextEditingController.text;
@@ -83,7 +90,8 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
   Future _updateData() async {
     setState(() => isLoading = true);
 
-    var uri = Uri.https(Constants.SERVER_URL, Constants.ServerApiEndpoints.PROFILE);
+    var uri =
+        Uri.https(Constants.SERVER_URL, Constants.ServerApiEndpoints.PROFILE);
     var response = await _httpService.get(uri);
     var value = await response.stream.bytesToString();
 
@@ -94,14 +102,16 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return isLoading ? LoadingBodyWidget() : Center(
-      child: SingleChildScrollView(
-        child: Container(
-            color: HexColor.fromHex('#f3f3f7'),
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Expanded(
-                  child: Column(
+    return isLoading
+        ? LoadingBodyWidget()
+        : Center(
+            child: SingleChildScrollView(
+            child: Container(
+                color: HexColor.fromHex('#f3f3f7'),
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Expanded(
+                      child: Column(
                     children: [
                       Container(
                         color: Colors.white,
@@ -122,23 +132,25 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                             ),
                             Container(margin: const EdgeInsets.only(top: 60)),
                             Padding(
-                              padding: const EdgeInsets.only(left: 12, right: 12),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Your ID: ",
-                                        style: TextStyle(
-                                          fontFamily: 'Nunito',
-                                          fontWeight: FontWeight.w800,
-                                          fontSize: 13,
-                                          color: HexColor.fromHex('#6C757D'),
+                                padding:
+                                    const EdgeInsets.only(left: 12, right: 12),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Your ID: ",
+                                          style: TextStyle(
+                                            fontFamily: 'Nunito',
+                                            fontWeight: FontWeight.w800,
+                                            fontSize: 13,
+                                            color: HexColor.fromHex('#6C757D'),
+                                          ),
                                         ),
-                                      ),
-                                      Flexible(
-                                        child: Text(
+                                        Flexible(
+                                            child: Text(
                                           model.userNumber,
                                           style: TextStyle(
                                             fontFamily: 'Nunito',
@@ -146,24 +158,24 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                             fontSize: 13,
                                             color: HexColor.fromHex('#98a6ad'),
                                           ),
-                                        )
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Refferal link: ",
-                                        style: TextStyle(
-                                          fontFamily: 'Nunito',
-                                          fontWeight: FontWeight.w800,
-                                          fontSize: 13,
-                                          color: HexColor.fromHex('#6C757D'),
+                                        ))
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Refferal link: ",
+                                          style: TextStyle(
+                                            fontFamily: 'Nunito',
+                                            fontWeight: FontWeight.w800,
+                                            fontSize: 13,
+                                            color: HexColor.fromHex('#6C757D'),
+                                          ),
                                         ),
-                                      ),
-                                      Flexible(
-                                        child: Text(
+                                        Flexible(
+                                            child: Text(
                                           "https://ecats.online/Register?refid=${model.userNumber}",
                                           style: TextStyle(
                                             fontFamily: 'Nunito',
@@ -171,57 +183,62 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                             fontSize: 13,
                                             color: HexColor.fromHex('#98a6ad'),
                                           ),
+                                        )),
+                                        IconButton(
+                                          icon:
+                                              const Icon(Icons.copy, size: 12),
+                                          onPressed: () async {
+                                            await Clipboard.setData(ClipboardData(
+                                                text:
+                                                    'https://ecats.online/Register?refid=${model.userNumber}'));
+                                          },
                                         )
-                                      ),
-                                      IconButton(
-                                        icon: const Icon(
-                                          Icons.copy,
-                                          size: 12
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Full Name: ",
+                                          style: TextStyle(
+                                            fontFamily: 'Nunito',
+                                            fontWeight: FontWeight.w800,
+                                            fontSize: 13,
+                                            color: HexColor.fromHex('#6C757D'),
+                                          ),
                                         ),
-                                        onPressed: () {},
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Full Name: ",
-                                        style: TextStyle(
-                                          fontFamily: 'Nunito',
-                                          fontWeight: FontWeight.w800,
-                                          fontSize: 13,
-                                          color: HexColor.fromHex('#6C757D'),
-                                        ),
-                                      ),
-                                      Flexible(
-                                        child: Text(
-                                          model.userInfo.fullName ?? "Undefined",
+                                        Flexible(
+                                            child: Text(
+                                          model.userInfo.fullName ??
+                                              "Undefined",
                                           style: TextStyle(
                                             fontFamily: 'Nunito',
                                             fontWeight: FontWeight.w500,
                                             fontSize: 13,
                                             color: HexColor.fromHex('#98a6ad'),
                                           ),
-                                        )
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Container(margin: const EdgeInsets.only(top: 0)),
-                                      Text(
-                                        "Email: ",
-                                        style: TextStyle(
-                                          fontFamily: 'Nunito',
-                                          fontWeight: FontWeight.w800,
-                                          fontSize: 13,
-                                          color: HexColor.fromHex('#6C757D'),
+                                        )),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            margin:
+                                                const EdgeInsets.only(top: 0)),
+                                        Text(
+                                          "Email: ",
+                                          style: TextStyle(
+                                            fontFamily: 'Nunito',
+                                            fontWeight: FontWeight.w800,
+                                            fontSize: 13,
+                                            color: HexColor.fromHex('#6C757D'),
+                                          ),
                                         ),
-                                      ),
-                                      Flexible(
-                                        child: Text(
+                                        Flexible(
+                                            child: Text(
                                           model.email,
                                           style: TextStyle(
                                             fontFamily: 'Nunito',
@@ -229,40 +246,44 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                             fontSize: 13,
                                             color: HexColor.fromHex('#98a6ad'),
                                           ),
-                                        )
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Container(margin: const EdgeInsets.only(top: 20)),
-                                      Text(
-                                        "Location: ",
-                                        style: TextStyle(
-                                          fontFamily: 'Nunito',
-                                          fontWeight: FontWeight.w800,
-                                          fontSize: 13,
-                                          color: HexColor.fromHex('#6C757D'),
-                                        ),
-                                      ),
-                                      Flexible(
-                                        child: Text(
-                                          model.userInfo.location ?? "Not selected",
+                                        ))
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            margin:
+                                                const EdgeInsets.only(top: 20)),
+                                        Text(
+                                          "Location: ",
                                           style: TextStyle(
                                             fontFamily: 'Nunito',
-                                            fontWeight: FontWeight.w500,
+                                            fontWeight: FontWeight.w800,
                                             fontSize: 13,
-                                            color: HexColor.fromHex('#98a6ad'),
+                                            color: HexColor.fromHex('#6C757D'),
                                           ),
                                         ),
-                                      )
-                                    ],
-                                  ),
-                                  Container(margin: const EdgeInsets.only(top: 10)),
-                                ],
-                              )
-                            ),
+                                        Flexible(
+                                          child: Text(
+                                            model.userInfo.location ??
+                                                "Not selected",
+                                            style: TextStyle(
+                                              fontFamily: 'Nunito',
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 13,
+                                              color:
+                                                  HexColor.fromHex('#98a6ad'),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    Container(
+                                        margin: const EdgeInsets.only(top: 10)),
+                                  ],
+                                )),
                           ],
                         ),
                       ),
@@ -274,10 +295,53 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                             MaterialButton(
                               child: Row(
                                 children: [
-                                  const Icon(
-                                      Icons.work,
-                                      size: 12
-                                  ),
+                                  const Icon(Icons.work, size: 12),
+                                  Container(
+                                    margin: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      "OPEN ORDERS",
+                                      style: TextStyle(
+                                        fontFamily: 'Nunito',
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 10.5,
+                                        color: HexColor.fromHex('#6C757D'),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              onPressed: () {
+                                widget.screenCallback(
+                                    PageEnum.OpenOrders, AppBarEnum.Authorized);
+                              },
+                            ),
+                            MaterialButton(
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.work, size: 12),
+                                  Container(
+                                    margin: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      "CLOSED ORDERS",
+                                      style: TextStyle(
+                                        fontFamily: 'Nunito',
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 10.5,
+                                        color: HexColor.fromHex('#6C757D'),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              onPressed: () {
+                                widget.screenCallback(PageEnum.ClosedOrders,
+                                    AppBarEnum.Authorized);
+                              },
+                            ),
+                            MaterialButton(
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.work, size: 12),
                                   Container(
                                     margin: const EdgeInsets.only(left: 10),
                                     child: Text(
@@ -290,18 +354,41 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                       ),
                                     ),
                                   )
-
                                 ],
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                widget.screenCallback(
+                                    PageEnum.IncomeTransactions,
+                                    AppBarEnum.Authorized);
+                              },
                             ),
                             MaterialButton(
                               child: Row(
                                 children: [
-                                  const Icon(
-                                      Icons.work,
-                                      size: 12
-                                  ),
+                                  const Icon(Icons.work, size: 12),
+                                  Container(
+                                    margin: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      "REFERALS",
+                                      style: TextStyle(
+                                        fontFamily: 'Nunito',
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 10.5,
+                                        color: HexColor.fromHex('#6C757D'),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              onPressed: () {
+                                widget.screenCallback(
+                                    PageEnum.Refferals, AppBarEnum.Authorized);
+                              },
+                            ),
+                            MaterialButton(
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.work, size: 12),
                                   Container(
                                     margin: const EdgeInsets.only(left: 10),
                                     child: Text(
@@ -316,31 +403,10 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                   )
                                 ],
                               ),
-                              onPressed: () {},
-                            ),
-                            MaterialButton(
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                      Icons.work,
-                                      size: 12
-                                  ),
-                                  Container(
-                                    margin: const EdgeInsets.only(left: 10),
-                                    child: Text(
-                                      "REFERALS",
-                                      style: TextStyle(
-                                        fontFamily: 'Nunito',
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 10.5,
-                                        color: HexColor.fromHex('#6C757D'),
-                                      ),
-                                    ),
-                                  )
-
-                                ],
-                              ),
-                              onPressed: () {},
+                              onPressed: () {
+                                widget.screenCallback(
+                                    PageEnum.Events, AppBarEnum.Authorized);
+                              },
                             ),
                           ],
                         ),
@@ -349,7 +415,8 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                           margin: const EdgeInsets.only(top: 15),
                           color: Colors.white,
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 12, right: 12, top: 15),
+                            padding: const EdgeInsets.only(
+                                left: 12, right: 12, top: 15),
                             child: Column(
                               children: [
                                 Row(
@@ -358,7 +425,8 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                       Icons.account_circle,
                                       size: 10,
                                     ),
-                                    Container(margin: const EdgeInsets.only(left: 5)),
+                                    Container(
+                                        margin: const EdgeInsets.only(left: 5)),
                                     Text(
                                       "PERSONAL INFO",
                                       style: TextStyle(
@@ -371,50 +439,51 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                   ],
                                 ),
                                 Container(
-                                  margin: const EdgeInsets.only(top: 30, bottom: 5),
-                                  alignment: FractionalOffset.centerLeft,
-                                  child: Text(
-                                    "Username",
-                                    style: TextStyle(
-                                      fontFamily: 'Nunito',
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 12.6,
-                                      color: HexColor.fromHex('#6C757D'),
-                                    ),
-                                  )
-                                ),
+                                    margin: const EdgeInsets.only(
+                                        top: 30, bottom: 5),
+                                    alignment: FractionalOffset.centerLeft,
+                                    child: Text(
+                                      "Username",
+                                      style: TextStyle(
+                                        fontFamily: 'Nunito',
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 12.6,
+                                        color: HexColor.fromHex('#6C757D'),
+                                      ),
+                                    )),
                                 TextFormField(
                                   controller: usernameTextEditingController,
                                   style: TextStyle(
-                                    fontSize: 12.6,
-                                    color: HexColor.fromHex('#5c6369'),
-                                    decorationThickness: 0
-                                  ),
+                                      fontSize: 12.6,
+                                      color: HexColor.fromHex('#5c6369'),
+                                      decorationThickness: 0),
                                   decoration: InputDecoration(
                                     hintText: 'Enter Username',
                                     hintStyle: const TextStyle(
-                                      fontSize: 12.6,
-                                      color: Colors.grey,
-                                      decorationThickness: 0
-                                    ),
+                                        fontSize: 12.6,
+                                        color: Colors.grey,
+                                        decorationThickness: 0),
                                     filled: true,
                                     fillColor: Colors.white,
                                     isDense: true,
                                     contentPadding: const EdgeInsets.all(9),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: HexColor.fromHex('#bdc0c4'), width: 1.0),
+                                          color: HexColor.fromHex('#bdc0c4'),
+                                          width: 1.0),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: HexColor.fromHex('#dee2e6'), width: 1.0),
+                                          color: HexColor.fromHex('#dee2e6'),
+                                          width: 1.0),
                                     ),
                                   ),
                                   cursorColor: Colors.black,
                                   cursorWidth: 0.5,
                                 ),
                                 Container(
-                                    margin: const EdgeInsets.only(top: 20, bottom: 5),
+                                    margin: const EdgeInsets.only(
+                                        top: 20, bottom: 5),
                                     alignment: FractionalOffset.centerLeft,
                                     child: Text(
                                       "FullName",
@@ -424,40 +493,40 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                         fontSize: 12.6,
                                         color: HexColor.fromHex('#6C757D'),
                                       ),
-                                    )
-                                ),
+                                    )),
                                 TextFormField(
                                   controller: fullNameTextEditingController,
                                   style: TextStyle(
                                       fontSize: 12.6,
                                       color: HexColor.fromHex('#5c6369'),
-                                      decorationThickness: 0
-                                  ),
+                                      decorationThickness: 0),
                                   decoration: InputDecoration(
                                     hintText: 'Enter Full Name',
                                     hintStyle: const TextStyle(
                                         fontSize: 12.6,
                                         color: Colors.grey,
-                                        decorationThickness: 0
-                                    ),
+                                        decorationThickness: 0),
                                     filled: true,
                                     fillColor: Colors.white,
                                     isDense: true,
                                     contentPadding: const EdgeInsets.all(9),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: HexColor.fromHex('#bdc0c4'), width: 1.0),
+                                          color: HexColor.fromHex('#bdc0c4'),
+                                          width: 1.0),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: HexColor.fromHex('#dee2e6'), width: 1.0),
+                                          color: HexColor.fromHex('#dee2e6'),
+                                          width: 1.0),
                                     ),
                                   ),
                                   cursorColor: Colors.black,
                                   cursorWidth: 0.5,
                                 ),
                                 Container(
-                                    margin: const EdgeInsets.only(top: 20, bottom: 5),
+                                    margin: const EdgeInsets.only(
+                                        top: 20, bottom: 5),
                                     alignment: FractionalOffset.centerLeft,
                                     child: Text(
                                       "Bio",
@@ -467,8 +536,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                         fontSize: 12.6,
                                         color: HexColor.fromHex('#6C757D'),
                                       ),
-                                    )
-                                ),
+                                    )),
                                 TextFormField(
                                   controller: aboutMeTextEditingController,
                                   maxLines: 7,
@@ -481,51 +549,56 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                     hintStyle: const TextStyle(
                                         fontSize: 12.6,
                                         color: Colors.grey,
-                                        decorationThickness: 0
-                                    ),
+                                        decorationThickness: 0),
                                     filled: true,
                                     fillColor: Colors.white,
                                     isDense: true,
                                     contentPadding: const EdgeInsets.all(9),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: HexColor.fromHex('#bdc0c4'), width: 1.0),
+                                          color: HexColor.fromHex('#bdc0c4'),
+                                          width: 1.0),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: HexColor.fromHex('#dee2e6'), width: 1.0),
+                                          color: HexColor.fromHex('#dee2e6'),
+                                          width: 1.0),
                                     ),
                                   ),
                                   cursorColor: Colors.black,
                                   cursorWidth: 0.5,
                                 ),
+                                /*
                                 Container(
-                                  margin: const EdgeInsets.only(top: 30),
-                                  color: HexColor.fromHex('#f5f4f9'),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10),
-                                    child: Row(
-                                      children: [
-                                        const Icon(
-                                          Icons.public,
-                                          size: 12,
-                                        ),
-                                        Container(margin: const EdgeInsets.only(left: 5)),
-                                        Text(
-                                          "SOCIAL",
-                                          style: TextStyle(
-                                            fontFamily: 'Nunito',
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 10.5,
-                                            color: HexColor.fromHex('#6C757D'),
+                                    margin: const EdgeInsets.only(top: 30),
+                                    color: HexColor.fromHex('#f5f4f9'),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10),
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.public,
+                                            size: 12,
                                           ),
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                ),
+                                          Container(
+                                              margin: const EdgeInsets.only(
+                                                  left: 5)),
+                                          Text(
+                                            "SOCIAL",
+                                            style: TextStyle(
+                                              fontFamily: 'Nunito',
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 10.5,
+                                              color:
+                                                  HexColor.fromHex('#6C757D'),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    )),
                                 Container(
-                                    margin: const EdgeInsets.only(top: 20, bottom: 5),
+                                    margin: const EdgeInsets.only(
+                                        top: 20, bottom: 5),
                                     alignment: FractionalOffset.centerLeft,
                                     child: Text(
                                       "Facebook",
@@ -535,8 +608,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                         fontSize: 12.6,
                                         color: HexColor.fromHex('#6C757D'),
                                       ),
-                                    )
-                                ),
+                                    )),
                                 TextFormField(
                                   controller: faceBookTextEditingController,
                                   style: TextStyle(
@@ -544,40 +616,42 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                       color: HexColor.fromHex('#5c6369'),
                                       decorationThickness: 0),
                                   decoration: InputDecoration(
-                                    contentPadding: const EdgeInsets.only(left: 15),
+                                    contentPadding:
+                                        const EdgeInsets.only(left: 15),
                                     prefixIconConstraints: const BoxConstraints(
-                                      maxHeight: double.maxFinite,
-                                      maxWidth: double.maxFinite,
-                                      minHeight: 32,
-                                      minWidth: 32
-                                    ),
+                                        maxHeight: double.maxFinite,
+                                        maxWidth: double.maxFinite,
+                                        minHeight: 32,
+                                        minWidth: 32),
                                     prefixIcon: const Icon(
                                       Icons.facebook,
                                       size: 20,
                                     ),
                                     hintText: 'Url',
                                     hintStyle: const TextStyle(
-                                      fontSize: 12.6,
-                                      color: Colors.grey,
-                                      decorationThickness: 0
-                                    ),
+                                        fontSize: 12.6,
+                                        color: Colors.grey,
+                                        decorationThickness: 0),
                                     filled: true,
                                     fillColor: Colors.white,
                                     isDense: true,
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: HexColor.fromHex('#bdc0c4'), width: 1.0),
+                                          color: HexColor.fromHex('#bdc0c4'),
+                                          width: 1.0),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: HexColor.fromHex('#dee2e6'), width: 1.0),
+                                          color: HexColor.fromHex('#dee2e6'),
+                                          width: 1.0),
                                     ),
                                   ),
                                   cursorColor: Colors.black,
                                   cursorWidth: 0.5,
                                 ),
                                 Container(
-                                    margin: const EdgeInsets.only(top: 20, bottom: 5),
+                                    margin: const EdgeInsets.only(
+                                        top: 20, bottom: 5),
                                     alignment: FractionalOffset.centerLeft,
                                     child: Text(
                                       "Twitter",
@@ -587,40 +661,40 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                         fontSize: 12.6,
                                         color: HexColor.fromHex('#6C757D'),
                                       ),
-                                    )
-                                ),
+                                    )),
                                 TextFormField(
                                   controller: twitterTextEditingController,
                                   style: TextStyle(
                                       fontSize: 12.6,
                                       color: HexColor.fromHex('#5c6369'),
-                                      decorationThickness: 0
-                                  ),
+                                      decorationThickness: 0),
                                   decoration: InputDecoration(
                                     hintText: 'Username',
                                     hintStyle: const TextStyle(
                                         fontSize: 12.6,
                                         color: Colors.grey,
-                                        decorationThickness: 0
-                                    ),
+                                        decorationThickness: 0),
                                     filled: true,
                                     fillColor: Colors.white,
                                     isDense: true,
                                     contentPadding: const EdgeInsets.all(9),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: HexColor.fromHex('#bdc0c4'), width: 1.0),
+                                          color: HexColor.fromHex('#bdc0c4'),
+                                          width: 1.0),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: HexColor.fromHex('#dee2e6'), width: 1.0),
+                                          color: HexColor.fromHex('#dee2e6'),
+                                          width: 1.0),
                                     ),
                                   ),
                                   cursorColor: Colors.black,
                                   cursorWidth: 0.5,
                                 ),
                                 Container(
-                                    margin: const EdgeInsets.only(top: 20, bottom: 5),
+                                    margin: const EdgeInsets.only(
+                                        top: 20, bottom: 5),
                                     alignment: FractionalOffset.centerLeft,
                                     child: Text(
                                       "Instagram",
@@ -630,40 +704,40 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                         fontSize: 12.6,
                                         color: HexColor.fromHex('#6C757D'),
                                       ),
-                                    )
-                                ),
+                                    )),
                                 TextFormField(
                                   controller: instagramTextEditingController,
                                   style: TextStyle(
                                       fontSize: 12.6,
                                       color: HexColor.fromHex('#5c6369'),
-                                      decorationThickness: 0
-                                  ),
+                                      decorationThickness: 0),
                                   decoration: InputDecoration(
                                     hintText: 'Url',
                                     hintStyle: const TextStyle(
                                         fontSize: 12.6,
                                         color: Colors.grey,
-                                        decorationThickness: 0
-                                    ),
+                                        decorationThickness: 0),
                                     filled: true,
                                     fillColor: Colors.white,
                                     isDense: true,
                                     contentPadding: const EdgeInsets.all(9),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: HexColor.fromHex('#bdc0c4'), width: 1.0),
+                                          color: HexColor.fromHex('#bdc0c4'),
+                                          width: 1.0),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: HexColor.fromHex('#dee2e6'), width: 1.0),
+                                          color: HexColor.fromHex('#dee2e6'),
+                                          width: 1.0),
                                     ),
                                   ),
                                   cursorColor: Colors.black,
                                   cursorWidth: 0.5,
                                 ),
                                 Container(
-                                    margin: const EdgeInsets.only(top: 20, bottom: 5),
+                                    margin: const EdgeInsets.only(
+                                        top: 20, bottom: 5),
                                     alignment: FractionalOffset.centerLeft,
                                     child: Text(
                                       "Linkedin",
@@ -673,40 +747,40 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                         fontSize: 12.6,
                                         color: HexColor.fromHex('#6C757D'),
                                       ),
-                                    )
-                                ),
+                                    )),
                                 TextFormField(
                                   controller: linkedinTextEditingController,
                                   style: TextStyle(
                                       fontSize: 12.6,
                                       color: HexColor.fromHex('#5c6369'),
-                                      decorationThickness: 0
-                                  ),
+                                      decorationThickness: 0),
                                   decoration: InputDecoration(
                                     hintText: 'Url',
                                     hintStyle: const TextStyle(
                                         fontSize: 12.6,
                                         color: Colors.grey,
-                                        decorationThickness: 0
-                                    ),
+                                        decorationThickness: 0),
                                     filled: true,
                                     fillColor: Colors.white,
                                     isDense: true,
                                     contentPadding: const EdgeInsets.all(9),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: HexColor.fromHex('#bdc0c4'), width: 1.0),
+                                          color: HexColor.fromHex('#bdc0c4'),
+                                          width: 1.0),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: HexColor.fromHex('#dee2e6'), width: 1.0),
+                                          color: HexColor.fromHex('#dee2e6'),
+                                          width: 1.0),
                                     ),
                                   ),
                                   cursorColor: Colors.black,
                                   cursorWidth: 0.5,
                                 ),
                                 Container(
-                                    margin: const EdgeInsets.only(top: 20, bottom: 5),
+                                    margin: const EdgeInsets.only(
+                                        top: 20, bottom: 5),
                                     alignment: FractionalOffset.centerLeft,
                                     child: Text(
                                       "Skype",
@@ -716,40 +790,40 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                         fontSize: 12.6,
                                         color: HexColor.fromHex('#6C757D'),
                                       ),
-                                    )
-                                ),
+                                    )),
                                 TextFormField(
                                   controller: skypeTextEditingController,
                                   style: TextStyle(
                                       fontSize: 12.6,
                                       color: HexColor.fromHex('#5c6369'),
-                                      decorationThickness: 0
-                                  ),
+                                      decorationThickness: 0),
                                   decoration: InputDecoration(
                                     hintText: 'Username',
                                     hintStyle: const TextStyle(
                                         fontSize: 12.6,
                                         color: Colors.grey,
-                                        decorationThickness: 0
-                                    ),
+                                        decorationThickness: 0),
                                     filled: true,
                                     fillColor: Colors.white,
                                     isDense: true,
                                     contentPadding: const EdgeInsets.all(9),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: HexColor.fromHex('#bdc0c4'), width: 1.0),
+                                          color: HexColor.fromHex('#bdc0c4'),
+                                          width: 1.0),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: HexColor.fromHex('#dee2e6'), width: 1.0),
+                                          color: HexColor.fromHex('#dee2e6'),
+                                          width: 1.0),
                                     ),
                                   ),
                                   cursorColor: Colors.black,
                                   cursorWidth: 0.5,
                                 ),
                                 Container(
-                                    margin: const EdgeInsets.only(top: 20, bottom: 5),
+                                    margin: const EdgeInsets.only(
+                                        top: 20, bottom: 5),
                                     alignment: FractionalOffset.centerLeft,
                                     child: Text(
                                       "Github",
@@ -759,39 +833,41 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                         fontSize: 12.6,
                                         color: HexColor.fromHex('#6C757D'),
                                       ),
-                                    )
-                                ),
+                                    )),
                                 TextFormField(
                                   controller: githubTextEditingController,
                                   style: TextStyle(
                                       fontSize: 12.6,
                                       color: HexColor.fromHex('#5c6369'),
-                                      decorationThickness: 0
-                                  ),
+                                      decorationThickness: 0),
                                   decoration: InputDecoration(
                                     hintText: 'Username',
                                     hintStyle: const TextStyle(
                                         fontSize: 12.6,
                                         color: Colors.grey,
-                                        decorationThickness: 0
-                                    ),
+                                        decorationThickness: 0),
                                     filled: true,
                                     fillColor: Colors.white,
                                     isDense: true,
                                     contentPadding: const EdgeInsets.all(9),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: HexColor.fromHex('#bdc0c4'), width: 1.0),
+                                          color: HexColor.fromHex('#bdc0c4'),
+                                          width: 1.0),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: HexColor.fromHex('#dee2e6'), width: 1.0),
+                                          color: HexColor.fromHex('#dee2e6'),
+                                          width: 1.0),
                                     ),
                                   ),
                                   cursorColor: Colors.black,
                                   cursorWidth: 0.5,
                                 ),
-                                Container(margin: const EdgeInsets.only(bottom: 20)),
+                                */
+
+                                Container(
+                                    margin: const EdgeInsets.only(bottom: 20)),
                                 Container(
                                   alignment: FractionalOffset.centerLeft,
                                   child: MaterialButton(
@@ -808,18 +884,14 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                     ),
                                   ),
                                 ),
-                                Container(margin: const EdgeInsets.only(bottom: 20)),
+                                Container(
+                                    margin: const EdgeInsets.only(bottom: 20)),
                               ],
                             ),
-                          )
-                      )
+                          ))
                     ],
-                  )
-              ),
-            )
-        ),
-      )
-    );
+                  )),
+                )),
+          ));
   }
-
 }

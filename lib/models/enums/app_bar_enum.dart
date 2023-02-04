@@ -1,4 +1,1 @@
-enum AppBarEnum {
-  Authorized,
-  NonAuthorized
-}
+enum AppBarEnum { Authorized, NonAuthorized }

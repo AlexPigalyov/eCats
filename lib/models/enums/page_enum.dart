@@ -2,5 +2,10 @@ enum PageEnum {
   Loading,
   Login,
   Register,
-  Profile
+  Profile,
+  OpenOrders,
+  ClosedOrders,
+  IncomeTransactions,
+  Events,
+  Refferals
 }

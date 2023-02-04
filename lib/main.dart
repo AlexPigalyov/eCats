@@ -1,14 +1,19 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
-import 'package:ecats/models/enums/page_enum.dart';
-import 'package:ecats/models/enums/app_bar_enum.dart';
-import 'package:ecats/account/login_body_widget.dart';
+import 'package:ecats/account/closed_orders_body_widget.dart';
+import 'package:ecats/account/events_body_widget.dart';
+import 'package:ecats/account/income_transactions_body_widget.dart';
 import 'package:ecats/account/loading_body_widget.dart';
+import 'package:ecats/account/login_body_widget.dart';
+import 'package:ecats/account/open_orders_body_widget.dart';
 import 'package:ecats/account/profile_body_widget.dart';
 import 'package:ecats/account/register_body_widget.dart';
 import 'package:ecats/account/shared/authorized_app_bar_widget.dart';
 import 'package:ecats/account/shared/non_authorized_app_bar_widget.dart';
+import 'package:ecats/account/user_refferals_body_widget.dart';
+import 'package:ecats/models/enums/app_bar_enum.dart';
+import 'package:ecats/models/enums/page_enum.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() {
@@ -40,7 +45,7 @@ class _MyAppState extends State<MyApp> {
 
     super.initState();
     //Only while develop
-    HttpOverrides.global = MyHttpOverrides();
+    //HttpOverrides.global = MyHttpOverrides();
   }
 
   dataLoadFunction() async {
@@ -49,14 +54,21 @@ class _MyAppState extends State<MyApp> {
       PageEnum.Loading: LoadingBodyWidget(),
       PageEnum.Login: LoginBodyWidget(screenCallback: changeScreen),
       PageEnum.Register: RegisterBodyWidget(screenCallback: changeScreen),
-      PageEnum.Profile: ProfileBodyWidget(screenCallback: changeScreen)
+      PageEnum.Profile: ProfileBodyWidget(screenCallback: changeScreen),
+      PageEnum.OpenOrders: OpenOrdersBodyWidget(screenCallback: changeScreen),
+      PageEnum.ClosedOrders:
+          ClosedOrdersBodyWidget(screenCallback: changeScreen),
+      PageEnum.IncomeTransactions:
+          IncomeTransactionsBodyWidget(screenCallback: changeScreen),
+      PageEnum.Events: EventsBodyWidget(screenCallback: changeScreen),
+      PageEnum.Refferals: UserRefferalsBodyWidget(screenCallback: changeScreen)
     };
 
     appBars = <AppBarEnum, PreferredSizeWidget>{
-      AppBarEnum.Authorized: AuthorizedAppBarWidget(
-          screenCallback: changeScreen),
-      AppBarEnum.NonAuthorized: NonAuthorizedAppBarWidget(
-          screenCallback: changeScreen)
+      AppBarEnum.Authorized:
+          AuthorizedAppBarWidget(screenCallback: changeScreen),
+      AppBarEnum.NonAuthorized:
+          NonAuthorizedAppBarWidget(screenCallback: changeScreen)
     };
 
     //Fetch some data
@@ -72,18 +84,14 @@ class _MyAppState extends State<MyApp> {
     //Set current AppBar
     currentAppBarWidget = (_isAuthorized
         ? appBars[AppBarEnum.Authorized]
-        : appBars[AppBarEnum.NonAuthorized]
-    )!;
+        : appBars[AppBarEnum.NonAuthorized])!;
 
     //Set current Body
-    currentBodyWidget = (_isAuthorized
-        ? bodies[PageEnum.Profile]
-        : bodies[PageEnum.Login]
-    )!;
+    currentBodyWidget =
+        (_isAuthorized ? bodies[PageEnum.Profile] : bodies[PageEnum.Login])!;
   }
 
-  changeScreen(PageEnum pageEnum, AppBarEnum appBarEnum) =>
-      setState(() {
+  changeScreen(PageEnum pageEnum, AppBarEnum appBarEnum) => setState(() {
         currentBodyWidget = bodies[pageEnum]!;
         currentAppBarWidget = appBars[appBarEnum]!;
       });
@@ -91,21 +99,20 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: _isLoading
-          ? Scaffold(body: bodies[PageEnum.Loading])
-          : Scaffold(appBar: currentAppBarWidget, body: currentBodyWidget)
-    );   
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: _isLoading
+            ? Scaffold(body: bodies[PageEnum.Loading])
+            : Scaffold(appBar: currentAppBarWidget, body: currentBodyWidget));
   }
 }
 
-
-class MyHttpOverrides extends HttpOverrides{
+class MyHttpOverrides extends HttpOverrides {
   @override
-  HttpClient createHttpClient(SecurityContext? context){
+  HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

@@ -1,22 +1,17 @@
-import 'dart:convert';
-
+import 'package:ecats/assets/constants.dart' as Constants;
+import 'package:ecats/models/enums/app_bar_enum.dart';
+import 'package:ecats/models/enums/page_enum.dart';
+import 'package:ecats/models/requests/login_request_model.dart';
 import 'package:ecats/services/http_service.dart';
 import 'package:flutter/material.dart';
-import 'package:ecats/models/requests/login_request_model.dart';
-import 'package:ecats/models/enums/page_enum.dart';
-import 'package:ecats/models/enums/app_bar_enum.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../extensions/hex_color.dart';
 
-import 'package:ecats/assets/constants.dart' as Constants;
-
 class LoginBodyWidget extends StatefulWidget {
   final void Function(PageEnum, AppBarEnum) screenCallback;
-  const LoginBodyWidget({
-    super.key,
-    required this.screenCallback
-  });
+
+  const LoginBodyWidget({super.key, required this.screenCallback});
 
   @override
   State<LoginBodyWidget> createState() => _LoginBodyWidgetState();
@@ -32,19 +27,21 @@ class _LoginBodyWidgetState extends State<LoginBodyWidget> {
   final TextEditingController passwordController = TextEditingController();
 
   void onLogInButtonPressed() async {
-    if(emailController.text.trim().isNotEmpty && passwordController.text.trim().isNotEmpty) {
-
+    if (emailController.text.trim().isNotEmpty &&
+        passwordController.text.trim().isNotEmpty) {
       model = LoginRequestModel(
           login: emailController.text,
           password: passwordController.text,
           rememberMe: true);
 
-      var uri = Uri.https(Constants.SERVER_URL, Constants.ServerApiEndpoints.LOGIN);
+      var uri =
+          Uri.https(Constants.SERVER_URL, Constants.ServerApiEndpoints.LOGIN);
 
       var response = await _httpService.post(uri, model);
 
-      if(response.statusCode == 200) {
-        await _storage.write(key: 'token', value: await response.stream.bytesToString());
+      if (response.statusCode == 200) {
+        await _storage.write(
+            key: 'token', value: await response.stream.bytesToString());
 
         widget.screenCallback(PageEnum.Profile, AppBarEnum.Authorized);
       }
@@ -60,7 +57,8 @@ class _LoginBodyWidgetState extends State<LoginBodyWidget> {
 
   @override
   Center build(BuildContext context) {
-    return Center(child: Column(
+    return Center(
+        child: Column(
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 12, right: 12),
@@ -230,7 +228,7 @@ class _LoginBodyWidgetState extends State<LoginBodyWidget> {
           ),
         ),
         Container(
-          margin: const EdgeInsets.only(left: 12, right: 12,top: 5, bottom: 5),
+          margin: const EdgeInsets.only(left: 12, right: 12, top: 5, bottom: 5),
           child: Divider(color: HexColor.fromHex('#6C757D')),
         ),
         Row(
@@ -270,14 +268,12 @@ class _LoginBodyWidgetState extends State<LoginBodyWidget> {
                                 fontFamily: 'Nunito',
                                 fontSize: 12.6,
                               ),
-                            )
-                        )
+                            ))
                       ],
                     ),
                     onPressed: () {},
                   ),
-                )
-            ),
+                )),
             Flexible(
               flex: 1,
               fit: FlexFit.tight,
@@ -311,8 +307,7 @@ class _LoginBodyWidgetState extends State<LoginBodyWidget> {
                               fontFamily: 'Nunito',
                               fontSize: 12.6,
                             ),
-                          )
-                      )
+                          ))
                     ],
                   ),
                   onPressed: () {},
@@ -324,8 +319,4 @@ class _LoginBodyWidgetState extends State<LoginBodyWidget> {
       ],
     ));
   }
-
 }
-
-
-
