@@ -169,7 +169,7 @@ class _LoginBodyWidgetState extends State<LoginBodyWidget> {
           ),
         ),
         Container(
-          padding: const EdgeInsets.only(left: 12),
+          padding: const EdgeInsets.only(left: 12, top: 10),
           alignment: FractionalOffset.centerLeft,
           child: MaterialButton(
             color: HexColor.fromHex('#1b6ec2'),
