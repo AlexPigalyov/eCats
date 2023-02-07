@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:ecats/account/loading_body_widget.dart';
 import 'package:ecats/assets/constants.dart' as Constants;
-import 'package:ecats/models/enums/app_bar_enum.dart';
-import 'package:ecats/models/enums/page_enum.dart';
 import 'package:ecats/models/requests/event_request_model.dart';
 import 'package:ecats/models/table_data_sources/events_by_user_data_source.dart';
 import 'package:ecats/services/http_service.dart';
@@ -14,9 +12,8 @@ import './shared/data_table/custom_pager.dart';
 import './shared/data_table/nav_helper.dart';
 
 class EventsBodyWidget extends StatefulWidget {
-  final void Function(PageEnum, AppBarEnum) screenCallback;
 
-  const EventsBodyWidget({super.key, required this.screenCallback});
+  const EventsBodyWidget({super.key});
 
   @override
   State<EventsBodyWidget> createState() => _EventsBodyWidgetState();
@@ -84,19 +81,27 @@ class _EventsBodyWidgetState extends State<EventsBodyWidget> {
 
   List<DataColumn> get _columns {
     return [
-      const DataColumn2(
-          size: ColumnSize.S,
-          label: Expanded(
-            child: Text('Event', textAlign: TextAlign.left),
-          )),
-      const DataColumn2(
-          size: ColumnSize.S,
-          label: Expanded(child: Text('Comment', textAlign: TextAlign.center)),
-          numeric: true),
-      const DataColumn2(
-          size: ColumnSize.L,
-          label: Expanded(child: Text('Date', textAlign: TextAlign.center)),
-          numeric: true)
+      DataColumn2(
+        size: ColumnSize.S,
+        label: Container(
+          alignment: Alignment.centerLeft,
+          child: const Text('Event'),
+        ),
+      ),
+      DataColumn2(
+        size: ColumnSize.S,
+        label: Container(
+          alignment: Alignment.center,
+          child: const Text('Comment'),
+        ),
+      ),
+      DataColumn2(
+        size: ColumnSize.L,
+        label: Container(
+          alignment: Alignment.center,
+          child: const Text('Date'),
+        ),
+      )
     ];
   }
 
@@ -132,9 +137,9 @@ class _EventsBodyWidgetState extends State<EventsBodyWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text('Events'),
-                  if (getCurrentRouteOption(context) == custPager &&
-                      _controller != null)
-                    PageNumber(controller: _controller!),
+                  //if (getCurrentRouteOption(context) == custPager &&
+                  //_controller != null)
+                  //PageNumber(controller: _controller!),
                   Expanded(
                     child: Container(
                       alignment: Alignment.centerRight,

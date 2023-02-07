@@ -34,7 +34,7 @@ class ClosedOrdersByUserDataSource extends DataTableSource {
 
   @override
   DataRow getRow(int index, [Color? color]) {
-    if (index >= closedOrders.length) throw 'index > _desserts.length';
+    if (index >= closedOrders.length) throw 'index > _closedOrders.length';
     final closedOrder = closedOrders[index];
     return DataRow2.byIndex(
       index: index,
@@ -45,43 +45,36 @@ class ClosedOrdersByUserDataSource extends DataTableSource {
               ? MaterialStateProperty.all(Theme.of(context).highlightColor)
               : null),
       cells: [
-        DataCell(Expanded(
-            child: Container(
+        DataCell(Container(
           alignment: Alignment.centerLeft,
           child: Text(closedOrder.pairAcronim, textAlign: TextAlign.left),
-        ))),
-        DataCell(Expanded(
-            child: Container(
+        )),
+        DataCell(Container(
           alignment: Alignment.center,
           child: Text(closedOrder.closedPrice.toString(),
               textAlign: TextAlign.center),
-        ))),
-        DataCell(Expanded(
-            child: Container(
+        )),
+        DataCell(Container(
           alignment: Alignment.center,
           child:
               Text(closedOrder.amount.toString(), textAlign: TextAlign.center),
-        ))),
-        DataCell(Expanded(
-            child: Container(
+        )),
+        DataCell(Container(
           alignment: Alignment.center,
           child:
               Text(closedOrder.total.toString(), textAlign: TextAlign.center),
-        ))),
-        DataCell(Expanded(
-            child: Container(
+        )),
+        DataCell(Container(
           alignment: Alignment.center,
           child: Text(DateTimeFormat.format(closedOrder.createDate),
               textAlign: TextAlign.center),
-        ))),
-        DataCell(Expanded(
-            child: Container(
+        )),
+        DataCell(Container(
           alignment: Alignment.center,
           child: Text(DateTimeFormat.format(closedOrder.closedDate),
               textAlign: TextAlign.center),
-        ))),
-        DataCell(Expanded(
-            child: Container(
+        )),
+        DataCell(Container(
           alignment: Alignment.center,
           child: Text(
               OrderStatusEnum.values[closedOrder.status]
@@ -89,7 +82,7 @@ class ClosedOrdersByUserDataSource extends DataTableSource {
                   .split('.')
                   .last,
               textAlign: TextAlign.center),
-        )))
+        ))
       ],
     );
   }

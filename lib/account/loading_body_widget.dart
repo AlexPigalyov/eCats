@@ -8,7 +8,7 @@ class LoadingBodyWidget extends Center {
           child: Image.asset(
             'assets/logo.png',
             fit: BoxFit.contain,
-            height: 64,
+            height: 128,
           ),
         ));
 }

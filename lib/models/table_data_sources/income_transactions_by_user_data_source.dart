@@ -35,7 +35,7 @@ class IncomeTransactionsByUserDataSouce extends DataTableSource {
   @override
   DataRow getRow(int index, [Color? color]) {
     if (index >= incomeTransactions.incomeTransactions!.length)
-      throw 'index > _desserts.length';
+      throw 'index > _incomeTransactions.length';
     final incomeTransaction = incomeTransactions.incomeTransactions?[index];
     return DataRow2.byIndex(
       index: index,
@@ -46,41 +46,35 @@ class IncomeTransactionsByUserDataSouce extends DataTableSource {
               ? MaterialStateProperty.all(Theme.of(context).highlightColor)
               : null),
       cells: [
-        DataCell(Expanded(
-            child: Container(
+        DataCell(Container(
           alignment: Alignment.centerLeft,
           child: Text(incomeTransaction.currencyAcronim,
               textAlign: TextAlign.left),
-        ))),
-        DataCell(Expanded(
-            child: Container(
+        )),
+        DataCell(Container(
           alignment: Alignment.centerRight,
           child: Text(incomeTransaction.amount.toString(),
               textAlign: TextAlign.center),
-        ))),
-        DataCell(Expanded(
-            child: Container(
+        )),
+        DataCell(Container(
           alignment: Alignment.centerRight,
           child: Text(incomeTransaction.transactionFee.toString(),
               textAlign: TextAlign.center),
-        ))),
-        DataCell(Expanded(
-            child: Container(
+        )),
+        DataCell(Container(
           alignment: Alignment.centerRight,
           child:
               Text(incomeTransaction.fromAdress, textAlign: TextAlign.center),
-        ))),
-        DataCell(Expanded(
-            child: Container(
+        )),
+        DataCell(Container(
           alignment: Alignment.center,
           child: Text(incomeTransaction.toAddress, textAlign: TextAlign.center),
-        ))),
-        DataCell(Expanded(
-            child: Container(
+        )),
+        DataCell(Container(
           alignment: Alignment.center,
           child: Text(DateTimeFormat.format(incomeTransaction.createdDate),
               textAlign: TextAlign.center),
-        )))
+        ))
       ],
     );
   }

@@ -34,7 +34,7 @@ class EventsByUserDataSource extends DataTableSource {
 
   @override
   DataRow getRow(int index, [Color? color]) {
-    if (index >= events.length) throw 'index > _desserts.length';
+    if (index >= events.length) throw 'index > _events.length';
     final event = events[index];
     return DataRow2.byIndex(
       index: index,
@@ -45,24 +45,21 @@ class EventsByUserDataSource extends DataTableSource {
               ? MaterialStateProperty.all(Theme.of(context).highlightColor)
               : null),
       cells: [
-        DataCell(Expanded(
-            child: Container(
+        DataCell(Container(
           alignment: Alignment.centerLeft,
           child: Text(
               EventTypeEnum.values[event.type].toString().split('.').last,
               textAlign: TextAlign.center),
-        ))),
-        DataCell(Expanded(
-            child: Container(
+        )),
+        DataCell(Container(
           alignment: Alignment.center,
           child: Text(event.comment, textAlign: TextAlign.center),
-        ))),
-        DataCell(Expanded(
-            child: Container(
+        )),
+        DataCell(Container(
           alignment: Alignment.center,
           child: Text(DateTimeFormat.format(event.whenDate),
               textAlign: TextAlign.center),
-        ))),
+        )),
       ],
     );
   }

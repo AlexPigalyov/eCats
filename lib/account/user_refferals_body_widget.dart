@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:ecats/account/loading_body_widget.dart';
 import 'package:ecats/assets/constants.dart' as Constants;
-import 'package:ecats/models/enums/app_bar_enum.dart';
-import 'package:ecats/models/enums/page_enum.dart';
 import 'package:ecats/models/requests/user_referals_request_model.dart';
 import 'package:ecats/models/requests/user_refferal_request_model.dart';
 import 'package:ecats/models/table_data_sources/user_referals_by_user_data_souce.dart';
@@ -15,9 +13,7 @@ import './shared/data_table/custom_pager.dart';
 import './shared/data_table/nav_helper.dart';
 
 class UserRefferalsBodyWidget extends StatefulWidget {
-  final void Function(PageEnum, AppBarEnum) screenCallback;
-
-  const UserRefferalsBodyWidget({super.key, required this.screenCallback});
+  const UserRefferalsBodyWidget({super.key});
 
   @override
   State<UserRefferalsBodyWidget> createState() =>
@@ -85,16 +81,20 @@ class _UserRefferalsBodyWidgetState extends State<UserRefferalsBodyWidget> {
 
   List<DataColumn> get _columns {
     return [
-      const DataColumn2(
-          size: ColumnSize.S,
-          label: Expanded(
-            child: Text('Email', textAlign: TextAlign.left),
-          )),
-      const DataColumn2(
-          size: ColumnSize.L,
-          label: Expanded(
-              child: Text('Registration date', textAlign: TextAlign.center)),
-          numeric: true),
+      DataColumn2(
+        size: ColumnSize.S,
+        label: Container(
+          alignment: Alignment.centerLeft,
+          child: const Text('Email'),
+        ),
+      ),
+      DataColumn2(
+        size: ColumnSize.S,
+        label: Container(
+          alignment: Alignment.center,
+          child: const Text('Registration date'),
+        ),
+      ),
     ];
   }
 
@@ -130,9 +130,9 @@ class _UserRefferalsBodyWidgetState extends State<UserRefferalsBodyWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text('My refferals'),
-                  if (getCurrentRouteOption(context) == custPager &&
-                      _controller != null)
-                    PageNumber(controller: _controller!),
+                  //if (getCurrentRouteOption(context) == custPager &&
+                  // _controller != null)
+                  //PageNumber(controller: _controller!),
                   Expanded(
                     child: Container(
                       alignment: Alignment.centerRight,

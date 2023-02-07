@@ -5,7 +5,7 @@ import '../../extensions/hex_color.dart';
 import '../../models/enums/page_enum.dart';
 
 class NonAuthorizedAppBarWidget extends AppBar {
-  final void Function(PageEnum, AppBarEnum) screenCallback;
+  final void Function(PageEnum, AppBarEnum, dynamic) screenCallback;
 
   NonAuthorizedAppBarWidget({super.key, required this.screenCallback})
       : super(
@@ -42,7 +42,8 @@ class NonAuthorizedAppBarWidget extends AppBar {
                       ),
                     ),
                     onPressed: () {
-                      screenCallback(PageEnum.Login, AppBarEnum.NonAuthorized);
+                      screenCallback(
+                          PageEnum.Login, AppBarEnum.NonAuthorized, null);
                     },
                   )),
               Flexible(
@@ -59,7 +60,7 @@ class NonAuthorizedAppBarWidget extends AppBar {
                     ),
                     onPressed: () {
                       screenCallback(
-                          PageEnum.Register, AppBarEnum.NonAuthorized);
+                          PageEnum.Register, AppBarEnum.NonAuthorized, null);
                     },
                   ))
             ]);

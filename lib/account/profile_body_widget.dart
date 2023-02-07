@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class ProfileBodyWidget extends StatefulWidget {
-  final void Function(PageEnum, AppBarEnum) screenCallback;
+  final void Function(PageEnum, AppBarEnum, dynamic) screenCallback;
 
   const ProfileBodyWidget({super.key, required this.screenCallback});
 
@@ -110,32 +110,74 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                 color: HexColor.fromHex('#f3f3f7'),
                 child: Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Expanded(
-                      child: Column(
+                  child: Column(
                     children: [
                       Container(
                         color: Colors.white,
                         child: Column(
                           children: [
-                            const Icon(
-                              Icons.account_circle_outlined,
-                              size: 72,
-                            ),
-                            Text(
-                              model.username,
-                              style: TextStyle(
-                                fontFamily: 'Nunito',
-                                fontWeight: FontWeight.w800,
-                                fontSize: 15.75,
-                                color: HexColor.fromHex('#6C757D'),
-                              ),
-                            ),
-                            Container(margin: const EdgeInsets.only(top: 60)),
+                            Container(margin: const EdgeInsets.only(top: 10)),
                             Padding(
                                 padding:
                                     const EdgeInsets.only(left: 12, right: 12),
                                 child: Column(
                                   children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            margin:
+                                                const EdgeInsets.only(top: 0)),
+                                        Text(
+                                          "Username: ",
+                                          style: TextStyle(
+                                            fontFamily: 'Nunito',
+                                            fontWeight: FontWeight.w800,
+                                            fontSize: 13,
+                                            color: HexColor.fromHex('#6C757D'),
+                                          ),
+                                        ),
+                                        Flexible(
+                                            child: Text(
+                                          model.username,
+                                          style: TextStyle(
+                                            fontFamily: 'Nunito',
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 13,
+                                            color: HexColor.fromHex('#98a6ad'),
+                                          ),
+                                        ))
+                                      ],
+                                    ),
+                                    Container(
+                                        margin:
+                                            const EdgeInsets.only(bottom: 10)),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Email: ",
+                                          style: TextStyle(
+                                            fontFamily: 'Nunito',
+                                            fontWeight: FontWeight.w800,
+                                            fontSize: 13,
+                                            color: HexColor.fromHex('#6C757D'),
+                                          ),
+                                        ),
+                                        Flexible(
+                                            child: Text(
+                                          model.email,
+                                          style: TextStyle(
+                                            fontFamily: 'Nunito',
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 13,
+                                            color: HexColor.fromHex('#98a6ad'),
+                                          ),
+                                        ))
+                                      ],
+                                    ),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -166,7 +208,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                           MainAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "Refferal link: ",
+                                          "Ref: ",
                                           style: TextStyle(
                                             fontFamily: 'Nunito',
                                             fontWeight: FontWeight.w800,
@@ -219,34 +261,6 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                             color: HexColor.fromHex('#98a6ad'),
                                           ),
                                         )),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                            margin:
-                                                const EdgeInsets.only(top: 0)),
-                                        Text(
-                                          "Email: ",
-                                          style: TextStyle(
-                                            fontFamily: 'Nunito',
-                                            fontWeight: FontWeight.w800,
-                                            fontSize: 13,
-                                            color: HexColor.fromHex('#6C757D'),
-                                          ),
-                                        ),
-                                        Flexible(
-                                            child: Text(
-                                          model.email,
-                                          style: TextStyle(
-                                            fontFamily: 'Nunito',
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 13,
-                                            color: HexColor.fromHex('#98a6ad'),
-                                          ),
-                                        ))
                                       ],
                                     ),
                                     Row(
@@ -311,8 +325,8 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                 ],
                               ),
                               onPressed: () {
-                                widget.screenCallback(
-                                    PageEnum.OpenOrders, AppBarEnum.Authorized);
+                                widget.screenCallback(PageEnum.OpenOrders,
+                                    AppBarEnum.Authorized, null);
                               },
                             ),
                             MaterialButton(
@@ -335,7 +349,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                               ),
                               onPressed: () {
                                 widget.screenCallback(PageEnum.ClosedOrders,
-                                    AppBarEnum.Authorized);
+                                    AppBarEnum.Authorized, null);
                               },
                             ),
                             MaterialButton(
@@ -345,7 +359,30 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                   Container(
                                     margin: const EdgeInsets.only(left: 10),
                                     child: Text(
-                                      "INCOMES",
+                                      "WALLETS",
+                                      style: TextStyle(
+                                        fontFamily: 'Nunito',
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 10.5,
+                                        color: HexColor.fromHex('#6C757D'),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              onPressed: () {
+                                widget.screenCallback(PageEnum.Wallets,
+                                    AppBarEnum.Authorized, null);
+                              },
+                            ),
+                            MaterialButton(
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.work, size: 12),
+                                  Container(
+                                    margin: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      "INCOMES TRANSACTIONS",
                                       style: TextStyle(
                                         fontFamily: 'Nunito',
                                         fontWeight: FontWeight.w700,
@@ -359,8 +396,75 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                               onPressed: () {
                                 widget.screenCallback(
                                     PageEnum.IncomeTransactions,
-                                    AppBarEnum.Authorized);
+                                    AppBarEnum.Authorized,
+                                    null);
                               },
+                            ),
+                            MaterialButton(
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.work, size: 12),
+                                  Container(
+                                    margin: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      "INCOMES WALLETS",
+                                      style: TextStyle(
+                                        fontFamily: 'Nunito',
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 10.5,
+                                        color: HexColor.fromHex('#6C757D'),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              onPressed: () {
+                                widget.screenCallback(PageEnum.IncomeWallets,
+                                    AppBarEnum.Authorized, null);
+                              },
+                            ),
+                            MaterialButton(
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.work, size: 12),
+                                  Container(
+                                    margin: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      "WITHDRAWS",
+                                      style: TextStyle(
+                                        fontFamily: 'Nunito',
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 10.5,
+                                        color: HexColor.fromHex('#6C757D'),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              onPressed: () {
+                                widget.screenCallback(PageEnum.Wallets,
+                                    AppBarEnum.Authorized, null);
+                              },
+                            ),
+                            MaterialButton(
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.work, size: 12),
+                                  Container(
+                                    margin: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      "TRANSFERS",
+                                      style: TextStyle(
+                                        fontFamily: 'Nunito',
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 10.5,
+                                        color: HexColor.fromHex('#6C757D'),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              onPressed: () {},
                             ),
                             MaterialButton(
                               child: Row(
@@ -381,8 +485,8 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                 ],
                               ),
                               onPressed: () {
-                                widget.screenCallback(
-                                    PageEnum.Refferals, AppBarEnum.Authorized);
+                                widget.screenCallback(PageEnum.Refferals,
+                                    AppBarEnum.Authorized, null);
                               },
                             ),
                             MaterialButton(
@@ -404,8 +508,8 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                 ],
                               ),
                               onPressed: () {
-                                widget.screenCallback(
-                                    PageEnum.Events, AppBarEnum.Authorized);
+                                widget.screenCallback(PageEnum.Events,
+                                    AppBarEnum.Authorized, null);
                               },
                             ),
                           ],
@@ -440,7 +544,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                 ),
                                 Container(
                                     margin: const EdgeInsets.only(
-                                        top: 30, bottom: 5),
+                                        top: 10, bottom: 5),
                                     alignment: FractionalOffset.centerLeft,
                                     child: Text(
                                       "Username",
@@ -890,7 +994,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                             ),
                           ))
                     ],
-                  )),
+                  ),
                 )),
           ));
   }

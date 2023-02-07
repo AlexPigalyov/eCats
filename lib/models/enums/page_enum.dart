@@ -7,5 +7,12 @@ enum PageEnum {
   ClosedOrders,
   IncomeTransactions,
   Events,
-  Refferals
+  Refferals,
+  Send,
+  SendCoins,
+  Success,
+  Error,
+  Wallets,
+  IncomeWallets,
+  Withdraw
 }

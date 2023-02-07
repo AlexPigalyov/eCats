@@ -3,14 +3,21 @@ import 'dart:io';
 import 'package:ecats/account/closed_orders_body_widget.dart';
 import 'package:ecats/account/events_body_widget.dart';
 import 'package:ecats/account/income_transactions_body_widget.dart';
+import 'package:ecats/account/income_wallets_body_widget.dart';
 import 'package:ecats/account/loading_body_widget.dart';
 import 'package:ecats/account/login_body_widget.dart';
 import 'package:ecats/account/open_orders_body_widget.dart';
 import 'package:ecats/account/profile_body_widget.dart';
 import 'package:ecats/account/register_body_widget.dart';
+import 'package:ecats/account/send_body_widget.dart';
+import 'package:ecats/account/send_coins_body_widget.dart';
 import 'package:ecats/account/shared/authorized_app_bar_widget.dart';
+import 'package:ecats/account/shared/error_body_widget.dart';
 import 'package:ecats/account/shared/non_authorized_app_bar_widget.dart';
+import 'package:ecats/account/shared/success_body_widget.dart';
 import 'package:ecats/account/user_refferals_body_widget.dart';
+import 'package:ecats/account/wallets_body_widget.dart';
+import 'package:ecats/account/withdraw_coins_body_widget.dart';
 import 'package:ecats/models/enums/app_bar_enum.dart';
 import 'package:ecats/models/enums/page_enum.dart';
 import 'package:flutter/material.dart';
@@ -55,13 +62,18 @@ class _MyAppState extends State<MyApp> {
       PageEnum.Login: LoginBodyWidget(screenCallback: changeScreen),
       PageEnum.Register: RegisterBodyWidget(screenCallback: changeScreen),
       PageEnum.Profile: ProfileBodyWidget(screenCallback: changeScreen),
-      PageEnum.OpenOrders: OpenOrdersBodyWidget(screenCallback: changeScreen),
-      PageEnum.ClosedOrders:
-          ClosedOrdersBodyWidget(screenCallback: changeScreen),
-      PageEnum.IncomeTransactions:
-          IncomeTransactionsBodyWidget(screenCallback: changeScreen),
-      PageEnum.Events: EventsBodyWidget(screenCallback: changeScreen),
-      PageEnum.Refferals: UserRefferalsBodyWidget(screenCallback: changeScreen)
+      PageEnum.OpenOrders: const OpenOrdersBodyWidget(),
+      PageEnum.ClosedOrders: const ClosedOrdersBodyWidget(),
+      PageEnum.IncomeTransactions: const IncomeTransactionsBodyWidget(),
+      PageEnum.Events: const EventsBodyWidget(),
+      PageEnum.Refferals: const UserRefferalsBodyWidget(),
+      PageEnum.Send: SendBodyWidget(screenCallback: changeScreen),
+      PageEnum.SendCoins: SendCoinsBodyWidget(screenCallback: changeScreen),
+      PageEnum.Success: SuccessBodyWidget(screenCallback: changeScreen),
+      PageEnum.Error: ErrorBodyWidget(screenCallback: changeScreen),
+      PageEnum.Wallets: WalletsBodyWidget(screenCallback: changeScreen),
+      PageEnum.IncomeWallets: const IncomeWalletsBodyWidget(),
+      PageEnum.Withdraw: WithdrawCoinsBodyWidget(screenCallback: changeScreen)
     };
 
     appBars = <AppBarEnum, PreferredSizeWidget>{
@@ -91,7 +103,20 @@ class _MyAppState extends State<MyApp> {
         (_isAuthorized ? bodies[PageEnum.Profile] : bodies[PageEnum.Login])!;
   }
 
-  changeScreen(PageEnum pageEnum, AppBarEnum appBarEnum) => setState(() {
+  changeScreen(PageEnum pageEnum, AppBarEnum appBarEnum, dynamic? args) =>
+      setState(() {
+        switch (pageEnum) {
+          case PageEnum.SendCoins:
+            (bodies[pageEnum] as SendCoinsBodyWidget).currency = args as String;
+            break;
+          case PageEnum.Error:
+            (bodies[pageEnum] as ErrorBodyWidget).errorMessage = args as String;
+            break;
+          case PageEnum.Withdraw:
+            (bodies[pageEnum] as WithdrawCoinsBodyWidget).currency =
+                args as String;
+            break;
+        }
         currentBodyWidget = bodies[pageEnum]!;
         currentAppBarWidget = appBars[appBarEnum]!;
       });

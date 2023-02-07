@@ -10,7 +10,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../Extensions/hex_color.dart';
 
 class RegisterBodyWidget extends StatefulWidget {
-  final void Function(PageEnum, AppBarEnum) screenCallback;
+  final void Function(PageEnum, AppBarEnum, dynamic) screenCallback;
 
   const RegisterBodyWidget({super.key, required this.screenCallback});
 
@@ -48,7 +48,7 @@ class _RegisterBodyWidgetState extends State<RegisterBodyWidget> {
         await _storage.write(
             key: 'token', value: await response.stream.bytesToString());
 
-        widget.screenCallback(PageEnum.Profile, AppBarEnum.Authorized);
+        widget.screenCallback(PageEnum.Profile, AppBarEnum.Authorized, null);
       }
 
       /*
