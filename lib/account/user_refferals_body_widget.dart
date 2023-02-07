@@ -86,14 +86,12 @@ class _UserRefferalsBodyWidgetState extends State<UserRefferalsBodyWidget> {
   List<DataColumn> get _columns {
     return [
       const DataColumn2(
-          size: ColumnSize.S,
-          label: Expanded(
-            child: Text('Email', textAlign: TextAlign.left),
-          )),
+        size: ColumnSize.S,
+        label: Text('Email', textAlign: TextAlign.left),
+      ),
       const DataColumn2(
           size: ColumnSize.L,
-          label: Expanded(
-              child: Text('Registration date', textAlign: TextAlign.center)),
+          label: Text('Registration date', textAlign: TextAlign.center),
           numeric: true),
     ];
   }
@@ -130,9 +128,9 @@ class _UserRefferalsBodyWidgetState extends State<UserRefferalsBodyWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text('My refferals'),
-                  if (getCurrentRouteOption(context) == custPager &&
-                      _controller != null)
-                    PageNumber(controller: _controller!),
+                  //if (getCurrentRouteOption(context) == custPager &&
+                  // _controller != null)
+                  //PageNumber(controller: _controller!),
                   Expanded(
                     child: Container(
                       alignment: Alignment.centerRight,

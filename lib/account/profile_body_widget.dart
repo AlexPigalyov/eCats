@@ -110,8 +110,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                 color: HexColor.fromHex('#f3f3f7'),
                 child: Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Expanded(
-                      child: Column(
+                  child: Column(
                     children: [
                       Container(
                         color: Colors.white,
@@ -890,7 +889,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                             ),
                           ))
                     ],
-                  )),
+                  ),
                 )),
           ));
   }

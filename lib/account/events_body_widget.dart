@@ -85,17 +85,16 @@ class _EventsBodyWidgetState extends State<EventsBodyWidget> {
   List<DataColumn> get _columns {
     return [
       const DataColumn2(
-          size: ColumnSize.S,
-          label: Expanded(
-            child: Text('Event', textAlign: TextAlign.left),
-          )),
+        size: ColumnSize.S,
+        label: Text('Event', textAlign: TextAlign.left),
+      ),
       const DataColumn2(
           size: ColumnSize.S,
-          label: Expanded(child: Text('Comment', textAlign: TextAlign.center)),
+          label: Text('Comment', textAlign: TextAlign.center),
           numeric: true),
       const DataColumn2(
           size: ColumnSize.L,
-          label: Expanded(child: Text('Date', textAlign: TextAlign.center)),
+          label: Text('Date', textAlign: TextAlign.center),
           numeric: true)
     ];
   }
@@ -132,9 +131,9 @@ class _EventsBodyWidgetState extends State<EventsBodyWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text('Events'),
-                  if (getCurrentRouteOption(context) == custPager &&
-                      _controller != null)
-                    PageNumber(controller: _controller!),
+                  //if (getCurrentRouteOption(context) == custPager &&
+                  //_controller != null)
+                  //PageNumber(controller: _controller!),
                   Expanded(
                     child: Container(
                       alignment: Alignment.centerRight,

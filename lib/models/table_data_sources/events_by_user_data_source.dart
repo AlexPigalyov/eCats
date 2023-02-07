@@ -45,24 +45,21 @@ class EventsByUserDataSource extends DataTableSource {
               ? MaterialStateProperty.all(Theme.of(context).highlightColor)
               : null),
       cells: [
-        DataCell(Expanded(
-            child: Container(
+        DataCell(Container(
           alignment: Alignment.centerLeft,
           child: Text(
               EventTypeEnum.values[event.type].toString().split('.').last,
               textAlign: TextAlign.center),
-        ))),
-        DataCell(Expanded(
-            child: Container(
+        )),
+        DataCell(Container(
           alignment: Alignment.center,
           child: Text(event.comment, textAlign: TextAlign.center),
-        ))),
-        DataCell(Expanded(
-            child: Container(
+        )),
+        DataCell(Container(
           alignment: Alignment.center,
           child: Text(DateTimeFormat.format(event.whenDate),
               textAlign: TextAlign.center),
-        ))),
+        )),
       ],
     );
   }

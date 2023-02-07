@@ -46,41 +46,35 @@ class IncomeTransactionsByUserDataSouce extends DataTableSource {
               ? MaterialStateProperty.all(Theme.of(context).highlightColor)
               : null),
       cells: [
-        DataCell(Expanded(
-            child: Container(
+        DataCell(Container(
           alignment: Alignment.centerLeft,
           child: Text(incomeTransaction.currencyAcronim,
               textAlign: TextAlign.left),
-        ))),
-        DataCell(Expanded(
-            child: Container(
+        )),
+        DataCell(Container(
           alignment: Alignment.centerRight,
           child: Text(incomeTransaction.amount.toString(),
               textAlign: TextAlign.center),
-        ))),
-        DataCell(Expanded(
-            child: Container(
+        )),
+        DataCell(Container(
           alignment: Alignment.centerRight,
           child: Text(incomeTransaction.transactionFee.toString(),
               textAlign: TextAlign.center),
-        ))),
-        DataCell(Expanded(
-            child: Container(
+        )),
+        DataCell(Container(
           alignment: Alignment.centerRight,
           child:
               Text(incomeTransaction.fromAdress, textAlign: TextAlign.center),
-        ))),
-        DataCell(Expanded(
-            child: Container(
+        )),
+        DataCell(Container(
           alignment: Alignment.center,
           child: Text(incomeTransaction.toAddress, textAlign: TextAlign.center),
-        ))),
-        DataCell(Expanded(
-            child: Container(
+        )),
+        DataCell(Container(
           alignment: Alignment.center,
           child: Text(DateTimeFormat.format(incomeTransaction.createdDate),
               textAlign: TextAlign.center),
-        )))
+        ))
       ],
     );
   }

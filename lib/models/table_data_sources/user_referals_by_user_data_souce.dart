@@ -45,16 +45,15 @@ class UserReferalsByUserDataSource extends DataTableSource {
               ? MaterialStateProperty.all(Theme.of(context).highlightColor)
               : null),
       cells: [
-        DataCell(Expanded(
-            child: Container(
+        DataCell(Container(
           alignment: Alignment.centerLeft,
           child: Text(referal.email, textAlign: TextAlign.center),
-        ))),
-        DataCell(Expanded(
-            child: Container(
+        )),
+        DataCell(Container(
           alignment: Alignment.center,
-          child: Text(DateTimeFormat.format(referal.registrationDate), textAlign: TextAlign.center),
-        )))
+          child: Text(DateTimeFormat.format(referal.registrationDate),
+              textAlign: TextAlign.center),
+        ))
       ],
     );
   }

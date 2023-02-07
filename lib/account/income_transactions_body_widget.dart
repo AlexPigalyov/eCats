@@ -88,31 +88,26 @@ class _IncomeTransactionsBodyWidgetState
   List<DataColumn> get _columns {
     return [
       const DataColumn2(
-          size: ColumnSize.S,
-          label: Expanded(
-            child: Text('Currency acronim', textAlign: TextAlign.left),
-          )),
+        size: ColumnSize.S,
+        label: Text('Currency acronim', textAlign: TextAlign.left),
+      ),
       const DataColumn2(
           size: ColumnSize.S,
-          label: Expanded(child: Text('Amount', textAlign: TextAlign.right)),
+          label: Text('Amount', textAlign: TextAlign.right),
           numeric: true),
       const DataColumn2(
           size: ColumnSize.S,
-          label: Expanded(
-              child: Text('Transaction fee', textAlign: TextAlign.right)),
+          label: Text('Transaction fee', textAlign: TextAlign.right),
           numeric: true),
       const DataColumn2(
           size: ColumnSize.S,
-          label:
-              Expanded(child: Text('From address', textAlign: TextAlign.right)),
+          label: Text('From address', textAlign: TextAlign.right),
           numeric: true),
       const DataColumn2(
           size: ColumnSize.S,
-          label:
-              Expanded(child: Text('To address', textAlign: TextAlign.center))),
+          label: Text('To address', textAlign: TextAlign.center)),
       const DataColumn2(
-          size: ColumnSize.L,
-          label: Expanded(child: Text('Date', textAlign: TextAlign.center))),
+          size: ColumnSize.L, label: Text('Date', textAlign: TextAlign.center)),
     ];
   }
 
@@ -148,9 +143,9 @@ class _IncomeTransactionsBodyWidgetState
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text('Income transactions'),
-                  if (getCurrentRouteOption(context) == custPager &&
-                      _controller != null)
-                    PageNumber(controller: _controller!),
+                  //if (getCurrentRouteOption(context) == custPager &&
+                  // _controller != null)
+                  //PageNumber(controller: _controller!),
                   Expanded(
                     child: Container(
                       alignment: Alignment.centerRight,

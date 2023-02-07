@@ -85,30 +85,29 @@ class _ClosedOrdersBodyWidgetState extends State<ClosedOrdersBodyWidget> {
   List<DataColumn> get _columns {
     return [
       const DataColumn(
-          label: Expanded(
-        child: Text('Pair', textAlign: TextAlign.left),
-      )),
+        label: Text('Pair', textAlign: TextAlign.left),
+      ),
       const DataColumn2(
           size: ColumnSize.S,
-          label: Expanded(child: Text('Price', textAlign: TextAlign.right)),
+          label: Text('Price', textAlign: TextAlign.right),
           numeric: true),
       const DataColumn2(
           size: ColumnSize.S,
-          label: Expanded(child: Text('Amount', textAlign: TextAlign.right)),
+          label: Text('Amount', textAlign: TextAlign.right),
           numeric: true),
       const DataColumn2(
           size: ColumnSize.S,
-          label: Expanded(child: Text('Total', textAlign: TextAlign.center)),
+          label: Text('Total', textAlign: TextAlign.center),
           numeric: true),
       const DataColumn2(
           size: ColumnSize.L,
-          label: Expanded(child: Text('Created', textAlign: TextAlign.center))),
+          label: Text('Created', textAlign: TextAlign.center)),
       const DataColumn2(
           size: ColumnSize.L,
-          label: Expanded(child: Text('Closed', textAlign: TextAlign.center))),
+          label: Text('Closed', textAlign: TextAlign.center)),
       const DataColumn2(
           size: ColumnSize.S,
-          label: Expanded(child: Text('Status', textAlign: TextAlign.center))),
+          label: Text('Status', textAlign: TextAlign.center)),
     ];
   }
 
@@ -143,9 +142,9 @@ class _ClosedOrdersBodyWidgetState extends State<ClosedOrdersBodyWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text('Closed Orders'),
-                  if (getCurrentRouteOption(context) == custPager &&
-                      _controller != null)
-                    PageNumber(controller: _controller!),
+                  //if (getCurrentRouteOption(context) == custPager &&
+                  //_controller != null)
+                  // PageNumber(controller: _controller!),
                   Expanded(
                     child: Container(
                       alignment: Alignment.centerRight,

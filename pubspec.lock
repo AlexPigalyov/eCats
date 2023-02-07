@@ -221,10 +221,10 @@ packages:
     dependency: "direct main"
     description:
       name: data_table_2
-      sha256: e5c0459872228d93698f93e0da1b2bee972bf1f4e9c5651b3f9f6f72f0b5f430
+      sha256: "321a5110db7a12ed97c67b173b448f15ee92ae2c360b319790ab011c3d857840"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.11"
+    version: "2.3.12"
   decimal:
     dependency: "direct main"
     description:
@@ -436,10 +436,10 @@ packages:
     dependency: transitive
     description:
       name: json_annotation
-      sha256: "6cec7404b25d6338c8cb7b30131cd6c760079a4ec1fa7846c55bdda91f9d2819"
+      sha256: c33da08e136c3df0190bd5bbe51ae1df4a7d96e7954d1d7249fea2968a72d317
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.1"
+    version: "4.8.0"
   lints:
     dependency: transitive
     description:
@@ -727,4 +727,4 @@ packages:
     version: "3.1.1"
 sdks:
   dart: ">=2.19.0 <3.0.0"
-  flutter: ">=3.0.0"
+  flutter: ">=3.7.0"

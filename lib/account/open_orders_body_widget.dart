@@ -86,28 +86,26 @@ class _OpenOrdersBodyWidgetState extends State<OpenOrdersBodyWidget> {
   List<DataColumn> get _columns {
     return [
       const DataColumn2(
-          size: ColumnSize.S,
-          label: Expanded(
-            child: Text('Pair', textAlign: TextAlign.left),
-          )),
+        size: ColumnSize.S,
+        label: Text('Pair', textAlign: TextAlign.left),
+      ),
       const DataColumn2(
           size: ColumnSize.S,
-          label: Expanded(child: Text('Price', textAlign: TextAlign.right)),
+          label: Text('Price', textAlign: TextAlign.right),
           numeric: true),
       const DataColumn2(
           size: ColumnSize.S,
-          label: Expanded(child: Text('Amount', textAlign: TextAlign.right)),
+          label: Text('Amount', textAlign: TextAlign.right),
           numeric: true),
       const DataColumn2(
           size: ColumnSize.S,
-          label: Expanded(child: Text('Total', textAlign: TextAlign.center)),
+          label: Text('Total', textAlign: TextAlign.center),
           numeric: true),
       const DataColumn2(
           size: ColumnSize.L,
-          label: Expanded(child: Text('Created', textAlign: TextAlign.center))),
+          label: Text('Created', textAlign: TextAlign.center)),
       const DataColumn2(
-          size: ColumnSize.S,
-          label: Expanded(child: Text('', textAlign: TextAlign.center))),
+          size: ColumnSize.S, label: Text('', textAlign: TextAlign.center)),
     ];
   }
 
@@ -143,9 +141,9 @@ class _OpenOrdersBodyWidgetState extends State<OpenOrdersBodyWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text('Open Orders'),
-                  if (getCurrentRouteOption(context) == custPager &&
-                      _controller != null)
-                    PageNumber(controller: _controller!),
+                  //if (getCurrentRouteOption(context) == custPager &&
+                  //_controller != null)
+                  // PageNumber(controller: _controller!),
                   Expanded(
                     child: Container(
                       alignment: Alignment.centerRight,

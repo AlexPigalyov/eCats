@@ -30,43 +30,39 @@ class _AuthorizedAppBarWidgetState extends State<AuthorizedAppBarWidget> {
       toolbarHeight: 50,
       backgroundColor: Colors.white,
       foregroundColor: HexColor.fromHex('#8391a2'),
-      title: Flexible(
-        flex: 3,
-        child: Container(
-          height: 50,
-          alignment: FractionalOffset.centerLeft,
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton2(
-              customButton: const Icon(
-                Icons.list,
-                size: 32,
-                color: Colors.black,
-              ),
-              items: <String>[].map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              itemHeight: 48,
-              itemPadding: const EdgeInsets.only(left: 16, right: 16),
-              dropdownWidth: 160,
-              dropdownPadding: const EdgeInsets.symmetric(vertical: 6),
-              dropdownDecoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(4)),
-              dropdownElevation: 8,
-              offset: const Offset(0, 8),
-              isExpanded: false,
-              iconSize: 24,
-              underline: const SizedBox(),
-              onChanged: (String? newValue) {
-                if (newValue != null && newValue == 'Logout') {
-                  _storage.delete(key: 'token').then((x) =>
-                      widget.screenCallback(
-                          PageEnum.Login, AppBarEnum.NonAuthorized));
-                }
-              },
+      title: Container(
+        height: 50,
+        alignment: FractionalOffset.centerLeft,
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton2(
+            customButton: const Icon(
+              Icons.list,
+              size: 32,
+              color: Colors.black,
             ),
+            items: <String>[].map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            itemHeight: 48,
+            itemPadding: const EdgeInsets.only(left: 16, right: 16),
+            dropdownWidth: 160,
+            dropdownPadding: const EdgeInsets.symmetric(vertical: 6),
+            dropdownDecoration:
+                BoxDecoration(borderRadius: BorderRadius.circular(4)),
+            dropdownElevation: 8,
+            offset: const Offset(0, 8),
+            isExpanded: false,
+            iconSize: 24,
+            underline: const SizedBox(),
+            onChanged: (String? newValue) {
+              if (newValue != null && newValue == 'Logout') {
+                _storage.delete(key: 'token').then((x) => widget.screenCallback(
+                    PageEnum.Login, AppBarEnum.NonAuthorized));
+              }
+            },
           ),
         ),
       ),
