@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:ecats/account/loading_body_widget.dart';
 import 'package:ecats/assets/constants.dart' as Constants;
-import 'package:ecats/models/enums/app_bar_enum.dart';
-import 'package:ecats/models/enums/page_enum.dart';
 import 'package:ecats/models/requests/closed_orders_by_user_request_model.dart';
 import 'package:ecats/models/table_data_sources/closed_orders_by_user_data_source.dart';
 import 'package:ecats/services/http_service.dart';
@@ -14,9 +12,7 @@ import './shared/data_table/custom_pager.dart';
 import './shared/data_table/nav_helper.dart';
 
 class ClosedOrdersBodyWidget extends StatefulWidget {
-  final void Function(PageEnum, AppBarEnum) screenCallback;
-
-  const ClosedOrdersBodyWidget({super.key, required this.screenCallback});
+  const ClosedOrdersBodyWidget({super.key});
 
   @override
   State<ClosedOrdersBodyWidget> createState() => _ClosedOrdersBodyWidgetState();
@@ -84,30 +80,58 @@ class _ClosedOrdersBodyWidgetState extends State<ClosedOrdersBodyWidget> {
 
   List<DataColumn> get _columns {
     return [
-      const DataColumn(
-        label: Text('Pair', textAlign: TextAlign.left),
+      DataColumn2(
+        size: ColumnSize.S,
+        label: Container(
+          alignment: Alignment.centerLeft,
+          child: const Text('Pair'),
+        ),
       ),
-      const DataColumn2(
-          size: ColumnSize.S,
-          label: Text('Price', textAlign: TextAlign.right),
-          numeric: true),
-      const DataColumn2(
-          size: ColumnSize.S,
-          label: Text('Amount', textAlign: TextAlign.right),
-          numeric: true),
-      const DataColumn2(
-          size: ColumnSize.S,
-          label: Text('Total', textAlign: TextAlign.center),
-          numeric: true),
-      const DataColumn2(
-          size: ColumnSize.L,
-          label: Text('Created', textAlign: TextAlign.center)),
-      const DataColumn2(
-          size: ColumnSize.L,
-          label: Text('Closed', textAlign: TextAlign.center)),
-      const DataColumn2(
-          size: ColumnSize.S,
-          label: Text('Status', textAlign: TextAlign.center)),
+      DataColumn2(
+        size: ColumnSize.S,
+        numeric: true,
+        label: Container(
+          alignment: Alignment.centerRight,
+          child: const Text('Price'),
+        ),
+      ),
+      DataColumn2(
+        size: ColumnSize.S,
+        numeric: true,
+        label: Container(
+          alignment: Alignment.centerRight,
+          child: const Text('Amount'),
+        ),
+      ),
+      DataColumn2(
+        size: ColumnSize.S,
+        numeric: true,
+        label: Container(
+          alignment: Alignment.center,
+          child: const Text('Total'),
+        ),
+      ),
+      DataColumn2(
+        size: ColumnSize.L,
+        label: Container(
+          alignment: Alignment.center,
+          child: const Text('Created'),
+        ),
+      ),
+      DataColumn2(
+        size: ColumnSize.L,
+        label: Container(
+          alignment: Alignment.center,
+          child: const Text('Closed'),
+        ),
+      ),
+      DataColumn2(
+        size: ColumnSize.S,
+        label: Container(
+          alignment: Alignment.center,
+          child: const Text('Status'),
+        ),
+      )
     ];
   }
 

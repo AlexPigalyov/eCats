@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:ecats/account/loading_body_widget.dart';
 import 'package:ecats/assets/constants.dart' as Constants;
-import 'package:ecats/models/enums/app_bar_enum.dart';
-import 'package:ecats/models/enums/page_enum.dart';
 import 'package:ecats/models/requests/income_transaction_request_model.dart';
 import 'package:ecats/models/requests/my_income_transaction_request_model.dart';
 import 'package:ecats/models/table_data_sources/income_transactions_by_user_data_source.dart';
@@ -15,9 +13,7 @@ import './shared/data_table/custom_pager.dart';
 import './shared/data_table/nav_helper.dart';
 
 class IncomeTransactionsBodyWidget extends StatefulWidget {
-  final void Function(PageEnum, AppBarEnum) screenCallback;
-
-  const IncomeTransactionsBodyWidget({super.key, required this.screenCallback});
+  const IncomeTransactionsBodyWidget({super.key});
 
   @override
   State<IncomeTransactionsBodyWidget> createState() =>
@@ -87,27 +83,50 @@ class _IncomeTransactionsBodyWidgetState
 
   List<DataColumn> get _columns {
     return [
-      const DataColumn2(
+      DataColumn2(
         size: ColumnSize.S,
-        label: Text('Currency acronim', textAlign: TextAlign.left),
+        label: Container(
+          alignment: Alignment.centerLeft,
+          child: const Text('Currency acronim'),
+        ),
       ),
-      const DataColumn2(
-          size: ColumnSize.S,
-          label: Text('Amount', textAlign: TextAlign.right),
-          numeric: true),
-      const DataColumn2(
-          size: ColumnSize.S,
-          label: Text('Transaction fee', textAlign: TextAlign.right),
-          numeric: true),
-      const DataColumn2(
-          size: ColumnSize.S,
-          label: Text('From address', textAlign: TextAlign.right),
-          numeric: true),
-      const DataColumn2(
-          size: ColumnSize.S,
-          label: Text('To address', textAlign: TextAlign.center)),
-      const DataColumn2(
-          size: ColumnSize.L, label: Text('Date', textAlign: TextAlign.center)),
+      DataColumn2(
+        size: ColumnSize.S,
+        numeric: true,
+        label: Container(
+          alignment: Alignment.centerRight,
+          child: const Text('Amount'),
+        ),
+      ),
+      DataColumn2(
+        size: ColumnSize.S,
+        numeric: true,
+        label: Container(
+          alignment: Alignment.centerRight,
+          child: const Text('Transaction fee'),
+        ),
+      ),
+      DataColumn2(
+        size: ColumnSize.S,
+        label: Container(
+          alignment: Alignment.centerRight,
+          child: const Text('From address'),
+        ),
+      ),
+      DataColumn2(
+        size: ColumnSize.S,
+        label: Container(
+          alignment: Alignment.center,
+          child: const Text('To address'),
+        ),
+      ),
+      DataColumn2(
+        size: ColumnSize.L,
+        label: Container(
+          alignment: Alignment.center,
+          child: const Text('Date'),
+        ),
+      )
     ];
   }
 

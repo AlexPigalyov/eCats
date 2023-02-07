@@ -35,7 +35,7 @@ class IncomeTransactionsByUserDataSouce extends DataTableSource {
   @override
   DataRow getRow(int index, [Color? color]) {
     if (index >= incomeTransactions.incomeTransactions!.length)
-      throw 'index > _desserts.length';
+      throw 'index > _incomeTransactions.length';
     final incomeTransaction = incomeTransactions.incomeTransactions?[index];
     return DataRow2.byIndex(
       index: index,

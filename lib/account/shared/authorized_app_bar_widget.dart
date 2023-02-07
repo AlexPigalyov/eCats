@@ -9,7 +9,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthorizedAppBarWidget extends StatefulWidget
     implements PreferredSizeWidget {
-  final void Function(PageEnum, AppBarEnum) screenCallback;
+  final void Function(PageEnum, AppBarEnum, dynamic) screenCallback;
 
   const AuthorizedAppBarWidget({super.key, required this.screenCallback})
       : preferredSize = const Size.fromHeight(kToolbarHeight);
@@ -40,7 +40,7 @@ class _AuthorizedAppBarWidgetState extends State<AuthorizedAppBarWidget> {
               size: 32,
               color: Colors.black,
             ),
-            items: <String>[].map((String value) {
+            items: <String>['Send'].map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(value),
@@ -58,9 +58,9 @@ class _AuthorizedAppBarWidgetState extends State<AuthorizedAppBarWidget> {
             iconSize: 24,
             underline: const SizedBox(),
             onChanged: (String? newValue) {
-              if (newValue != null && newValue == 'Logout') {
-                _storage.delete(key: 'token').then((x) => widget.screenCallback(
-                    PageEnum.Login, AppBarEnum.NonAuthorized));
+              if (newValue != null && newValue == 'Send') {
+                widget.screenCallback(
+                    PageEnum.Send, AppBarEnum.Authorized, null);
               }
             },
           ),
@@ -109,11 +109,11 @@ class _AuthorizedAppBarWidgetState extends State<AuthorizedAppBarWidget> {
                     if (newValue != null) {
                       if (newValue == 'Logout') {
                         _storage.delete(key: 'token').then((x) =>
-                            widget.screenCallback(
-                                PageEnum.Login, AppBarEnum.NonAuthorized));
+                            widget.screenCallback(PageEnum.Login,
+                                AppBarEnum.NonAuthorized, null));
                       } else if (newValue == 'Profile') {
                         widget.screenCallback(
-                            PageEnum.Profile, AppBarEnum.Authorized);
+                            PageEnum.Profile, AppBarEnum.Authorized, null);
                       }
                     }
                   },

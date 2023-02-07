@@ -122,19 +122,21 @@ class EventTableModel {
   double? resultBalance;
   double? platformCommission;
   String comment;
-  String whenDate;
+  DateTime whenDate;
   String currencyAccronim;
 
   EventTableModel.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         userId = json['userId'],
         type = json['type'],
-        value = json['value'],
-        startBalance = json['startBalance'],
-        resultBalance = json['resultBalance'],
-        platformCommission = json['platformCommission'],
+        value = json['value'] == null ? 0 : double.parse(json['value'].toString()),
+        startBalance = json['startBalance'] == null ? 0 : double.parse(json['startBalance'].toString()),
+        resultBalance = json['resultBalance'] == null
+            ? 0
+            : double.parse(json['resultBalance'].toString()),
+        platformCommission = json['platformCommission'] == null ? 0 : double.parse(json['platformCommission'].toString()),
         comment = json['comment'],
-        whenDate = json['whenDate'],
+        whenDate = DateTime.parse(json['whenDate']),
         currencyAccronim = json['currencyAccronim'];
 
   Map<String, dynamic> toJson() => {
@@ -171,7 +173,7 @@ class NotEmptyValueWalletModel {
   NotEmptyValueWalletModel.fromJson(Map<String, dynamic> json)
       : userId = json['userId'],
         currencyAcronim = json['currencyAcronim'],
-        value = json['value'];
+        value = double.parse(json['value'].toString());
 
   Map<String, dynamic> toJson() =>
       {'userId': userId, 'currencyAcronim': currencyAcronim, 'value': value};

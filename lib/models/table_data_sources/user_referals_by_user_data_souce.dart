@@ -34,7 +34,8 @@ class UserReferalsByUserDataSource extends DataTableSource {
 
   @override
   DataRow getRow(int index, [Color? color]) {
-    if (index >= referals.myRefferals!.length) throw 'index > _desserts.length';
+    if (index >= referals.myRefferals!.length)
+      throw 'index > _userReferals.length';
     final referal = referals.myRefferals![index];
     return DataRow2.byIndex(
       index: index,

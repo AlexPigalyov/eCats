@@ -34,7 +34,7 @@ class EventsByUserDataSource extends DataTableSource {
 
   @override
   DataRow getRow(int index, [Color? color]) {
-    if (index >= events.length) throw 'index > _desserts.length';
+    if (index >= events.length) throw 'index > _events.length';
     final event = events[index];
     return DataRow2.byIndex(
       index: index,

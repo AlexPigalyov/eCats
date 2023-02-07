@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class ProfileBodyWidget extends StatefulWidget {
-  final void Function(PageEnum, AppBarEnum) screenCallback;
+  final void Function(PageEnum, AppBarEnum, dynamic) screenCallback;
 
   const ProfileBodyWidget({super.key, required this.screenCallback});
 
@@ -311,7 +311,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                               ),
                               onPressed: () {
                                 widget.screenCallback(
-                                    PageEnum.OpenOrders, AppBarEnum.Authorized);
+                                    PageEnum.OpenOrders, AppBarEnum.Authorized, null);
                               },
                             ),
                             MaterialButton(
@@ -334,7 +334,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                               ),
                               onPressed: () {
                                 widget.screenCallback(PageEnum.ClosedOrders,
-                                    AppBarEnum.Authorized);
+                                    AppBarEnum.Authorized, null);
                               },
                             ),
                             MaterialButton(
@@ -358,7 +358,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                               onPressed: () {
                                 widget.screenCallback(
                                     PageEnum.IncomeTransactions,
-                                    AppBarEnum.Authorized);
+                                    AppBarEnum.Authorized, null);
                               },
                             ),
                             MaterialButton(
@@ -381,7 +381,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                               ),
                               onPressed: () {
                                 widget.screenCallback(
-                                    PageEnum.Refferals, AppBarEnum.Authorized);
+                                    PageEnum.Refferals, AppBarEnum.Authorized, null);
                               },
                             ),
                             MaterialButton(
@@ -404,7 +404,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                               ),
                               onPressed: () {
                                 widget.screenCallback(
-                                    PageEnum.Events, AppBarEnum.Authorized);
+                                    PageEnum.Events, AppBarEnum.Authorized, null);
                               },
                             ),
                           ],
