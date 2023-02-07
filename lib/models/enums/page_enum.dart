@@ -11,5 +11,8 @@ enum PageEnum {
   Send,
   SendCoins,
   Success,
-  Error
+  Error,
+  Wallets,
+  IncomeWallets,
+  Withdraw
 }

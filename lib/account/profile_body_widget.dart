@@ -124,11 +124,11 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                   children: [
                                     Row(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.start,
+                                          MainAxisAlignment.start,
                                       children: [
                                         Container(
                                             margin:
-                                            const EdgeInsets.only(top: 0)),
+                                                const EdgeInsets.only(top: 0)),
                                         Text(
                                           "Username: ",
                                           style: TextStyle(
@@ -140,23 +140,23 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                         ),
                                         Flexible(
                                             child: Text(
-                                              model.username,
-                                              style: TextStyle(
-                                                fontFamily: 'Nunito',
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 13,
-                                                color: HexColor.fromHex('#98a6ad'),
-                                              ),
-                                            ))
+                                          model.username,
+                                          style: TextStyle(
+                                            fontFamily: 'Nunito',
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 13,
+                                            color: HexColor.fromHex('#98a6ad'),
+                                          ),
+                                        ))
                                       ],
                                     ),
+                                    Container(
+                                        margin:
+                                            const EdgeInsets.only(bottom: 10)),
                                     Row(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.start,
+                                          MainAxisAlignment.start,
                                       children: [
-                                        Container(
-                                            margin:
-                                            const EdgeInsets.only(top: 0)),
                                         Text(
                                           "Email: ",
                                           style: TextStyle(
@@ -168,14 +168,14 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                         ),
                                         Flexible(
                                             child: Text(
-                                              model.email,
-                                              style: TextStyle(
-                                                fontFamily: 'Nunito',
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 13,
-                                                color: HexColor.fromHex('#98a6ad'),
-                                              ),
-                                            ))
+                                          model.email,
+                                          style: TextStyle(
+                                            fontFamily: 'Nunito',
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 13,
+                                            color: HexColor.fromHex('#98a6ad'),
+                                          ),
+                                        ))
                                       ],
                                     ),
                                     Row(
@@ -325,8 +325,8 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                 ],
                               ),
                               onPressed: () {
-                                widget.screenCallback(
-                                    PageEnum.OpenOrders, AppBarEnum.Authorized, null);
+                                widget.screenCallback(PageEnum.OpenOrders,
+                                    AppBarEnum.Authorized, null);
                               },
                             ),
                             MaterialButton(
@@ -359,7 +359,30 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                   Container(
                                     margin: const EdgeInsets.only(left: 10),
                                     child: Text(
-                                      "INCOMES",
+                                      "WALLETS",
+                                      style: TextStyle(
+                                        fontFamily: 'Nunito',
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 10.5,
+                                        color: HexColor.fromHex('#6C757D'),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              onPressed: () {
+                                widget.screenCallback(PageEnum.Wallets,
+                                    AppBarEnum.Authorized, null);
+                              },
+                            ),
+                            MaterialButton(
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.work, size: 12),
+                                  Container(
+                                    margin: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      "INCOMES TRANSACTIONS",
                                       style: TextStyle(
                                         fontFamily: 'Nunito',
                                         fontWeight: FontWeight.w700,
@@ -373,8 +396,75 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                               onPressed: () {
                                 widget.screenCallback(
                                     PageEnum.IncomeTransactions,
+                                    AppBarEnum.Authorized,
+                                    null);
+                              },
+                            ),
+                            MaterialButton(
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.work, size: 12),
+                                  Container(
+                                    margin: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      "INCOMES WALLETS",
+                                      style: TextStyle(
+                                        fontFamily: 'Nunito',
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 10.5,
+                                        color: HexColor.fromHex('#6C757D'),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              onPressed: () {
+                                widget.screenCallback(PageEnum.IncomeWallets,
                                     AppBarEnum.Authorized, null);
                               },
+                            ),
+                            MaterialButton(
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.work, size: 12),
+                                  Container(
+                                    margin: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      "WITHDRAWS",
+                                      style: TextStyle(
+                                        fontFamily: 'Nunito',
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 10.5,
+                                        color: HexColor.fromHex('#6C757D'),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              onPressed: () {
+                                widget.screenCallback(PageEnum.Wallets,
+                                    AppBarEnum.Authorized, null);
+                              },
+                            ),
+                            MaterialButton(
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.work, size: 12),
+                                  Container(
+                                    margin: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      "TRANSFERS",
+                                      style: TextStyle(
+                                        fontFamily: 'Nunito',
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 10.5,
+                                        color: HexColor.fromHex('#6C757D'),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              onPressed: () {},
                             ),
                             MaterialButton(
                               child: Row(
@@ -395,8 +485,8 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                 ],
                               ),
                               onPressed: () {
-                                widget.screenCallback(
-                                    PageEnum.Refferals, AppBarEnum.Authorized, null);
+                                widget.screenCallback(PageEnum.Refferals,
+                                    AppBarEnum.Authorized, null);
                               },
                             ),
                             MaterialButton(
@@ -418,8 +508,8 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                 ],
                               ),
                               onPressed: () {
-                                widget.screenCallback(
-                                    PageEnum.Events, AppBarEnum.Authorized, null);
+                                widget.screenCallback(PageEnum.Events,
+                                    AppBarEnum.Authorized, null);
                               },
                             ),
                           ],
@@ -454,7 +544,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                 ),
                                 Container(
                                     margin: const EdgeInsets.only(
-                                        top: 30, bottom: 5),
+                                        top: 10, bottom: 5),
                                     alignment: FractionalOffset.centerLeft,
                                     child: Text(
                                       "Username",

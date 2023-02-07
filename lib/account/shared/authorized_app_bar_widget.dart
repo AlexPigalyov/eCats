@@ -40,7 +40,7 @@ class _AuthorizedAppBarWidgetState extends State<AuthorizedAppBarWidget> {
               size: 32,
               color: Colors.black,
             ),
-            items: <String>['Send'].map((String value) {
+            items: <String>[].map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(value),

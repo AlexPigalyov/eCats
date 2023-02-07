@@ -129,12 +129,17 @@ class EventTableModel {
       : id = json['id'],
         userId = json['userId'],
         type = json['type'],
-        value = json['value'] == null ? 0 : double.parse(json['value'].toString()),
-        startBalance = json['startBalance'] == null ? 0 : double.parse(json['startBalance'].toString()),
+        value =
+            json['value'] == null ? 0 : double.parse(json['value'].toString()),
+        startBalance = json['startBalance'] == null
+            ? 0
+            : double.parse(json['startBalance'].toString()),
         resultBalance = json['resultBalance'] == null
             ? 0
             : double.parse(json['resultBalance'].toString()),
-        platformCommission = json['platformCommission'] == null ? 0 : double.parse(json['platformCommission'].toString()),
+        platformCommission = json['platformCommission'] == null
+            ? 0
+            : double.parse(json['platformCommission'].toString()),
         comment = json['comment'],
         whenDate = DateTime.parse(json['whenDate']),
         currencyAccronim = json['currencyAccronim'];

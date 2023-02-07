@@ -15,6 +15,12 @@ class HttpService {
     return response;
   }
 
+  Future<StreamedResponse> postWithoutBody(Uri uri) async {
+    var response = await _sendRequest('POST', uri, null);
+
+    return response;
+  }
+
   Future<StreamedResponse> get(Uri uri) async {
     var response = await _sendRequest('GET', uri, null);
 
