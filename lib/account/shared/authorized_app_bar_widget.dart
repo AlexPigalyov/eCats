@@ -36,7 +36,7 @@ class _AuthorizedAppBarWidgetState extends State<AuthorizedAppBarWidget> {
         child: DropdownButtonHideUnderline(
           child: DropdownButton2(
             customButton: const Icon(
-              Icons.list,
+              Icons.reorder,
               size: 32,
               color: Colors.black,
             ),

@@ -116,25 +116,68 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                         color: Colors.white,
                         child: Column(
                           children: [
-                            const Icon(
-                              Icons.account_circle_outlined,
-                              size: 72,
-                            ),
-                            Text(
-                              model.username,
-                              style: TextStyle(
-                                fontFamily: 'Nunito',
-                                fontWeight: FontWeight.w800,
-                                fontSize: 15.75,
-                                color: HexColor.fromHex('#6C757D'),
-                              ),
-                            ),
-                            Container(margin: const EdgeInsets.only(top: 60)),
+                            Container(margin: const EdgeInsets.only(top: 10)),
                             Padding(
                                 padding:
                                     const EdgeInsets.only(left: 12, right: 12),
                                 child: Column(
                                   children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            margin:
+                                            const EdgeInsets.only(top: 0)),
+                                        Text(
+                                          "Username: ",
+                                          style: TextStyle(
+                                            fontFamily: 'Nunito',
+                                            fontWeight: FontWeight.w800,
+                                            fontSize: 13,
+                                            color: HexColor.fromHex('#6C757D'),
+                                          ),
+                                        ),
+                                        Flexible(
+                                            child: Text(
+                                              model.username,
+                                              style: TextStyle(
+                                                fontFamily: 'Nunito',
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 13,
+                                                color: HexColor.fromHex('#98a6ad'),
+                                              ),
+                                            ))
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            margin:
+                                            const EdgeInsets.only(top: 0)),
+                                        Text(
+                                          "Email: ",
+                                          style: TextStyle(
+                                            fontFamily: 'Nunito',
+                                            fontWeight: FontWeight.w800,
+                                            fontSize: 13,
+                                            color: HexColor.fromHex('#6C757D'),
+                                          ),
+                                        ),
+                                        Flexible(
+                                            child: Text(
+                                              model.email,
+                                              style: TextStyle(
+                                                fontFamily: 'Nunito',
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 13,
+                                                color: HexColor.fromHex('#98a6ad'),
+                                              ),
+                                            ))
+                                      ],
+                                    ),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -165,7 +208,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                           MainAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "Refferal link: ",
+                                          "Ref: ",
                                           style: TextStyle(
                                             fontFamily: 'Nunito',
                                             fontWeight: FontWeight.w800,
@@ -218,34 +261,6 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                             color: HexColor.fromHex('#98a6ad'),
                                           ),
                                         )),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                            margin:
-                                                const EdgeInsets.only(top: 0)),
-                                        Text(
-                                          "Email: ",
-                                          style: TextStyle(
-                                            fontFamily: 'Nunito',
-                                            fontWeight: FontWeight.w800,
-                                            fontSize: 13,
-                                            color: HexColor.fromHex('#6C757D'),
-                                          ),
-                                        ),
-                                        Flexible(
-                                            child: Text(
-                                          model.email,
-                                          style: TextStyle(
-                                            fontFamily: 'Nunito',
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 13,
-                                            color: HexColor.fromHex('#98a6ad'),
-                                          ),
-                                        ))
                                       ],
                                     ),
                                     Row(
