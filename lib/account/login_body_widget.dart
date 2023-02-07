@@ -211,7 +211,9 @@ class _LoginBodyWidgetState extends State<LoginBodyWidget> {
                 color: HexColor.fromHex('#6C757D'),
               ),
             ),
-            onPressed: () {},
+            onPressed: () {
+              widget.screenCallback(PageEnum.Register, AppBarEnum.NonAuthorized, null);
+            },
           ),
         ),
         Container(
