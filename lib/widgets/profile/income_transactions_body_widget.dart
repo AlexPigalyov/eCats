@@ -21,6 +21,7 @@ class IncomeTransactionsBodyWidget extends StatefulWidget {
 
 class _IncomeTransactionsBodyWidgetState
     extends State<IncomeTransactionsBodyWidget> {
+  late double columnHeight =  100 - (MediaQuery.of(context).size.width / 10);
   final _httpService = HttpService();
   bool isLoading = true;
 
@@ -146,7 +147,7 @@ class _IncomeTransactionsBodyWidgetState
         : Center(
             child: Stack(alignment: Alignment.bottomCenter, children: [
             PaginatedDataTable2(
-              dataRowHeight: 35,
+              dataRowHeight: columnHeight < 35 ? 35 : columnHeight,
               headingRowHeight: 40,
               fixedLeftColumns: 5,
               showCheckboxColumn: false,

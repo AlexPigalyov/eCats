@@ -20,7 +20,7 @@ class EventsBodyWidget extends StatefulWidget {
 class _EventsBodyWidgetState extends State<EventsBodyWidget> {
   final _httpService = HttpService();
   bool isLoading = true;
-
+  late double columnHeight =  100 - (MediaQuery.of(context).size.width / 10);
   //final int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
   //int? _sortColumnIndex;
   //bool _sortAscending = true;
@@ -120,7 +120,7 @@ class _EventsBodyWidgetState extends State<EventsBodyWidget> {
         : Center(
             child: Stack(alignment: Alignment.bottomCenter, children: [
             PaginatedDataTable2(
-              dataRowHeight: 35,
+              dataRowHeight: columnHeight < 35 ? 35 : columnHeight,
               headingRowHeight: 40,
               fixedLeftColumns: 5,
               showCheckboxColumn: false,

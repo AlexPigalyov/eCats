@@ -19,6 +19,7 @@ class ClosedOrdersBodyWidget extends StatefulWidget {
 
 class _ClosedOrdersBodyWidgetState extends State<ClosedOrdersBodyWidget> {
   final _httpService = HttpService();
+  late double columnHeight =  100 - (MediaQuery.of(context).size.width / 10);
   bool isLoading = true;
 
   //int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
@@ -151,7 +152,7 @@ class _ClosedOrdersBodyWidgetState extends State<ClosedOrdersBodyWidget> {
         : Center(
             child: Stack(alignment: Alignment.bottomCenter, children: [
             PaginatedDataTable2(
-              dataRowHeight: 35,
+              dataRowHeight: columnHeight < 35 ? 35 : columnHeight,
               headingRowHeight: 40,
               showCheckboxColumn: false,
               horizontalMargin: 20,

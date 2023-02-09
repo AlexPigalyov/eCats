@@ -37,7 +37,7 @@ class _IncomeWalletsBodyWidgetState extends State<IncomeWalletsBodyWidget> {
   late IncomeWalletsByUserDataSource _incomeUserWallets;
   late UserWalletsResponseRequestModel _model;
   late String selectedAcronim;
-
+  late double columnHeight =  100 - (MediaQuery.of(context).size.width / 10);
   @override
   void initState() {
     super.initState();
@@ -138,7 +138,7 @@ class _IncomeWalletsBodyWidgetState extends State<IncomeWalletsBodyWidget> {
                     child: Column(children: [
                       Expanded(
                         child: PaginatedDataTable2(
-                          dataRowHeight: 35,
+                          dataRowHeight: columnHeight < 35 ? 35 : columnHeight,
                           headingRowHeight: 40,
                           fixedLeftColumns: 5,
                           showCheckboxColumn: false,
