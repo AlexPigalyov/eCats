@@ -41,7 +41,7 @@ class PageNumberState extends State<PageNumber> {
     // print(identityHashCode(this));
     return Text(widget._controller.isAttached
         ? 'Page: ${1 + ((widget._controller.currentRowIndex + 1) / widget._controller.rowsPerPage).floor()} of '
-        '${(widget._controller.rowCount / widget._controller.rowsPerPage).ceil()}'
+            '${(widget._controller.rowCount / widget._controller.rowsPerPage).ceil()}'
         : 'Page: x of y');
   }
 }
@@ -88,7 +88,7 @@ class CustomPagerState extends State<CustomPager> {
           data: Theme.of(context).copyWith(
               iconTheme: const IconThemeData(color: Colors.white),
               textTheme:
-              const TextTheme(titleMedium: TextStyle(color: Colors.white))),
+                  const TextTheme(titleMedium: TextStyle(color: Colors.white))),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -106,9 +106,9 @@ class CustomPagerState extends State<CustomPager> {
                   dropdownColor: Colors.grey[800],
                   items: _availableSizes
                       .map((s) => DropdownMenuItem<int>(
-                    value: s,
-                    child: Text(s.toString()),
-                  ))
+                            value: s,
+                            child: Text(s.toString()),
+                          ))
                       .toList()),
               IconButton(
                   onPressed: () => widget.controller.goToNextPage(),

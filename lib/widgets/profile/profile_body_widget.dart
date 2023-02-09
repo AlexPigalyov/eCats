@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:ecats/account/loading_body_widget.dart';
 import 'package:ecats/assets/constants.dart' as Constants;
 import 'package:ecats/extensions/hex_color.dart';
 import 'package:ecats/models/enums/app_bar_enum.dart';
 import 'package:ecats/models/enums/page_enum.dart';
 import 'package:ecats/models/requests/profile_request_model.dart';
 import 'package:ecats/services/http_service.dart';
+import 'package:ecats/widgets/shared/loading_body_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

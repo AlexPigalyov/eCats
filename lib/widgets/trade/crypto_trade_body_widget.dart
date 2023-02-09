@@ -1,15 +1,15 @@
 import 'dart:convert';
 
-import 'package:ecats/account/loading_body_widget.dart';
 import 'package:ecats/assets/constants.dart' as Constants;
 import 'package:ecats/assets/constants.dart';
 import 'package:ecats/models/enums/app_bar_enum.dart';
 import 'package:ecats/models/enums/page_enum.dart';
-import 'package:ecats/models/requests/closed_order_response_request_model.dart';
-import 'package:ecats/models/requests/crypto_create_order.dart';
 import 'package:ecats/models/requests/crypto_trade_response_request_model.dart';
-import 'package:ecats/models/requests/order_by_desc_price_orderbook_response_request_model.dart';
+import 'package:ecats/models/requests/orders/closed_order_response_request_model.dart';
+import 'package:ecats/models/requests/orders/crypto_create_order.dart';
+import 'package:ecats/models/requests/orders/order_by_desc_price_orderbook_response_request_model.dart';
 import 'package:ecats/services/http_service.dart';
+import 'package:ecats/widgets/shared/loading_body_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tab_indicator_styler/flutter_tab_indicator_styler.dart';
 import 'package:group_button/group_button.dart';

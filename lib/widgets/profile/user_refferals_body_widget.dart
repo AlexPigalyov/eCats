@@ -1,25 +1,25 @@
 import 'dart:convert';
 
 import 'package:data_table_2/data_table_2.dart';
-import 'package:ecats/account/loading_body_widget.dart';
 import 'package:ecats/assets/constants.dart' as Constants;
-import 'package:ecats/models/requests/event_request_model.dart';
-import 'package:ecats/models/table_data_sources/events_by_user_data_source.dart';
+import 'package:ecats/assets/data_table/custom_pager.dart';
+import 'package:ecats/assets/data_table/nav_helper.dart';
+import 'package:ecats/models/requests/user_reffs/user_referals_request_model.dart';
+import 'package:ecats/models/requests/user_reffs/user_refferal_request_model.dart';
+import 'package:ecats/models/table_data_sources/user_referals_by_user_data_souce.dart';
 import 'package:ecats/services/http_service.dart';
+import 'package:ecats/widgets/shared/loading_body_widget.dart';
 import 'package:flutter/material.dart';
 
-import './shared/data_table/custom_pager.dart';
-import './shared/data_table/nav_helper.dart';
-
-class EventsBodyWidget extends StatefulWidget {
-
-  const EventsBodyWidget({super.key});
+class UserRefferalsBodyWidget extends StatefulWidget {
+  const UserRefferalsBodyWidget({super.key});
 
   @override
-  State<EventsBodyWidget> createState() => _EventsBodyWidgetState();
+  State<UserRefferalsBodyWidget> createState() =>
+      _UserRefferalsBodyWidgetState();
 }
 
-class _EventsBodyWidgetState extends State<EventsBodyWidget> {
+class _UserRefferalsBodyWidgetState extends State<UserRefferalsBodyWidget> {
   final _httpService = HttpService();
   bool isLoading = true;
 
@@ -28,8 +28,8 @@ class _EventsBodyWidgetState extends State<EventsBodyWidget> {
   //bool _sortAscending = true;
   PaginatorController? _controller;
 
-  late EventsByUserDataSource _eventsDataSource;
-  late List<EventRequestModel> _model;
+  late UserReferalsByUserDataSource _refferals;
+  late UserRefferalRequestModel _model;
 
   @override
   void initState() {
@@ -40,7 +40,7 @@ class _EventsBodyWidgetState extends State<EventsBodyWidget> {
 
   @override
   void dispose() {
-    _eventsDataSource.dispose();
+    _refferals.dispose();
     super.dispose();
   }
 
@@ -59,20 +59,19 @@ class _EventsBodyWidgetState extends State<EventsBodyWidget> {
     setState(() => isLoading = true);
 
     var uri = Uri.https(
-        Constants.SERVER_URL, Constants.ServerApiEndpoints.USER_EVENTS);
+        Constants.SERVER_URL, Constants.ServerApiEndpoints.USER_REFFERALS);
     var response = await _httpService.get(uri);
     var value = await response.stream.bytesToString();
 
-    _model = List<EventRequestModel>.from(
-        jsonDecode(value)?.map((model) => EventRequestModel.fromJson(model)));
-    _eventsDataSource = EventsByUserDataSource(context, _model);
+    _model = UserRefferalRequestModel.fromJson(jsonDecode(value));
+    _refferals = UserReferalsByUserDataSource(context, _model);
 
     setState(() => isLoading = false);
   }
 
-  void sort<T>(Comparable<T> Function(EventRequestModel d) getField,
+  void sort<T>(Comparable<T> Function(UserReferalsRequestModel d) getField,
       int columnIndex, bool ascending) {
-    _eventsDataSource.sort<T>(getField, ascending);
+    _refferals.sort<T>(getField, ascending);
     setState(() {
       //_sortColumnIndex = columnIndex;
       //_sortAscending = ascending;
@@ -85,23 +84,16 @@ class _EventsBodyWidgetState extends State<EventsBodyWidget> {
         size: ColumnSize.S,
         label: Container(
           alignment: Alignment.centerLeft,
-          child: const Text('Event'),
+          child: const Text('Email'),
         ),
       ),
       DataColumn2(
         size: ColumnSize.S,
         label: Container(
           alignment: Alignment.center,
-          child: const Text('Comment'),
+          child: const Text('Registration date'),
         ),
       ),
-      DataColumn2(
-        size: ColumnSize.L,
-        label: Container(
-          alignment: Alignment.center,
-          child: const Text('Date'),
-        ),
-      )
     ];
   }
 
@@ -136,9 +128,9 @@ class _EventsBodyWidgetState extends State<EventsBodyWidget> {
               header: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Events'),
+                  const Text('My refferals'),
                   //if (getCurrentRouteOption(context) == custPager &&
-                  //_controller != null)
+                  // _controller != null)
                   //PageNumber(controller: _controller!),
                   Expanded(
                     child: Container(
@@ -176,7 +168,7 @@ class _EventsBodyWidgetState extends State<EventsBodyWidget> {
               // custom arrow
               //sortArrowAnimationDuration: const Duration(milliseconds: 0),
               // custom animation duration
-              //onSelectAll: _openOrdersDataSource.selectAll,
+              //onSelectAll: _refferalsDataSource.selectAll,
               //controller: getCurrentRouteOption(context) == custPager
               //? _controller
               //: null,
@@ -189,8 +181,8 @@ class _EventsBodyWidgetState extends State<EventsBodyWidget> {
                       color: Colors.grey[200],
                       child: const Text('No data'))),
               source: getCurrentRouteOption(context) == noData
-                  ? EventsByUserDataSource.empty(context)
-                  : _eventsDataSource,
+                  ? UserReferalsByUserDataSource.empty(context)
+                  : _refferals,
             ),
             if (getCurrentRouteOption(context) == custPager)
               Positioned(bottom: 16, child: CustomPager(_controller!))

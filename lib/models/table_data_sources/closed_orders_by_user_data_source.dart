@@ -1,7 +1,7 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:ecats/assets/constants.dart';
 import 'package:ecats/models/enums/order_status_enum.dart';
-import 'package:ecats/models/requests/closed_orders_by_user_request_model.dart';
+import 'package:ecats/models/requests/orders/closed_orders_by_user_request_model.dart';
 import 'package:flutter/material.dart';
 
 class ClosedOrdersByUserDataSource extends DataTableSource {

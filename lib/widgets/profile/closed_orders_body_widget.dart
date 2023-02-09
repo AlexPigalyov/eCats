@@ -1,37 +1,33 @@
 import 'dart:convert';
 
 import 'package:data_table_2/data_table_2.dart';
-import 'package:ecats/account/loading_body_widget.dart';
 import 'package:ecats/assets/constants.dart' as Constants;
-import 'package:ecats/models/requests/income_transaction_request_model.dart';
-import 'package:ecats/models/requests/my_income_transaction_request_model.dart';
-import 'package:ecats/models/table_data_sources/income_transactions_by_user_data_source.dart';
+import 'package:ecats/assets/data_table/custom_pager.dart';
+import 'package:ecats/assets/data_table/nav_helper.dart';
+import 'package:ecats/models/requests/orders/closed_orders_by_user_request_model.dart';
+import 'package:ecats/models/table_data_sources/closed_orders_by_user_data_source.dart';
 import 'package:ecats/services/http_service.dart';
+import 'package:ecats/widgets/shared/loading_body_widget.dart';
 import 'package:flutter/material.dart';
 
-import './shared/data_table/custom_pager.dart';
-import './shared/data_table/nav_helper.dart';
-
-class IncomeTransactionsBodyWidget extends StatefulWidget {
-  const IncomeTransactionsBodyWidget({super.key});
+class ClosedOrdersBodyWidget extends StatefulWidget {
+  const ClosedOrdersBodyWidget({super.key});
 
   @override
-  State<IncomeTransactionsBodyWidget> createState() =>
-      _IncomeTransactionsBodyWidgetState();
+  State<ClosedOrdersBodyWidget> createState() => _ClosedOrdersBodyWidgetState();
 }
 
-class _IncomeTransactionsBodyWidgetState
-    extends State<IncomeTransactionsBodyWidget> {
+class _ClosedOrdersBodyWidgetState extends State<ClosedOrdersBodyWidget> {
   final _httpService = HttpService();
   bool isLoading = true;
 
-  //final int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
+  //int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
   //int? _sortColumnIndex;
   //bool _sortAscending = true;
   PaginatorController? _controller;
 
-  late IncomeTransactionsByUserDataSouce _incomeTransactionsDataSource;
-  late MyIncomeTransactionRequestModel _model;
+  late ClosedOrdersByUserDataSource _closedOrdersDataSource;
+  late List<ClosedOrderByUserRequestModel> _model;
 
   @override
   void initState() {
@@ -42,7 +38,7 @@ class _IncomeTransactionsBodyWidgetState
 
   @override
   void dispose() {
-    _incomeTransactionsDataSource.dispose();
+    _closedOrdersDataSource.dispose();
     super.dispose();
   }
 
@@ -53,32 +49,32 @@ class _IncomeTransactionsBodyWidgetState
     _controller = PaginatorController();
 
     //if (getCurrentRouteOption(context) == defaultSorting) {
-    //_sortColumnIndex = 1;
+    // _sortColumnIndex = 1;
     //}
   }
 
   Future _updateData() async {
     setState(() => isLoading = true);
 
-    var uri = Uri.https(Constants.SERVER_URL,
-        Constants.ServerApiEndpoints.USER_INCOME_TRANSACTIONS);
+    var uri = Uri.https(
+        Constants.SERVER_URL, Constants.ServerApiEndpoints.USER_CLOSED_ORDERS);
     var response = await _httpService.get(uri);
     var value = await response.stream.bytesToString();
 
-    _model = MyIncomeTransactionRequestModel.fromJson(jsonDecode(value));
-    _incomeTransactionsDataSource =
-        IncomeTransactionsByUserDataSouce(context, _model);
+    _model = List<ClosedOrderByUserRequestModel>.from(jsonDecode(value)
+        ?.map((model) => ClosedOrderByUserRequestModel.fromJson(model)));
+    _closedOrdersDataSource = ClosedOrdersByUserDataSource(context, _model);
 
     setState(() => isLoading = false);
   }
 
-  void sort<T>(Comparable<T> Function(EventRequestModel d) getField,
+  void sort<T>(Comparable<T> Function(ClosedOrderByUserRequestModel d) getField,
       int columnIndex, bool ascending) {
-    _incomeTransactionsDataSource.sort<T>(getField, ascending);
-    //setState(() {
-    //_sortColumnIndex = columnIndex;
-    //_sortAscending = ascending;
-    //});
+    _closedOrdersDataSource.sort<T>(getField, ascending);
+    setState(() {
+      //_sortColumnIndex = columnIndex;
+      //_sortAscending = ascending;
+    });
   }
 
   List<DataColumn> get _columns {
@@ -87,7 +83,15 @@ class _IncomeTransactionsBodyWidgetState
         size: ColumnSize.S,
         label: Container(
           alignment: Alignment.centerLeft,
-          child: const Text('Currency acronim'),
+          child: const Text('Pair'),
+        ),
+      ),
+      DataColumn2(
+        size: ColumnSize.S,
+        numeric: true,
+        label: Container(
+          alignment: Alignment.centerRight,
+          child: const Text('Price'),
         ),
       ),
       DataColumn2(
@@ -102,29 +106,29 @@ class _IncomeTransactionsBodyWidgetState
         size: ColumnSize.S,
         numeric: true,
         label: Container(
-          alignment: Alignment.centerRight,
-          child: const Text('Transaction fee'),
-        ),
-      ),
-      DataColumn2(
-        size: ColumnSize.S,
-        label: Container(
-          alignment: Alignment.centerRight,
-          child: const Text('From address'),
-        ),
-      ),
-      DataColumn2(
-        size: ColumnSize.S,
-        label: Container(
           alignment: Alignment.center,
-          child: const Text('To address'),
+          child: const Text('Total'),
         ),
       ),
       DataColumn2(
         size: ColumnSize.L,
         label: Container(
           alignment: Alignment.center,
-          child: const Text('Date'),
+          child: const Text('Created'),
+        ),
+      ),
+      DataColumn2(
+        size: ColumnSize.L,
+        label: Container(
+          alignment: Alignment.center,
+          child: const Text('Closed'),
+        ),
+      ),
+      DataColumn2(
+        size: ColumnSize.S,
+        label: Container(
+          alignment: Alignment.center,
+          child: const Text('Status'),
         ),
       )
     ];
@@ -149,7 +153,6 @@ class _IncomeTransactionsBodyWidgetState
             PaginatedDataTable2(
               dataRowHeight: 35,
               headingRowHeight: 40,
-              fixedLeftColumns: 5,
               showCheckboxColumn: false,
               horizontalMargin: 20,
               checkboxHorizontalMargin: 12,
@@ -161,10 +164,10 @@ class _IncomeTransactionsBodyWidgetState
               header: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Income transactions'),
+                  const Text('Closed Orders'),
                   //if (getCurrentRouteOption(context) == custPager &&
-                  // _controller != null)
-                  //PageNumber(controller: _controller!),
+                  //_controller != null)
+                  // PageNumber(controller: _controller!),
                   Expanded(
                     child: Container(
                       alignment: Alignment.centerRight,
@@ -201,10 +204,10 @@ class _IncomeTransactionsBodyWidgetState
               // custom arrow
               //sortArrowAnimationDuration: const Duration(milliseconds: 0),
               // custom animation duration
-              //onSelectAll: _incomeTransactions.selectAll,
+              //onSelectAll: _closedOrdersDataSource.selectAll,
               //controller: getCurrentRouteOption(context) == custPager
-              //? _controller
-              //: null,
+              // ? _controller
+              // : null,
               //hidePaginator: getCurrentRouteOption(context) == custPager,
               hidePaginator: true,
               columns: _columns,
@@ -214,8 +217,8 @@ class _IncomeTransactionsBodyWidgetState
                       color: Colors.grey[200],
                       child: const Text('No data'))),
               source: getCurrentRouteOption(context) == noData
-                  ? IncomeTransactionsByUserDataSouce.empty(context)
-                  : _incomeTransactionsDataSource,
+                  ? ClosedOrdersByUserDataSource.empty(context)
+                  : _closedOrdersDataSource,
             ),
             if (getCurrentRouteOption(context) == custPager)
               Positioned(bottom: 16, child: CustomPager(_controller!))

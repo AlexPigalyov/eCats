@@ -1,26 +1,23 @@
 import 'dart:convert';
 
 import 'package:data_table_2/data_table_2.dart';
-import 'package:ecats/account/loading_body_widget.dart';
 import 'package:ecats/assets/constants.dart' as Constants;
-import 'package:ecats/models/requests/user_referals_request_model.dart';
-import 'package:ecats/models/requests/user_refferal_request_model.dart';
-import 'package:ecats/models/table_data_sources/user_referals_by_user_data_souce.dart';
+import 'package:ecats/assets/data_table/custom_pager.dart';
+import 'package:ecats/assets/data_table/nav_helper.dart';
+import 'package:ecats/models/requests/orders/open_orders_by_user_request_model.dart';
+import 'package:ecats/models/table_data_sources/open_orders_by_user_data_source.dart';
 import 'package:ecats/services/http_service.dart';
+import 'package:ecats/widgets/shared/loading_body_widget.dart';
 import 'package:flutter/material.dart';
 
-import './shared/data_table/custom_pager.dart';
-import './shared/data_table/nav_helper.dart';
-
-class UserRefferalsBodyWidget extends StatefulWidget {
-  const UserRefferalsBodyWidget({super.key});
+class OpenOrdersBodyWidget extends StatefulWidget {
+  const OpenOrdersBodyWidget({super.key});
 
   @override
-  State<UserRefferalsBodyWidget> createState() =>
-      _UserRefferalsBodyWidgetState();
+  State<OpenOrdersBodyWidget> createState() => _OpenOrdersBodyWidgetState();
 }
 
-class _UserRefferalsBodyWidgetState extends State<UserRefferalsBodyWidget> {
+class _OpenOrdersBodyWidgetState extends State<OpenOrdersBodyWidget> {
   final _httpService = HttpService();
   bool isLoading = true;
 
@@ -29,8 +26,8 @@ class _UserRefferalsBodyWidgetState extends State<UserRefferalsBodyWidget> {
   //bool _sortAscending = true;
   PaginatorController? _controller;
 
-  late UserReferalsByUserDataSource _refferals;
-  late UserRefferalRequestModel _model;
+  late OpenOrdersByUserDataSource _openOrdersDataSource;
+  late List<OpenOrderByUserRequestModel> _model;
 
   @override
   void initState() {
@@ -41,7 +38,7 @@ class _UserRefferalsBodyWidgetState extends State<UserRefferalsBodyWidget> {
 
   @override
   void dispose() {
-    _refferals.dispose();
+    _openOrdersDataSource.dispose();
     super.dispose();
   }
 
@@ -60,19 +57,21 @@ class _UserRefferalsBodyWidgetState extends State<UserRefferalsBodyWidget> {
     setState(() => isLoading = true);
 
     var uri = Uri.https(
-        Constants.SERVER_URL, Constants.ServerApiEndpoints.USER_REFFERALS);
+        Constants.SERVER_URL, Constants.ServerApiEndpoints.USER_OPEN_ORDERS);
     var response = await _httpService.get(uri);
     var value = await response.stream.bytesToString();
 
-    _model = UserRefferalRequestModel.fromJson(jsonDecode(value));
-    _refferals = UserReferalsByUserDataSource(context, _model);
+    _model = List<OpenOrderByUserRequestModel>.from(jsonDecode(value)
+        ?.map((model) => OpenOrderByUserRequestModel.fromJson(model)));
+    _openOrdersDataSource =
+        OpenOrdersByUserDataSource(context, _model, _updateData);
 
     setState(() => isLoading = false);
   }
 
-  void sort<T>(Comparable<T> Function(UserReferalsRequestModel d) getField,
+  void sort<T>(Comparable<T> Function(OpenOrderByUserRequestModel d) getField,
       int columnIndex, bool ascending) {
-    _refferals.sort<T>(getField, ascending);
+    _openOrdersDataSource.sort<T>(getField, ascending);
     setState(() {
       //_sortColumnIndex = columnIndex;
       //_sortAscending = ascending;
@@ -85,16 +84,47 @@ class _UserRefferalsBodyWidgetState extends State<UserRefferalsBodyWidget> {
         size: ColumnSize.S,
         label: Container(
           alignment: Alignment.centerLeft,
-          child: const Text('Email'),
+          child: const Text('Pair'),
+        ),
+      ),
+      DataColumn2(
+        size: ColumnSize.S,
+        numeric: true,
+        label: Container(
+          alignment: Alignment.centerRight,
+          child: const Text('Price'),
+        ),
+      ),
+      DataColumn2(
+        size: ColumnSize.S,
+        numeric: true,
+        label: Container(
+          alignment: Alignment.centerRight,
+          child: const Text('Amount'),
+        ),
+      ),
+      DataColumn2(
+        size: ColumnSize.S,
+        numeric: true,
+        label: Container(
+          alignment: Alignment.center,
+          child: const Text('Total'),
+        ),
+      ),
+      DataColumn2(
+        size: ColumnSize.L,
+        label: Container(
+          alignment: Alignment.center,
+          child: const Text('Created'),
         ),
       ),
       DataColumn2(
         size: ColumnSize.S,
         label: Container(
           alignment: Alignment.center,
-          child: const Text('Registration date'),
+          child: const Text(''),
         ),
-      ),
+      )
     ];
   }
 
@@ -129,10 +159,10 @@ class _UserRefferalsBodyWidgetState extends State<UserRefferalsBodyWidget> {
               header: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('My refferals'),
+                  const Text('Open Orders'),
                   //if (getCurrentRouteOption(context) == custPager &&
-                  // _controller != null)
-                  //PageNumber(controller: _controller!),
+                  //_controller != null)
+                  // PageNumber(controller: _controller!),
                   Expanded(
                     child: Container(
                       alignment: Alignment.centerRight,
@@ -169,7 +199,7 @@ class _UserRefferalsBodyWidgetState extends State<UserRefferalsBodyWidget> {
               // custom arrow
               //sortArrowAnimationDuration: const Duration(milliseconds: 0),
               // custom animation duration
-              //onSelectAll: _refferalsDataSource.selectAll,
+              //onSelectAll: _openOrdersDataSource.selectAll,
               //controller: getCurrentRouteOption(context) == custPager
               //? _controller
               //: null,
@@ -182,8 +212,8 @@ class _UserRefferalsBodyWidgetState extends State<UserRefferalsBodyWidget> {
                       color: Colors.grey[200],
                       child: const Text('No data'))),
               source: getCurrentRouteOption(context) == noData
-                  ? UserReferalsByUserDataSource.empty(context)
-                  : _refferals,
+                  ? OpenOrdersByUserDataSource.empty(context)
+                  : _openOrdersDataSource,
             ),
             if (getCurrentRouteOption(context) == custPager)
               Positioned(bottom: 16, child: CustomPager(_controller!))

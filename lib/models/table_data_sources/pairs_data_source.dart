@@ -51,7 +51,8 @@ class PairsDataSource extends DataTableSource {
           child: TextButton(
             child: Text(pair.header),
             onPressed: () async {
-              screenCallback(PageEnum.CryptoTrade, AppBarEnum.Authorized, pair.acronim);
+              screenCallback(
+                  PageEnum.CryptoTrade, AppBarEnum.Authorized, pair.acronim);
             },
           ),
         )),

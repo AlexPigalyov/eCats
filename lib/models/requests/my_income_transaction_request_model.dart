@@ -1,6 +1,6 @@
 import 'package:ecats/models/requests/income_transaction_request_model.dart';
-import 'package:ecats/models/requests/paged_request_model.dart';
 import 'package:ecats/models/requests/request_model.dart';
+import 'package:ecats/models/requests/shared/paged_request_model.dart';
 
 class MyIncomeTransactionRequestModel implements RequestModel {
   MyIncomeTransactionRequestModel({this.incomeTransactions, this.paged});

@@ -1,27 +1,26 @@
 import 'dart:convert';
 
 import 'package:data_table_2/data_table_2.dart';
-import 'package:ecats/account/loading_body_widget.dart';
 import 'package:ecats/assets/constants.dart' as Constants;
-import 'package:ecats/models/enums/app_bar_enum.dart';
-import 'package:ecats/models/enums/page_enum.dart';
-import 'package:ecats/models/requests/pair_response_request_model.dart';
-import 'package:ecats/models/table_data_sources/pairs_data_source.dart';
+import 'package:ecats/assets/data_table/custom_pager.dart';
+import 'package:ecats/assets/data_table/nav_helper.dart';
+import 'package:ecats/models/requests/income_transaction_request_model.dart';
+import 'package:ecats/models/requests/my_income_transaction_request_model.dart';
+import 'package:ecats/models/table_data_sources/income_transactions_by_user_data_source.dart';
 import 'package:ecats/services/http_service.dart';
+import 'package:ecats/widgets/shared/loading_body_widget.dart';
 import 'package:flutter/material.dart';
 
-import './shared/data_table/custom_pager.dart';
-import './shared/data_table/nav_helper.dart';
-
-class PairsBodyWidget extends StatefulWidget {
-  final void Function(PageEnum, AppBarEnum, dynamic) screenCallback;
-  const PairsBodyWidget({super.key, required this.screenCallback});
+class IncomeTransactionsBodyWidget extends StatefulWidget {
+  const IncomeTransactionsBodyWidget({super.key});
 
   @override
-  State<PairsBodyWidget> createState() => _PairsBodyWidgetState();
+  State<IncomeTransactionsBodyWidget> createState() =>
+      _IncomeTransactionsBodyWidgetState();
 }
 
-class _PairsBodyWidgetState extends State<PairsBodyWidget> {
+class _IncomeTransactionsBodyWidgetState
+    extends State<IncomeTransactionsBodyWidget> {
   final _httpService = HttpService();
   bool isLoading = true;
 
@@ -30,8 +29,8 @@ class _PairsBodyWidgetState extends State<PairsBodyWidget> {
   //bool _sortAscending = true;
   PaginatorController? _controller;
 
-  late PairsDataSource _pairsDataSource;
-  late List<PairResponseRequestModel> _model;
+  late IncomeTransactionsByUserDataSouce _incomeTransactionsDataSource;
+  late MyIncomeTransactionRequestModel _model;
 
   @override
   void initState() {
@@ -42,7 +41,7 @@ class _PairsBodyWidgetState extends State<PairsBodyWidget> {
 
   @override
   void dispose() {
-    _pairsDataSource.dispose();
+    _incomeTransactionsDataSource.dispose();
     super.dispose();
   }
 
@@ -51,34 +50,34 @@ class _PairsBodyWidgetState extends State<PairsBodyWidget> {
     super.didChangeDependencies();
 
     _controller = PaginatorController();
-    /*
-    if (getCurrentRouteOption(context) == defaultSorting) {
-      _sortColumnIndex = 1;
-    }*/
+
+    //if (getCurrentRouteOption(context) == defaultSorting) {
+    //_sortColumnIndex = 1;
+    //}
   }
 
   Future _updateData() async {
     setState(() => isLoading = true);
 
-    var uri =
-        Uri.https(Constants.SERVER_URL, Constants.ServerApiEndpoints.PAIRS);
+    var uri = Uri.https(Constants.SERVER_URL,
+        Constants.ServerApiEndpoints.USER_INCOME_TRANSACTIONS);
     var response = await _httpService.get(uri);
     var value = await response.stream.bytesToString();
 
-    _model = List<PairResponseRequestModel>.from(jsonDecode(value)
-        ?.map((model) => PairResponseRequestModel.fromJson(model)));
-    _pairsDataSource = PairsDataSource(context, _model, widget.screenCallback);
+    _model = MyIncomeTransactionRequestModel.fromJson(jsonDecode(value));
+    _incomeTransactionsDataSource =
+        IncomeTransactionsByUserDataSouce(context, _model);
 
     setState(() => isLoading = false);
   }
 
-  void sort<T>(Comparable<T> Function(PairResponseRequestModel d) getField,
+  void sort<T>(Comparable<T> Function(EventRequestModel d) getField,
       int columnIndex, bool ascending) {
-    _pairsDataSource.sort<T>(getField, ascending);
-    setState(() {
-      //_sortColumnIndex = columnIndex;
-      //_sortAscending = ascending;
-    });
+    _incomeTransactionsDataSource.sort<T>(getField, ascending);
+    //setState(() {
+    //_sortColumnIndex = columnIndex;
+    //_sortAscending = ascending;
+    //});
   }
 
   List<DataColumn> get _columns {
@@ -87,7 +86,7 @@ class _PairsBodyWidgetState extends State<PairsBodyWidget> {
         size: ColumnSize.S,
         label: Container(
           alignment: Alignment.centerLeft,
-          child: const Text('Name'),
+          child: const Text('Currency acronim'),
         ),
       ),
       DataColumn2(
@@ -95,7 +94,7 @@ class _PairsBodyWidgetState extends State<PairsBodyWidget> {
         numeric: true,
         label: Container(
           alignment: Alignment.centerRight,
-          child: const Text('Price'),
+          child: const Text('Amount'),
         ),
       ),
       DataColumn2(
@@ -103,29 +102,28 @@ class _PairsBodyWidgetState extends State<PairsBodyWidget> {
         numeric: true,
         label: Container(
           alignment: Alignment.centerRight,
-          child: const Text('Change 15m'),
-        ),
-      ),
-      DataColumn2(
-        size: ColumnSize.S,
-        numeric: true,
-        label: Container(
-          alignment: Alignment.center,
-          child: const Text('Change 1h'),
+          child: const Text('Transaction fee'),
         ),
       ),
       DataColumn2(
         size: ColumnSize.S,
         label: Container(
-          alignment: Alignment.center,
-          child: const Text('Change 24h'),
+          alignment: Alignment.centerRight,
+          child: const Text('From address'),
         ),
       ),
       DataColumn2(
         size: ColumnSize.S,
         label: Container(
           alignment: Alignment.center,
-          child: const Text('Volume 24h'),
+          child: const Text('To address'),
+        ),
+      ),
+      DataColumn2(
+        size: ColumnSize.L,
+        label: Container(
+          alignment: Alignment.center,
+          child: const Text('Date'),
         ),
       )
     ];
@@ -162,10 +160,10 @@ class _PairsBodyWidgetState extends State<PairsBodyWidget> {
               header: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Pairs'),
+                  const Text('Income transactions'),
                   //if (getCurrentRouteOption(context) == custPager &&
-                  //_controller != null)
-                  // PageNumber(controller: _controller!),
+                  // _controller != null)
+                  //PageNumber(controller: _controller!),
                   Expanded(
                     child: Container(
                       alignment: Alignment.centerRight,
@@ -202,7 +200,7 @@ class _PairsBodyWidgetState extends State<PairsBodyWidget> {
               // custom arrow
               //sortArrowAnimationDuration: const Duration(milliseconds: 0),
               // custom animation duration
-              //onSelectAll: _openOrdersDataSource.selectAll,
+              //onSelectAll: _incomeTransactions.selectAll,
               //controller: getCurrentRouteOption(context) == custPager
               //? _controller
               //: null,
@@ -215,8 +213,8 @@ class _PairsBodyWidgetState extends State<PairsBodyWidget> {
                       color: Colors.grey[200],
                       child: const Text('No data'))),
               source: getCurrentRouteOption(context) == noData
-                  ? PairsDataSource.empty(context)
-                  : _pairsDataSource,
+                  ? IncomeTransactionsByUserDataSouce.empty(context)
+                  : _incomeTransactionsDataSource,
             ),
             if (getCurrentRouteOption(context) == custPager)
               Positioned(bottom: 16, child: CustomPager(_controller!))

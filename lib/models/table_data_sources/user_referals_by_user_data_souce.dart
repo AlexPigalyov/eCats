@@ -1,7 +1,7 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:ecats/assets/constants.dart';
-import 'package:ecats/models/requests/user_referals_request_model.dart';
-import 'package:ecats/models/requests/user_refferal_request_model.dart';
+import 'package:ecats/models/requests/user_reffs/user_referals_request_model.dart';
+import 'package:ecats/models/requests/user_reffs/user_refferal_request_model.dart';
 import 'package:flutter/material.dart';
 
 class UserReferalsByUserDataSource extends DataTableSource {

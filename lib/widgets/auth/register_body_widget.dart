@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../Extensions/hex_color.dart';
+import '../../Extensions/hex_color.dart';
 
 class RegisterBodyWidget extends StatefulWidget {
   final void Function(PageEnum, AppBarEnum, dynamic) screenCallback;
@@ -37,7 +37,8 @@ class _RegisterBodyWidgetState extends State<RegisterBodyWidget> {
           email: emailController.text,
           password: passwordController.text,
           confirmPassword: confirmPasswordController.text,
-          refId: int.parse(refIdController.text.isNotEmpty ? refIdController.text : '0'));
+          refId: int.parse(
+              refIdController.text.isNotEmpty ? refIdController.text : '0'));
 
       var uri = Uri.https(
           Constants.SERVER_URL, Constants.ServerApiEndpoints.REGISTER);

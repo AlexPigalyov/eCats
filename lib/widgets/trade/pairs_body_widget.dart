@@ -1,24 +1,27 @@
 import 'dart:convert';
 
 import 'package:data_table_2/data_table_2.dart';
-import 'package:ecats/account/loading_body_widget.dart';
 import 'package:ecats/assets/constants.dart' as Constants;
-import 'package:ecats/models/requests/open_orders_by_user_request_model.dart';
-import 'package:ecats/models/table_data_sources/open_orders_by_user_data_source.dart';
+import 'package:ecats/assets/data_table/custom_pager.dart';
+import 'package:ecats/assets/data_table/nav_helper.dart';
+import 'package:ecats/models/enums/app_bar_enum.dart';
+import 'package:ecats/models/enums/page_enum.dart';
+import 'package:ecats/models/requests/pair_response_request_model.dart';
+import 'package:ecats/models/table_data_sources/pairs_data_source.dart';
 import 'package:ecats/services/http_service.dart';
+import 'package:ecats/widgets/shared/loading_body_widget.dart';
 import 'package:flutter/material.dart';
 
-import './shared/data_table/custom_pager.dart';
-import './shared/data_table/nav_helper.dart';
+class PairsBodyWidget extends StatefulWidget {
+  final void Function(PageEnum, AppBarEnum, dynamic) screenCallback;
 
-class OpenOrdersBodyWidget extends StatefulWidget {
-  const OpenOrdersBodyWidget({super.key});
+  const PairsBodyWidget({super.key, required this.screenCallback});
 
   @override
-  State<OpenOrdersBodyWidget> createState() => _OpenOrdersBodyWidgetState();
+  State<PairsBodyWidget> createState() => _PairsBodyWidgetState();
 }
 
-class _OpenOrdersBodyWidgetState extends State<OpenOrdersBodyWidget> {
+class _PairsBodyWidgetState extends State<PairsBodyWidget> {
   final _httpService = HttpService();
   bool isLoading = true;
 
@@ -27,8 +30,8 @@ class _OpenOrdersBodyWidgetState extends State<OpenOrdersBodyWidget> {
   //bool _sortAscending = true;
   PaginatorController? _controller;
 
-  late OpenOrdersByUserDataSource _openOrdersDataSource;
-  late List<OpenOrderByUserRequestModel> _model;
+  late PairsDataSource _pairsDataSource;
+  late List<PairResponseRequestModel> _model;
 
   @override
   void initState() {
@@ -39,7 +42,7 @@ class _OpenOrdersBodyWidgetState extends State<OpenOrdersBodyWidget> {
 
   @override
   void dispose() {
-    _openOrdersDataSource.dispose();
+    _pairsDataSource.dispose();
     super.dispose();
   }
 
@@ -57,22 +60,21 @@ class _OpenOrdersBodyWidgetState extends State<OpenOrdersBodyWidget> {
   Future _updateData() async {
     setState(() => isLoading = true);
 
-    var uri = Uri.https(
-        Constants.SERVER_URL, Constants.ServerApiEndpoints.USER_OPEN_ORDERS);
+    var uri =
+        Uri.https(Constants.SERVER_URL, Constants.ServerApiEndpoints.PAIRS);
     var response = await _httpService.get(uri);
     var value = await response.stream.bytesToString();
 
-    _model = List<OpenOrderByUserRequestModel>.from(jsonDecode(value)
-        ?.map((model) => OpenOrderByUserRequestModel.fromJson(model)));
-    _openOrdersDataSource =
-        OpenOrdersByUserDataSource(context, _model, _updateData);
+    _model = List<PairResponseRequestModel>.from(jsonDecode(value)
+        ?.map((model) => PairResponseRequestModel.fromJson(model)));
+    _pairsDataSource = PairsDataSource(context, _model, widget.screenCallback);
 
     setState(() => isLoading = false);
   }
 
-  void sort<T>(Comparable<T> Function(OpenOrderByUserRequestModel d) getField,
+  void sort<T>(Comparable<T> Function(PairResponseRequestModel d) getField,
       int columnIndex, bool ascending) {
-    _openOrdersDataSource.sort<T>(getField, ascending);
+    _pairsDataSource.sort<T>(getField, ascending);
     setState(() {
       //_sortColumnIndex = columnIndex;
       //_sortAscending = ascending;
@@ -85,7 +87,7 @@ class _OpenOrdersBodyWidgetState extends State<OpenOrdersBodyWidget> {
         size: ColumnSize.S,
         label: Container(
           alignment: Alignment.centerLeft,
-          child: const Text('Pair'),
+          child: const Text('Name'),
         ),
       ),
       DataColumn2(
@@ -101,7 +103,7 @@ class _OpenOrdersBodyWidgetState extends State<OpenOrdersBodyWidget> {
         numeric: true,
         label: Container(
           alignment: Alignment.centerRight,
-          child: const Text('Amount'),
+          child: const Text('Change 15m'),
         ),
       ),
       DataColumn2(
@@ -109,21 +111,21 @@ class _OpenOrdersBodyWidgetState extends State<OpenOrdersBodyWidget> {
         numeric: true,
         label: Container(
           alignment: Alignment.center,
-          child: const Text('Total'),
-        ),
-      ),
-      DataColumn2(
-        size: ColumnSize.L,
-        label: Container(
-          alignment: Alignment.center,
-          child: const Text('Created'),
+          child: const Text('Change 1h'),
         ),
       ),
       DataColumn2(
         size: ColumnSize.S,
         label: Container(
           alignment: Alignment.center,
-          child: const Text(''),
+          child: const Text('Change 24h'),
+        ),
+      ),
+      DataColumn2(
+        size: ColumnSize.S,
+        label: Container(
+          alignment: Alignment.center,
+          child: const Text('Volume 24h'),
         ),
       )
     ];
@@ -160,7 +162,7 @@ class _OpenOrdersBodyWidgetState extends State<OpenOrdersBodyWidget> {
               header: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Open Orders'),
+                  const Text('Pairs'),
                   //if (getCurrentRouteOption(context) == custPager &&
                   //_controller != null)
                   // PageNumber(controller: _controller!),
@@ -213,8 +215,8 @@ class _OpenOrdersBodyWidgetState extends State<OpenOrdersBodyWidget> {
                       color: Colors.grey[200],
                       child: const Text('No data'))),
               source: getCurrentRouteOption(context) == noData
-                  ? OpenOrdersByUserDataSource.empty(context)
-                  : _openOrdersDataSource,
+                  ? PairsDataSource.empty(context)
+                  : _pairsDataSource,
             ),
             if (getCurrentRouteOption(context) == custPager)
               Positioned(bottom: 16, child: CustomPager(_controller!))

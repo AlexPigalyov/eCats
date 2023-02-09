@@ -1,11 +1,12 @@
-import 'package:flutter/material.dart';
 import 'dart:math';
+
+import 'package:flutter/material.dart';
 
 ThemeData blackSlider(BuildContext context) {
   return Theme.of(context).copyWith(
       sliderTheme: SliderThemeData(
           rangeThumbShape:
-          const RectRangeSliderThumbShape(enabledThumbRadius: 8),
+              const RectRangeSliderThumbShape(enabledThumbRadius: 8),
           thumbShape: const RectSliderThumbShape(enabledThumbRadius: 8),
           thumbColor: Colors.grey[800],
           activeTrackColor: Colors.grey[700],
@@ -25,6 +26,7 @@ class RectRangeSliderThumbShape extends RangeSliderThumbShape {
   final double enabledThumbRadius;
 
   final double? disabledThumbRadius;
+
   double get _disabledThumbRadius => disabledThumbRadius ?? enabledThumbRadius;
 
   final double elevation;
@@ -39,18 +41,18 @@ class RectRangeSliderThumbShape extends RangeSliderThumbShape {
 
   @override
   void paint(
-      PaintingContext context,
-      Offset center, {
-        required Animation<double> activationAnimation,
-        required Animation<double> enableAnimation,
-        bool isDiscrete = false,
-        bool isEnabled = false,
-        bool? isOnTop,
-        required SliderThemeData sliderTheme,
-        TextDirection? textDirection,
-        Thumb? thumb,
-        bool? isPressed,
-      }) {
+    PaintingContext context,
+    Offset center, {
+    required Animation<double> activationAnimation,
+    required Animation<double> enableAnimation,
+    bool isDiscrete = false,
+    bool isEnabled = false,
+    bool? isOnTop,
+    required SliderThemeData sliderTheme,
+    TextDirection? textDirection,
+    Thumb? thumb,
+    bool? isPressed,
+  }) {
     assert(sliderTheme.showValueIndicator != null);
     assert(sliderTheme.overlappingShapeStrokeColor != null);
 
@@ -83,7 +85,7 @@ class RectRangeSliderThumbShape extends RangeSliderThumbShape {
     final Color color = colorTween.evaluate(enableAnimation)!;
 
     final double evaluatedElevation =
-    isPressed! ? elevationTween.evaluate(activationAnimation) : elevation;
+        isPressed! ? elevationTween.evaluate(activationAnimation) : elevation;
     final Path shadowPath = Path()
       ..addArc(
           Rect.fromCenter(
@@ -110,6 +112,7 @@ class RectSliderThumbShape extends SliderComponentShape {
   final double enabledThumbRadius;
 
   final double? disabledThumbRadius;
+
   double get _disabledThumbRadius => disabledThumbRadius ?? enabledThumbRadius;
 
   final double elevation;
@@ -124,19 +127,19 @@ class RectSliderThumbShape extends SliderComponentShape {
 
   @override
   void paint(
-      PaintingContext context,
-      Offset center, {
-        required Animation<double> activationAnimation,
-        required Animation<double> enableAnimation,
-        required bool isDiscrete,
-        required TextPainter labelPainter,
-        required RenderBox parentBox,
-        required SliderThemeData sliderTheme,
-        required TextDirection textDirection,
-        required double value,
-        required double textScaleFactor,
-        required Size sizeWithOverflow,
-      }) {
+    PaintingContext context,
+    Offset center, {
+    required Animation<double> activationAnimation,
+    required Animation<double> enableAnimation,
+    required bool isDiscrete,
+    required TextPainter labelPainter,
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required TextDirection textDirection,
+    required double value,
+    required double textScaleFactor,
+    required Size sizeWithOverflow,
+  }) {
     assert(sliderTheme.disabledThumbColor != null);
     assert(sliderTheme.thumbColor != null);
 
@@ -159,7 +162,7 @@ class RectSliderThumbShape extends SliderComponentShape {
     );
 
     final double evaluatedElevation =
-    elevationTween.evaluate(activationAnimation);
+        elevationTween.evaluate(activationAnimation);
     final Path path = Path()
       ..addArc(
           Rect.fromCenter(

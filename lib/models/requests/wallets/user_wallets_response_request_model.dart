@@ -1,6 +1,6 @@
 import 'package:ecats/models/requests/currency_response_request_model.dart';
-import 'package:ecats/models/requests/income_wallet_response_request_model.dart';
-import 'package:ecats/models/requests/user_wallet_response_request_model.dart';
+import 'package:ecats/models/requests/wallets/income_wallet_response_request_model.dart';
+import 'package:ecats/models/requests/wallets/user_wallet_response_request_model.dart';
 
 class UserWalletsResponseRequestModel {
   UserWalletsResponseRequestModel(

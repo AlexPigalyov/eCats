@@ -3,18 +3,17 @@ import 'dart:convert';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:ecats/Extensions/hex_color.dart';
-import 'package:ecats/account/loading_body_widget.dart';
 import 'package:ecats/assets/constants.dart' as Constants;
+import 'package:ecats/assets/data_table/nav_helper.dart';
 import 'package:ecats/models/enums/app_bar_enum.dart';
 import 'package:ecats/models/enums/page_enum.dart';
 import 'package:ecats/models/requests/currency_response_request_model.dart';
-import 'package:ecats/models/requests/income_wallet_response_request_model.dart';
-import 'package:ecats/models/requests/user_wallets_response_request_model.dart';
+import 'package:ecats/models/requests/wallets/income_wallet_response_request_model.dart';
+import 'package:ecats/models/requests/wallets/user_wallets_response_request_model.dart';
 import 'package:ecats/models/table_data_sources/income_wallets_by_user_data_source.dart';
 import 'package:ecats/services/http_service.dart';
+import 'package:ecats/widgets/shared/loading_body_widget.dart';
 import 'package:flutter/material.dart';
-
-import './shared/data_table/nav_helper.dart';
 
 class IncomeWalletsBodyWidget extends StatefulWidget {
   final void Function(PageEnum, AppBarEnum, dynamic) screenCallback;

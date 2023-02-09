@@ -6,7 +6,7 @@ import 'package:ecats/services/http_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../extensions/hex_color.dart';
+import '../../extensions/hex_color.dart';
 
 class LoginBodyWidget extends StatefulWidget {
   final void Function(PageEnum, AppBarEnum, dynamic) screenCallback;
@@ -212,7 +212,8 @@ class _LoginBodyWidgetState extends State<LoginBodyWidget> {
               ),
             ),
             onPressed: () {
-              widget.screenCallback(PageEnum.Register, AppBarEnum.NonAuthorized, null);
+              widget.screenCallback(
+                  PageEnum.Register, AppBarEnum.NonAuthorized, null);
             },
           ),
         ),

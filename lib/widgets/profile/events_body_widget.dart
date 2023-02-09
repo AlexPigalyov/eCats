@@ -1,28 +1,23 @@
 import 'dart:convert';
 
 import 'package:data_table_2/data_table_2.dart';
-import 'package:ecats/account/loading_body_widget.dart';
 import 'package:ecats/assets/constants.dart' as Constants;
-import 'package:ecats/models/enums/app_bar_enum.dart';
-import 'package:ecats/models/enums/page_enum.dart';
-import 'package:ecats/models/requests/wallet_request_model.dart';
-import 'package:ecats/models/table_data_sources/send_by_user_data_souce.dart';
+import 'package:ecats/assets/data_table/custom_pager.dart';
+import 'package:ecats/assets/data_table/nav_helper.dart';
+import 'package:ecats/models/requests/event_request_model.dart';
+import 'package:ecats/models/table_data_sources/events_by_user_data_source.dart';
 import 'package:ecats/services/http_service.dart';
+import 'package:ecats/widgets/shared/loading_body_widget.dart';
 import 'package:flutter/material.dart';
 
-import './shared/data_table/custom_pager.dart';
-import './shared/data_table/nav_helper.dart';
-
-class SendBodyWidget extends StatefulWidget {
-  final void Function(PageEnum, AppBarEnum, dynamic) screenCallback;
-
-  const SendBodyWidget({super.key, required this.screenCallback});
+class EventsBodyWidget extends StatefulWidget {
+  const EventsBodyWidget({super.key});
 
   @override
-  State<SendBodyWidget> createState() => _SendBodyWidgetState();
+  State<EventsBodyWidget> createState() => _EventsBodyWidgetState();
 }
 
-class _SendBodyWidgetState extends State<SendBodyWidget> {
+class _EventsBodyWidgetState extends State<EventsBodyWidget> {
   final _httpService = HttpService();
   bool isLoading = true;
 
@@ -31,8 +26,8 @@ class _SendBodyWidgetState extends State<SendBodyWidget> {
   //bool _sortAscending = true;
   PaginatorController? _controller;
 
-  late SendByUserDataSource _sendByUserDataSource;
-  late List<WalletRequestModel> _model;
+  late EventsByUserDataSource _eventsDataSource;
+  late List<EventRequestModel> _model;
 
   @override
   void initState() {
@@ -43,7 +38,7 @@ class _SendBodyWidgetState extends State<SendBodyWidget> {
 
   @override
   void dispose() {
-    _sendByUserDataSource.dispose();
+    _eventsDataSource.dispose();
     super.dispose();
   }
 
@@ -61,22 +56,21 @@ class _SendBodyWidgetState extends State<SendBodyWidget> {
   Future _updateData() async {
     setState(() => isLoading = true);
 
-    var uri =
-        Uri.https(Constants.SERVER_URL, Constants.ServerApiEndpoints.SEND);
+    var uri = Uri.https(
+        Constants.SERVER_URL, Constants.ServerApiEndpoints.USER_EVENTS);
     var response = await _httpService.get(uri);
     var value = await response.stream.bytesToString();
 
-    _model = List<WalletRequestModel>.from(
-        jsonDecode(value)?.map((model) => WalletRequestModel.fromJson(model)));
-    _sendByUserDataSource =
-        SendByUserDataSource(context, _model, widget.screenCallback);
+    _model = List<EventRequestModel>.from(
+        jsonDecode(value)?.map((model) => EventRequestModel.fromJson(model)));
+    _eventsDataSource = EventsByUserDataSource(context, _model);
 
     setState(() => isLoading = false);
   }
 
-  void sort<T>(Comparable<T> Function(WalletRequestModel d) getField,
+  void sort<T>(Comparable<T> Function(EventRequestModel d) getField,
       int columnIndex, bool ascending) {
-    _sendByUserDataSource.sort<T>(getField, ascending);
+    _eventsDataSource.sort<T>(getField, ascending);
     setState(() {
       //_sortColumnIndex = columnIndex;
       //_sortAscending = ascending;
@@ -89,21 +83,23 @@ class _SendBodyWidgetState extends State<SendBodyWidget> {
         size: ColumnSize.S,
         label: Container(
           alignment: Alignment.centerLeft,
-          child: const Text('Currency'),
+          child: const Text('Event'),
         ),
       ),
       DataColumn2(
         size: ColumnSize.S,
         label: Container(
           alignment: Alignment.center,
-          child: const Text('Balance'),
+          child: const Text('Comment'),
         ),
       ),
       DataColumn2(
-        size: ColumnSize.S,
-        label:
-            Container(alignment: Alignment.center, child: const Text('Action')),
-      ),
+        size: ColumnSize.L,
+        label: Container(
+          alignment: Alignment.center,
+          child: const Text('Date'),
+        ),
+      )
     ];
   }
 
@@ -138,9 +134,9 @@ class _SendBodyWidgetState extends State<SendBodyWidget> {
               header: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Balance:'),
+                  const Text('Events'),
                   //if (getCurrentRouteOption(context) == custPager &&
-                  // _controller != null)
+                  //_controller != null)
                   //PageNumber(controller: _controller!),
                   Expanded(
                     child: Container(
@@ -178,7 +174,7 @@ class _SendBodyWidgetState extends State<SendBodyWidget> {
               // custom arrow
               //sortArrowAnimationDuration: const Duration(milliseconds: 0),
               // custom animation duration
-              //onSelectAll: _sendByUserDataSource.selectAll,
+              //onSelectAll: _openOrdersDataSource.selectAll,
               //controller: getCurrentRouteOption(context) == custPager
               //? _controller
               //: null,
@@ -191,8 +187,8 @@ class _SendBodyWidgetState extends State<SendBodyWidget> {
                       color: Colors.grey[200],
                       child: const Text('No data'))),
               source: getCurrentRouteOption(context) == noData
-                  ? SendByUserDataSource.empty(context)
-                  : _sendByUserDataSource,
+                  ? EventsByUserDataSource.empty(context)
+                  : _eventsDataSource,
             ),
             if (getCurrentRouteOption(context) == custPager)
               Positioned(bottom: 16, child: CustomPager(_controller!))

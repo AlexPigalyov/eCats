@@ -25,7 +25,9 @@ class WalletRequestModel implements RequestModel {
       : id = json['id'],
         userId = json['userId'],
         currencyAcronim = json['currencyAcronim'],
-        value = json['value'].toString().contains('.') ? json['value'] : double.parse('${json['value']}.0'),
+        value = json['value'].toString().contains('.')
+            ? json['value']
+            : double.parse('${json['value']}.0'),
         created = DateTime.parse(json['created']),
         lastUpdate = DateTime.parse(json['lastUpdate']),
         address = json['address'];

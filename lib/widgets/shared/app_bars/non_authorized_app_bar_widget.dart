@@ -1,8 +1,8 @@
 import 'package:ecats/models/enums/app_bar_enum.dart';
 import 'package:flutter/material.dart';
 
-import '../../extensions/hex_color.dart';
-import '../../models/enums/page_enum.dart';
+import '../../../extensions/hex_color.dart';
+import '../../../models/enums/page_enum.dart';
 
 class NonAuthorizedAppBarWidget extends AppBar {
   final void Function(PageEnum, AppBarEnum, dynamic) screenCallback;

@@ -1,7 +1,7 @@
-import 'package:ecats/models/requests/closed_order_response_request_model.dart';
-import 'package:ecats/models/requests/open_order_by_user_response_request_model.dart';
-import 'package:ecats/models/requests/order_by_desc_price_orderbook_response_request_model.dart';
-import 'package:ecats/models/requests/wallet_request_model.dart';
+import 'package:ecats/models/requests/orders/closed_order_response_request_model.dart';
+import 'package:ecats/models/requests/orders/open_order_by_user_response_request_model.dart';
+import 'package:ecats/models/requests/orders/order_by_desc_price_orderbook_response_request_model.dart';
+import 'package:ecats/models/requests/wallets/wallet_request_model.dart';
 
 class CryptoTradeResponseRequestModel {
   CryptoTradeResponseRequestModel({

@@ -1,7 +1,7 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:ecats/assets/constants.dart' as Constants;
 import 'package:ecats/assets/constants.dart';
-import 'package:ecats/models/requests/open_orders_by_user_request_model.dart';
+import 'package:ecats/models/requests/orders/open_orders_by_user_request_model.dart';
 import 'package:ecats/services/http_service.dart';
 import 'package:flutter/material.dart';
 

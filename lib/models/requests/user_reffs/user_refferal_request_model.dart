@@ -1,7 +1,7 @@
 import 'package:ecats/models/requests/asp_net_user_request_model.dart';
-import 'package:ecats/models/requests/paged_request_model.dart';
 import 'package:ecats/models/requests/request_model.dart';
-import 'package:ecats/models/requests/user_referals_request_model.dart';
+import 'package:ecats/models/requests/shared/paged_request_model.dart';
+import 'package:ecats/models/requests/user_reffs/user_referals_request_model.dart';
 
 class UserRefferalRequestModel implements RequestModel {
   UserRefferalRequestModel(

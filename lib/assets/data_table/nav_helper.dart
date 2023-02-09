@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 /// the given example
 String getCurrentRouteOption(BuildContext context) {
   var isEmpty = ModalRoute.of(context) != null &&
-      ModalRoute.of(context)!.settings.arguments != null &&
-      ModalRoute.of(context)!.settings.arguments is String
+          ModalRoute.of(context)!.settings.arguments != null &&
+          ModalRoute.of(context)!.settings.arguments is String
       ? ModalRoute.of(context)!.settings.arguments as String
       : '';
 

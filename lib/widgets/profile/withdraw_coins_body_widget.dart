@@ -1,27 +1,27 @@
 import 'dart:convert';
 
 import 'package:ecats/Extensions/hex_color.dart';
-import 'package:ecats/account/loading_body_widget.dart';
 import 'package:ecats/assets/constants.dart' as Constants;
 import 'package:ecats/models/enums/app_bar_enum.dart';
 import 'package:ecats/models/enums/page_enum.dart';
-import 'package:ecats/models/requests/send_coins_request_model.dart';
-import 'package:ecats/models/requests/send_coins_response_request_model.dart';
-import 'package:ecats/models/requests/status_response_request_model.dart';
+import 'package:ecats/models/requests/general_withdraw_request_model.dart';
+import 'package:ecats/models/requests/shared/status_response_request_model.dart';
 import 'package:ecats/services/http_service.dart';
+import 'package:ecats/widgets/shared/loading_body_widget.dart';
 import 'package:flutter/material.dart';
 
-class SendCoinsBodyWidget extends StatefulWidget {
+class WithdrawCoinsBodyWidget extends StatefulWidget {
   final void Function(PageEnum, AppBarEnum, dynamic) screenCallback;
   late String currency;
 
-  SendCoinsBodyWidget({super.key, required this.screenCallback});
+  WithdrawCoinsBodyWidget({super.key, required this.screenCallback});
 
   @override
-  State<SendCoinsBodyWidget> createState() => _SendCoinsBodyWidgetState();
+  State<WithdrawCoinsBodyWidget> createState() =>
+      _WithdrawCoinsBodyWidgetState();
 }
 
-class _SendCoinsBodyWidgetState extends State<SendCoinsBodyWidget> {
+class _WithdrawCoinsBodyWidgetState extends State<WithdrawCoinsBodyWidget> {
   final _httpService = HttpService();
   bool isLoading = true;
 
@@ -29,7 +29,7 @@ class _SendCoinsBodyWidgetState extends State<SendCoinsBodyWidget> {
   final TextEditingController amountCoinsController = TextEditingController();
   final TextEditingController commentController = TextEditingController();
 
-  late SendCoinsResponseRequestModel _model;
+  late GeneralWithdrawRequestModel _model;
 
   @override
   void initState() {
@@ -42,11 +42,11 @@ class _SendCoinsBodyWidgetState extends State<SendCoinsBodyWidget> {
     setState(() => isLoading = true);
 
     var uri = Uri.parse(
-        'https://${Constants.SERVER_URL}/${Constants.ServerApiEndpoints.SEND_COINS}?currency=${widget.currency}');
+        'https://${Constants.SERVER_URL}/${Constants.ServerApiEndpoints.WITHDRAW}?currency=${widget.currency}');
     var response = await _httpService.get(uri);
     var value = await response.stream.bytesToString();
 
-    _model = SendCoinsResponseRequestModel.fromJson(jsonDecode(value));
+    _model = GeneralWithdrawRequestModel.fromJson(jsonDecode(value));
 
     setState(() => isLoading = false);
   }
@@ -85,7 +85,7 @@ class _SendCoinsBodyWidgetState extends State<SendCoinsBodyWidget> {
                     margin: const EdgeInsets.only(top: 5),
                     alignment: FractionalOffset.centerLeft,
                     child: Text(
-                      "User Name, User ID, Email, Phone, Wallet",
+                      "Address",
                       style: TextStyle(
                           fontFamily: 'Nunito',
                           fontSize: 12.6,
@@ -118,7 +118,7 @@ class _SendCoinsBodyWidgetState extends State<SendCoinsBodyWidget> {
                   Container(
                     alignment: FractionalOffset.centerLeft,
                     child: Text(
-                      "Amount coins",
+                      "Amount",
                       style: TextStyle(
                           fontFamily: 'Nunito',
                           fontSize: 12.6,
@@ -151,41 +151,18 @@ class _SendCoinsBodyWidgetState extends State<SendCoinsBodyWidget> {
                   Container(
                     alignment: FractionalOffset.centerLeft,
                     child: Text(
-                      "Comment",
+                      "Minimum amount: ${_model.amountMin ?? 0}",
                       style: TextStyle(
                           fontFamily: 'Nunito',
-                          fontSize: 12.6,
+                          fontSize: 15,
                           color: HexColor.fromHex('#5c6369')),
                     ),
-                  ),
-                  TextField(
-                    controller: commentController,
-                    style: TextStyle(
-                        fontSize: 12.6,
-                        color: HexColor.fromHex('#5c6369'),
-                        decorationThickness: 0),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      isDense: true,
-                      contentPadding: const EdgeInsets.all(9),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: HexColor.fromHex('#bdc0c4'), width: 1.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: HexColor.fromHex('#dee2e6'), width: 1.0),
-                      ),
-                    ),
-                    cursorColor: Colors.black,
-                    cursorWidth: 0.5,
                   ),
                   Container(
                     margin: const EdgeInsets.only(top: 5),
                     alignment: FractionalOffset.centerLeft,
                     child: Text(
-                      "Commission: ${_model.commision}",
+                      "Commission: ${_model.currency}",
                       style: TextStyle(
                           fontFamily: 'Nunito',
                           fontSize: 15,
@@ -203,14 +180,13 @@ class _SendCoinsBodyWidgetState extends State<SendCoinsBodyWidget> {
                           isLoading = true;
                         });
 
-                        var model = SendCoinsRequestModel(
-                            inputTextIdentifier: recipientController.text,
+                        var model = GeneralWithdrawRequestModel(
+                            address: recipientController.text,
                             currency: _model.currency,
-                            amount: amountCoinsController.text,
-                            comment: commentController.text);
+                            amount: amountCoinsController.text);
 
                         var uri = Uri.parse(
-                            'https://${Constants.SERVER_URL}/${Constants.ServerApiEndpoints.SEND_COINS}');
+                            'https://${Constants.SERVER_URL}/${Constants.ServerApiEndpoints.WITHDRAW}');
                         var response = await _httpService.post(uri, model);
                         var value = await response.stream.bytesToString();
 
