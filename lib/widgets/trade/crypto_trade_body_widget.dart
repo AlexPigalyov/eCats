@@ -535,6 +535,9 @@ class _CryptoTradeBodyWidgetState extends State<CryptoTradeBodyWidget> {
                                     minWidth: constraints.maxWidth,
                                     color: activeTabColor,
                                     height: 50,
+                                    shape:  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
                                     //onPressed: onLogInButtonPressed,
                                     onPressed: () async {
                                       var uri = Uri.https(
