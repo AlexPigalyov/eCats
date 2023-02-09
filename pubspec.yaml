@@ -21,6 +21,12 @@ dependencies:
   dropdown_button2: ^1.9.2
   data_table_2: ^2.3.11
   intl: ^0.16.1
+  split_view: ^3.2.1
+  multi_split_view: ^2.2.0
+  flutter_tab_indicator_styler: ^2.0.0
+  input_quantity: ^1.1.4
+  group_button: ^5.2.2
+  signalr_client: ^0.1.6
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,6 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:ecats/assets/constants.dart';
-import 'package:ecats/models/requests/income_wallet_response_request_model.dart';
+import 'package:ecats/models/requests/wallets/income_wallet_response_request_model.dart';
 import 'package:flutter/material.dart';
 
 class IncomeWalletsByUserDataSource extends DataTableSource {

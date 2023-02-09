@@ -1,7 +1,7 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:ecats/models/enums/app_bar_enum.dart';
 import 'package:ecats/models/enums/page_enum.dart';
-import 'package:ecats/models/requests/wallet_request_model.dart';
+import 'package:ecats/models/requests/wallets/wallet_request_model.dart';
 import 'package:flutter/material.dart';
 
 class SendByUserDataSource extends DataTableSource {

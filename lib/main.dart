@@ -1,25 +1,27 @@
 import 'dart:io';
 
-import 'package:ecats/account/closed_orders_body_widget.dart';
-import 'package:ecats/account/events_body_widget.dart';
-import 'package:ecats/account/income_transactions_body_widget.dart';
-import 'package:ecats/account/income_wallets_body_widget.dart';
-import 'package:ecats/account/loading_body_widget.dart';
-import 'package:ecats/account/login_body_widget.dart';
-import 'package:ecats/account/open_orders_body_widget.dart';
-import 'package:ecats/account/profile_body_widget.dart';
-import 'package:ecats/account/register_body_widget.dart';
-import 'package:ecats/account/send_body_widget.dart';
-import 'package:ecats/account/send_coins_body_widget.dart';
-import 'package:ecats/account/shared/authorized_app_bar_widget.dart';
-import 'package:ecats/account/shared/error_body_widget.dart';
-import 'package:ecats/account/shared/non_authorized_app_bar_widget.dart';
-import 'package:ecats/account/shared/success_body_widget.dart';
-import 'package:ecats/account/user_refferals_body_widget.dart';
-import 'package:ecats/account/wallets_body_widget.dart';
-import 'package:ecats/account/withdraw_coins_body_widget.dart';
 import 'package:ecats/models/enums/app_bar_enum.dart';
 import 'package:ecats/models/enums/page_enum.dart';
+import 'package:ecats/widgets/auth/login_body_widget.dart';
+import 'package:ecats/widgets/auth/register_body_widget.dart';
+import 'package:ecats/widgets/profile/closed_orders_body_widget.dart';
+import 'package:ecats/widgets/profile/events_body_widget.dart';
+import 'package:ecats/widgets/profile/income_transactions_body_widget.dart';
+import 'package:ecats/widgets/profile/income_wallets_body_widget.dart';
+import 'package:ecats/widgets/profile/open_orders_body_widget.dart';
+import 'package:ecats/widgets/profile/profile_body_widget.dart';
+import 'package:ecats/widgets/profile/send_body_widget.dart';
+import 'package:ecats/widgets/profile/send_coins_body_widget.dart';
+import 'package:ecats/widgets/profile/user_refferals_body_widget.dart';
+import 'package:ecats/widgets/profile/wallets_body_widget.dart';
+import 'package:ecats/widgets/profile/withdraw_coins_body_widget.dart';
+import 'package:ecats/widgets/shared/app_bars/authorized_app_bar_widget.dart';
+import 'package:ecats/widgets/shared/app_bars/non_authorized_app_bar_widget.dart';
+import 'package:ecats/widgets/shared/error_body_widget.dart';
+import 'package:ecats/widgets/shared/loading_body_widget.dart';
+import 'package:ecats/widgets/shared/success_body_widget.dart';
+import 'package:ecats/widgets/trade/crypto_trade_body_widget.dart';
+import 'package:ecats/widgets/trade/pairs_body_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -49,10 +51,9 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     dataLoadFunction();
-
     super.initState();
     //Only while develop
-    //HttpOverrides.global = MyHttpOverrides();
+    HttpOverrides.global = MyHttpOverrides();
   }
 
   dataLoadFunction() async {
@@ -72,8 +73,11 @@ class _MyAppState extends State<MyApp> {
       PageEnum.Success: SuccessBodyWidget(screenCallback: changeScreen),
       PageEnum.Error: ErrorBodyWidget(screenCallback: changeScreen),
       PageEnum.Wallets: WalletsBodyWidget(screenCallback: changeScreen),
-      PageEnum.IncomeWallets: const IncomeWalletsBodyWidget(),
-      PageEnum.Withdraw: WithdrawCoinsBodyWidget(screenCallback: changeScreen)
+      PageEnum.IncomeWallets:
+          IncomeWalletsBodyWidget(screenCallback: changeScreen),
+      PageEnum.Withdraw: WithdrawCoinsBodyWidget(screenCallback: changeScreen),
+      PageEnum.Pairs: PairsBodyWidget(screenCallback: changeScreen),
+      PageEnum.CryptoTrade: CryptoTradeBodyWidget(screenCallback: changeScreen)
     };
 
     appBars = <AppBarEnum, PreferredSizeWidget>{
@@ -114,6 +118,10 @@ class _MyAppState extends State<MyApp> {
             break;
           case PageEnum.Withdraw:
             (bodies[pageEnum] as WithdrawCoinsBodyWidget).currency =
+                args as String;
+            break;
+          case PageEnum.CryptoTrade:
+            (bodies[pageEnum] as CryptoTradeBodyWidget).acronim =
                 args as String;
             break;
         }

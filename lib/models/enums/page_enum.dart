@@ -14,5 +14,7 @@ enum PageEnum {
   Error,
   Wallets,
   IncomeWallets,
-  Withdraw
+  Withdraw,
+  Pairs,
+  CryptoTrade
 }
