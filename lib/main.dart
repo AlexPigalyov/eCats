@@ -1,12 +1,15 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:ecats/account/closed_orders_body_widget.dart';
+import 'package:ecats/account/crypto_trade_body_widget.dart';
 import 'package:ecats/account/events_body_widget.dart';
 import 'package:ecats/account/income_transactions_body_widget.dart';
 import 'package:ecats/account/income_wallets_body_widget.dart';
 import 'package:ecats/account/loading_body_widget.dart';
 import 'package:ecats/account/login_body_widget.dart';
 import 'package:ecats/account/open_orders_body_widget.dart';
+import 'package:ecats/account/pairs_body_widget.dart';
 import 'package:ecats/account/profile_body_widget.dart';
 import 'package:ecats/account/register_body_widget.dart';
 import 'package:ecats/account/send_body_widget.dart';
@@ -20,8 +23,11 @@ import 'package:ecats/account/wallets_body_widget.dart';
 import 'package:ecats/account/withdraw_coins_body_widget.dart';
 import 'package:ecats/models/enums/app_bar_enum.dart';
 import 'package:ecats/models/enums/page_enum.dart';
+import 'package:ecats/assets/constants.dart' as Constants;
+import 'package:ecats/models/requests/closed_order_response_request_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:signalr_client/hub_connection_builder.dart';
 
 void main() {
   runApp(const MyApp());
@@ -49,10 +55,9 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     dataLoadFunction();
-
     super.initState();
     //Only while develop
-    //HttpOverrides.global = MyHttpOverrides();
+    HttpOverrides.global = MyHttpOverrides();
   }
 
   dataLoadFunction() async {
@@ -72,8 +77,11 @@ class _MyAppState extends State<MyApp> {
       PageEnum.Success: SuccessBodyWidget(screenCallback: changeScreen),
       PageEnum.Error: ErrorBodyWidget(screenCallback: changeScreen),
       PageEnum.Wallets: WalletsBodyWidget(screenCallback: changeScreen),
-      PageEnum.IncomeWallets: const IncomeWalletsBodyWidget(),
-      PageEnum.Withdraw: WithdrawCoinsBodyWidget(screenCallback: changeScreen)
+      PageEnum.IncomeWallets:
+          IncomeWalletsBodyWidget(screenCallback: changeScreen),
+      PageEnum.Withdraw: WithdrawCoinsBodyWidget(screenCallback: changeScreen),
+      PageEnum.Pairs: PairsBodyWidget(screenCallback: changeScreen),
+      PageEnum.CryptoTrade: CryptoTradeBodyWidget(screenCallback: changeScreen)
     };
 
     appBars = <AppBarEnum, PreferredSizeWidget>{
@@ -114,6 +122,10 @@ class _MyAppState extends State<MyApp> {
             break;
           case PageEnum.Withdraw:
             (bodies[pageEnum] as WithdrawCoinsBodyWidget).currency =
+                args as String;
+            break;
+          case PageEnum.CryptoTrade:
+            (bodies[pageEnum] as CryptoTradeBodyWidget).acronim =
                 args as String;
             break;
         }

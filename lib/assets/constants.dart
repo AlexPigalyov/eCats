@@ -20,4 +20,7 @@ class ServerApiEndpoints {
   static const String WALLETS = 'MobileWallets/Index';
   static const String WALLET_CREATE = 'MobileWallets/Create';
   static const String WITHDRAW = 'MobileWithdraw/Index';
+  static const String PAIRS = 'MobileTrade/Index';
+  static const String CRYPTO_TRADE = 'MobileTrade/Crypto';
+  static const String CRYPTO_CREATE_ORDER = 'MobileTrade/CryptoCreateOrder';
 }

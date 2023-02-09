@@ -2,28 +2,26 @@ import 'dart:convert';
 
 import 'package:data_table_2/data_table_2.dart';
 import 'package:ecats/account/loading_body_widget.dart';
-import 'package:ecats/account/shared/data_table/custom_pager.dart';
 import 'package:ecats/assets/constants.dart' as Constants;
 import 'package:ecats/models/enums/app_bar_enum.dart';
 import 'package:ecats/models/enums/page_enum.dart';
-import 'package:ecats/models/requests/user_wallet_response_request_model.dart';
-import 'package:ecats/models/requests/user_wallets_response_request_model.dart';
-import 'package:ecats/models/table_data_sources/wallets_by_user_data_source.dart';
+import 'package:ecats/models/requests/pair_response_request_model.dart';
+import 'package:ecats/models/table_data_sources/pairs_data_source.dart';
 import 'package:ecats/services/http_service.dart';
 import 'package:flutter/material.dart';
 
+import './shared/data_table/custom_pager.dart';
 import './shared/data_table/nav_helper.dart';
 
-class WalletsBodyWidget extends StatefulWidget {
+class PairsBodyWidget extends StatefulWidget {
   final void Function(PageEnum, AppBarEnum, dynamic) screenCallback;
-
-  const WalletsBodyWidget({super.key, required this.screenCallback});
+  const PairsBodyWidget({super.key, required this.screenCallback});
 
   @override
-  State<WalletsBodyWidget> createState() => _WalletsBodyWidgetState();
+  State<PairsBodyWidget> createState() => _PairsBodyWidgetState();
 }
 
-class _WalletsBodyWidgetState extends State<WalletsBodyWidget> {
+class _PairsBodyWidgetState extends State<PairsBodyWidget> {
   final _httpService = HttpService();
   bool isLoading = true;
 
@@ -32,9 +30,8 @@ class _WalletsBodyWidgetState extends State<WalletsBodyWidget> {
   //bool _sortAscending = true;
   PaginatorController? _controller;
 
-  late WalletsByUserDataSource _userWallets;
-  late UserWalletsResponseRequestModel _model;
-  late String selectedAcronim;
+  late PairsDataSource _pairsDataSource;
+  late List<PairResponseRequestModel> _model;
 
   @override
   void initState() {
@@ -45,7 +42,7 @@ class _WalletsBodyWidgetState extends State<WalletsBodyWidget> {
 
   @override
   void dispose() {
-    _userWallets.dispose();
+    _pairsDataSource.dispose();
     super.dispose();
   }
 
@@ -64,38 +61,49 @@ class _WalletsBodyWidgetState extends State<WalletsBodyWidget> {
     setState(() => isLoading = true);
 
     var uri =
-        Uri.https(Constants.SERVER_URL, Constants.ServerApiEndpoints.WALLETS);
+        Uri.https(Constants.SERVER_URL, Constants.ServerApiEndpoints.PAIRS);
     var response = await _httpService.get(uri);
     var value = await response.stream.bytesToString();
 
-    _model = UserWalletsResponseRequestModel.fromJson(jsonDecode(value));
-    _userWallets = WalletsByUserDataSource(context,
-        _model.userWallets ?? _model.emptyUserWallets(), widget.screenCallback);
-
-    selectedAcronim = (_model.currencies ?? []).first.acronim;
+    _model = List<PairResponseRequestModel>.from(jsonDecode(value)
+        ?.map((model) => PairResponseRequestModel.fromJson(model)));
+    _pairsDataSource = PairsDataSource(context, _model, widget.screenCallback);
 
     setState(() => isLoading = false);
   }
 
-  void sortUserWallets<T>(
-      Comparable<T> Function(UserWalletResponseRequestModel d)
-          getUserWalletsField,
-      int columnIndex,
-      bool ascending) {
-    _userWallets.sort<T>(getUserWalletsField, ascending);
+  void sort<T>(Comparable<T> Function(PairResponseRequestModel d) getField,
+      int columnIndex, bool ascending) {
+    _pairsDataSource.sort<T>(getField, ascending);
     setState(() {
       //_sortColumnIndex = columnIndex;
       //_sortAscending = ascending;
     });
   }
 
-  List<DataColumn> get _columnsUserWallets {
+  List<DataColumn> get _columns {
     return [
       DataColumn2(
         size: ColumnSize.S,
         label: Container(
           alignment: Alignment.centerLeft,
-          child: const Text('Currency'),
+          child: const Text('Name'),
+        ),
+      ),
+      DataColumn2(
+        size: ColumnSize.S,
+        numeric: true,
+        label: Container(
+          alignment: Alignment.centerRight,
+          child: const Text('Price'),
+        ),
+      ),
+      DataColumn2(
+        size: ColumnSize.S,
+        numeric: true,
+        label: Container(
+          alignment: Alignment.centerRight,
+          child: const Text('Change 15m'),
         ),
       ),
       DataColumn2(
@@ -103,23 +111,23 @@ class _WalletsBodyWidgetState extends State<WalletsBodyWidget> {
         numeric: true,
         label: Container(
           alignment: Alignment.center,
-          child: const Text('Balance'),
+          child: const Text('Change 1h'),
         ),
       ),
       DataColumn2(
         size: ColumnSize.S,
         label: Container(
           alignment: Alignment.center,
-          child: const Text('Address'),
+          child: const Text('Change 24h'),
         ),
       ),
       DataColumn2(
-        size: ColumnSize.L,
+        size: ColumnSize.S,
         label: Container(
           alignment: Alignment.center,
-          child: const Text('Action'),
+          child: const Text('Volume 24h'),
         ),
-      ),
+      )
     ];
   }
 
@@ -140,7 +148,7 @@ class _WalletsBodyWidgetState extends State<WalletsBodyWidget> {
         : Center(
             child: Stack(alignment: Alignment.bottomCenter, children: [
             PaginatedDataTable2(
-              dataRowHeight: 100,
+              dataRowHeight: 35,
               headingRowHeight: 40,
               fixedLeftColumns: 5,
               showCheckboxColumn: false,
@@ -154,10 +162,10 @@ class _WalletsBodyWidgetState extends State<WalletsBodyWidget> {
               header: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Platform wallets (only for inner transactions):'),
+                  const Text('Pairs'),
                   //if (getCurrentRouteOption(context) == custPager &&
-                  // _controller != null)
-                  //PageNumber(controller: _controller!),
+                  //_controller != null)
+                  // PageNumber(controller: _controller!),
                   Expanded(
                     child: Container(
                       alignment: Alignment.centerRight,
@@ -194,21 +202,21 @@ class _WalletsBodyWidgetState extends State<WalletsBodyWidget> {
               // custom arrow
               //sortArrowAnimationDuration: const Duration(milliseconds: 0),
               // custom animation duration
-              //onSelectAll: .selectAll,
+              //onSelectAll: _openOrdersDataSource.selectAll,
               //controller: getCurrentRouteOption(context) == custPager
               //? _controller
               //: null,
               //hidePaginator: getCurrentRouteOption(context) == custPager,
               hidePaginator: true,
-              columns: _columnsUserWallets,
+              columns: _columns,
               empty: Center(
                   child: Container(
                       padding: const EdgeInsets.all(20),
                       color: Colors.grey[200],
                       child: const Text('No data'))),
               source: getCurrentRouteOption(context) == noData
-                  ? WalletsByUserDataSource.empty(context)
-                  : _userWallets,
+                  ? PairsDataSource.empty(context)
+                  : _pairsDataSource,
             ),
             if (getCurrentRouteOption(context) == custPager)
               Positioned(bottom: 16, child: CustomPager(_controller!))

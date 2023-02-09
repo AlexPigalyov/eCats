@@ -40,7 +40,7 @@ class _AuthorizedAppBarWidgetState extends State<AuthorizedAppBarWidget> {
               size: 32,
               color: Colors.black,
             ),
-            items: <String>[].map((String value) {
+            items: <String>['Markets'].map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(value),
@@ -58,9 +58,9 @@ class _AuthorizedAppBarWidgetState extends State<AuthorizedAppBarWidget> {
             iconSize: 24,
             underline: const SizedBox(),
             onChanged: (String? newValue) {
-              if (newValue != null && newValue == 'Send') {
+              if (newValue != null && newValue == 'Markets') {
                 widget.screenCallback(
-                    PageEnum.Send, AppBarEnum.Authorized, null);
+                    PageEnum.Pairs, AppBarEnum.Authorized, null);
               }
             },
           ),
