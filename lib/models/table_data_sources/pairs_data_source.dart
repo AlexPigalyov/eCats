@@ -57,12 +57,12 @@ class PairsDataSource extends DataTableSource {
           ),
         )),
         DataCell(Container(
-          alignment: Alignment.centerRight,
+          alignment: Alignment.center,
           child: Text("${pair.price} ${pair.currency2Postfix}",
               textAlign: TextAlign.center),
         )),
         DataCell(Container(
-          alignment: Alignment.centerRight,
+          alignment: Alignment.center,
           child: Text("${pair.change15m} %",
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -89,7 +89,7 @@ class PairsDataSource extends DataTableSource {
                       : (pair.change24h < 0 ? Colors.red : Colors.green)))),
         )),
         DataCell(Container(
-          alignment: Alignment.center,
+          alignment: Alignment.centerRight,
           child: Text("${pair.volume24h} ${pair.currency2Postfix}",
               textAlign: TextAlign.center),
         )),

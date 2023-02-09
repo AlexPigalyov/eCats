@@ -40,7 +40,18 @@ class _AuthorizedAppBarWidgetState extends State<AuthorizedAppBarWidget> {
               size: 32,
               color: Colors.black,
             ),
-            items: <String>['Markets'].map((String value) {
+            items: <String>[
+              'Markets',
+              'Open Orders',
+              'Closed Orders',
+              'Wallets',
+              'Income Transactions',
+              'Income Wallets',
+              'Withdraws',
+              'Transfers',
+              'Referals',
+              'Events'
+            ].map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(value),
@@ -58,9 +69,45 @@ class _AuthorizedAppBarWidgetState extends State<AuthorizedAppBarWidget> {
             iconSize: 24,
             underline: const SizedBox(),
             onChanged: (String? newValue) {
-              if (newValue != null && newValue == 'Markets') {
-                widget.screenCallback(
-                    PageEnum.Pairs, AppBarEnum.Authorized, null);
+              if (newValue != null) {
+                switch (newValue) {
+                  case 'Markets':
+                    widget.screenCallback(
+                        PageEnum.Pairs, AppBarEnum.Authorized, null);
+                    break;
+                  case 'Open Orders':
+                    widget.screenCallback(
+                        PageEnum.OpenOrders, AppBarEnum.Authorized, null);
+                    break;
+                  case 'Closed Orders':
+                    widget.screenCallback(
+                        PageEnum.ClosedOrders, AppBarEnum.Authorized, null);
+                    break;
+                  case 'Wallets':
+                    widget.screenCallback(
+                        PageEnum.Wallets, AppBarEnum.Authorized, null);
+                    break;
+                  case 'Income Transactions':
+                    widget.screenCallback(PageEnum.IncomeTransactions,
+                        AppBarEnum.Authorized, null);
+                    break;
+                  case 'Income Wallets':
+                    widget.screenCallback(
+                        PageEnum.IncomeWallets, AppBarEnum.Authorized, null);
+                    break;
+                  case 'Withdraws':
+                    widget.screenCallback(
+                        PageEnum.Withdraw, AppBarEnum.Authorized, null);
+                    break;
+                  case 'Referals':
+                    widget.screenCallback(
+                        PageEnum.Refferals, AppBarEnum.Authorized, null);
+                    break;
+                  case 'Events':
+                    widget.screenCallback(
+                        PageEnum.Events, AppBarEnum.Authorized, null);
+                    break;
+                }
               }
             },
           ),

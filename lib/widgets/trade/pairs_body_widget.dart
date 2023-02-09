@@ -24,7 +24,7 @@ class PairsBodyWidget extends StatefulWidget {
 class _PairsBodyWidgetState extends State<PairsBodyWidget> {
   final _httpService = HttpService();
   bool isLoading = true;
-
+  late double columnHeight =  120 - (MediaQuery.of(context).size.width / 10);
   //final int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
   //int? _sortColumnIndex;
   //bool _sortAscending = true;
@@ -94,7 +94,7 @@ class _PairsBodyWidgetState extends State<PairsBodyWidget> {
         size: ColumnSize.S,
         numeric: true,
         label: Container(
-          alignment: Alignment.centerRight,
+          alignment: Alignment.center,
           child: const Text('Price'),
         ),
       ),
@@ -102,7 +102,7 @@ class _PairsBodyWidgetState extends State<PairsBodyWidget> {
         size: ColumnSize.S,
         numeric: true,
         label: Container(
-          alignment: Alignment.centerRight,
+          alignment: Alignment.center,
           child: const Text('Change 15m'),
         ),
       ),
@@ -122,9 +122,9 @@ class _PairsBodyWidgetState extends State<PairsBodyWidget> {
         ),
       ),
       DataColumn2(
-        size: ColumnSize.S,
+        size: ColumnSize.L,
         label: Container(
-          alignment: Alignment.center,
+          alignment: Alignment.centerRight,
           child: const Text('Volume 24h'),
         ),
       )
@@ -148,7 +148,7 @@ class _PairsBodyWidgetState extends State<PairsBodyWidget> {
         : Center(
             child: Stack(alignment: Alignment.bottomCenter, children: [
             PaginatedDataTable2(
-              dataRowHeight: 35,
+              dataRowHeight: columnHeight < 35 ? 35 : columnHeight,
               headingRowHeight: 40,
               fixedLeftColumns: 5,
               showCheckboxColumn: false,

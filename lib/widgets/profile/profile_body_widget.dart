@@ -382,7 +382,30 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                   Container(
                                     margin: const EdgeInsets.only(left: 10),
                                     child: Text(
-                                      "INCOMES TRANSACTIONS",
+                                      "INCOME WALLETS",
+                                      style: TextStyle(
+                                        fontFamily: 'Nunito',
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 10.5,
+                                        color: HexColor.fromHex('#6C757D'),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              onPressed: () {
+                                widget.screenCallback(PageEnum.IncomeWallets,
+                                    AppBarEnum.Authorized, null);
+                              },
+                            ),
+                            MaterialButton(
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.work, size: 12),
+                                  Container(
+                                    margin: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      "INCOME TRANSACTIONS",
                                       style: TextStyle(
                                         fontFamily: 'Nunito',
                                         fontWeight: FontWeight.w700,
@@ -398,29 +421,6 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                     PageEnum.IncomeTransactions,
                                     AppBarEnum.Authorized,
                                     null);
-                              },
-                            ),
-                            MaterialButton(
-                              child: Row(
-                                children: [
-                                  const Icon(Icons.work, size: 12),
-                                  Container(
-                                    margin: const EdgeInsets.only(left: 10),
-                                    child: Text(
-                                      "INCOMES WALLETS",
-                                      style: TextStyle(
-                                        fontFamily: 'Nunito',
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 10.5,
-                                        color: HexColor.fromHex('#6C757D'),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              onPressed: () {
-                                widget.screenCallback(PageEnum.IncomeWallets,
-                                    AppBarEnum.Authorized, null);
                               },
                             ),
                             MaterialButton(
