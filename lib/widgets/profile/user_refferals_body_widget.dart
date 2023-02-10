@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:data_table_2/data_table_2.dart';
 import 'package:ecats/assets/constants.dart' as Constants;
-import 'package:ecats/assets/data_table/custom_pager.dart';
 import 'package:ecats/assets/data_table/nav_helper.dart';
 import 'package:ecats/models/requests/user_reffs/user_referals_request_model.dart';
 import 'package:ecats/models/requests/user_reffs/user_refferal_request_model.dart';
@@ -10,6 +9,7 @@ import 'package:ecats/models/table_data_sources/user_referals_by_user_data_souce
 import 'package:ecats/services/http_service.dart';
 import 'package:ecats/widgets/shared/loading_body_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class UserRefferalsBodyWidget extends StatefulWidget {
   const UserRefferalsBodyWidget({super.key});
@@ -22,12 +22,15 @@ class UserRefferalsBodyWidget extends StatefulWidget {
 class _UserRefferalsBodyWidgetState extends State<UserRefferalsBodyWidget> {
   final _httpService = HttpService();
   bool isLoading = true;
-  late double columnHeight =  90 - (MediaQuery.of(context).size.width / 10);
+  late double columnHeight = 90 - (MediaQuery.of(context).size.width / 10);
+
   //final int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
   //int? _sortColumnIndex;
   //bool _sortAscending = true;
   PaginatorController? _controller;
-
+  final ScrollController _scrollController = ScrollController();
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   late UserReferalsByUserDataSource _refferals;
   late UserRefferalRequestModel _model;
 
@@ -65,7 +68,7 @@ class _UserRefferalsBodyWidgetState extends State<UserRefferalsBodyWidget> {
 
     _model = UserRefferalRequestModel.fromJson(jsonDecode(value));
     _refferals = UserReferalsByUserDataSource(context, _model);
-
+    _refreshController.refreshCompleted();
     setState(() => isLoading = false);
   }
 
@@ -112,80 +115,72 @@ class _UserRefferalsBodyWidgetState extends State<UserRefferalsBodyWidget> {
     return isLoading
         ? LoadingBodyWidget()
         : Center(
-            child: Stack(alignment: Alignment.bottomCenter, children: [
-            PaginatedDataTable2(
-              dataRowHeight: columnHeight < 35 ? 35 : columnHeight,
-              headingRowHeight: 40,
-              fixedLeftColumns: 5,
-              showCheckboxColumn: false,
-              horizontalMargin: 20,
-              checkboxHorizontalMargin: 12,
-              columnSpacing: 0,
-              wrapInCard: false,
-              renderEmptyRowsInTheEnd: false,
-              headingRowColor:
-                  MaterialStateColor.resolveWith((states) => Colors.grey[200]!),
-              header: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text('My refferals'),
-                  //if (getCurrentRouteOption(context) == custPager &&
-                  // _controller != null)
-                  //PageNumber(controller: _controller!),
-                  Expanded(
-                    child: Container(
-                      alignment: Alignment.centerRight,
-                      child: IconButton(
-                        icon: const Icon(Icons.refresh),
-                        onPressed: () async {
-                          await _updateData();
-                        },
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              //rowsPerPage: _rowsPerPage,
-              autoRowsToHeight: getCurrentRouteOption(context) == autoRows,
-              fit: FlexFit.tight,
-              border: const TableBorder(
-                  top: BorderSide(width: 0, style: BorderStyle.none),
-                  bottom: BorderSide(width: 0, style: BorderStyle.none),
-                  left: BorderSide(width: 0, style: BorderStyle.none),
-                  right: BorderSide(width: 0, style: BorderStyle.none),
-                  verticalInside: BorderSide(width: 0, style: BorderStyle.none),
-                  horizontalInside: BorderSide(color: Colors.grey, width: 0.2)),
-              //onRowsPerPageChanged: (value) {
-              // _rowsPerPage = value!;
-              //},
-              initialFirstRowIndex: 0,
-              //onPageChanged: (rowIndex) {
-              //TODO: pagination
-              //},
-              //sortColumnIndex: _sortColumnIndex,
-              //sortAscending: _sortAscending,
-              //sortArrowIcon: Icons.keyboard_arrow_up,
-              // custom arrow
-              //sortArrowAnimationDuration: const Duration(milliseconds: 0),
-              // custom animation duration
-              //onSelectAll: _refferalsDataSource.selectAll,
-              //controller: getCurrentRouteOption(context) == custPager
-              //? _controller
-              //: null,
-              //hidePaginator: getCurrentRouteOption(context) == custPager,
-              hidePaginator: true,
-              columns: _columns,
-              empty: Center(
-                  child: Container(
-                      padding: const EdgeInsets.all(20),
-                      color: Colors.grey[200],
-                      child: const Text('No data'))),
-              source: getCurrentRouteOption(context) == noData
-                  ? UserReferalsByUserDataSource.empty(context)
-                  : _refferals,
-            ),
-            if (getCurrentRouteOption(context) == custPager)
-              Positioned(bottom: 16, child: CustomPager(_controller!))
-          ]));
+            child: SmartRefresher(
+                onRefresh: () => _updateData(),
+                controller: _refreshController,
+                enablePullUp: true,
+                child: Stack(alignment: Alignment.bottomCenter, children: [
+                  Theme(
+                      data: ThemeData(
+                          scrollbarTheme: ScrollbarThemeData(
+                              thumbVisibility: MaterialStateProperty.all(true),
+                              thumbColor: MaterialStateProperty.all<Color>(
+                                  Colors.black))),
+                      child: PaginatedDataTable2(
+                        scrollController: _scrollController,
+                        minWidth: 400,
+                        headingRowHeight: 40,
+                        showCheckboxColumn: false,
+                        horizontalMargin: 20,
+                        checkboxHorizontalMargin: 12,
+                        columnSpacing: 0,
+                        wrapInCard: false,
+                        renderEmptyRowsInTheEnd: false,
+                        headingRowColor: MaterialStateColor.resolveWith(
+                            (states) => Colors.grey[200]!),
+                        header: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text('My refferals'),
+                            Expanded(
+                              child: Container(
+                                alignment: Alignment.centerRight,
+                                child: IconButton(
+                                  icon: const Icon(Icons.refresh),
+                                  onPressed: () async {
+                                    await _updateData();
+                                  },
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        autoRowsToHeight:
+                            getCurrentRouteOption(context) == autoRows,
+                        fit: FlexFit.tight,
+                        border: const TableBorder(
+                            top: BorderSide(width: 0, style: BorderStyle.none),
+                            bottom:
+                                BorderSide(width: 0, style: BorderStyle.none),
+                            left: BorderSide(width: 0, style: BorderStyle.none),
+                            right:
+                                BorderSide(width: 0, style: BorderStyle.none),
+                            verticalInside:
+                                BorderSide(width: 0, style: BorderStyle.none),
+                            horizontalInside:
+                                BorderSide(color: Colors.grey, width: 0.2)),
+                        initialFirstRowIndex: 0,
+                        hidePaginator: true,
+                        columns: _columns,
+                        empty: Center(
+                            child: Container(
+                                padding: const EdgeInsets.all(20),
+                                color: Colors.grey[200],
+                                child: const Text('No data'))),
+                        source: getCurrentRouteOption(context) == noData
+                            ? UserReferalsByUserDataSource.empty(context)
+                            : _refferals,
+                      )),
+                ])));
   }
 }

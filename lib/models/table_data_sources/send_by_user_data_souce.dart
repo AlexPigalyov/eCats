@@ -2,6 +2,7 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:ecats/models/enums/app_bar_enum.dart';
 import 'package:ecats/models/enums/page_enum.dart';
 import 'package:ecats/models/requests/wallets/wallet_request_model.dart';
+import 'package:ecats/models/shared/page_model.dart';
 import 'package:flutter/material.dart';
 
 class SendByUserDataSource extends DataTableSource {
@@ -14,7 +15,7 @@ class SendByUserDataSource extends DataTableSource {
       this.hasRowHeightOverrides = false,
       this.hasZebraStripes = false]);
 
-  late void Function(PageEnum, AppBarEnum, dynamic) screenCallback;
+  late void Function(PageModel?, bool, PageModel) screenCallback;
   final BuildContext context;
   late List<WalletRequestModel>? wallets;
   bool hasRowTaps = false;
@@ -59,8 +60,16 @@ class SendByUserDataSource extends DataTableSource {
           child: TextButton(
             child: Text("Send ${wallet.currencyAcronim}"),
             onPressed: () async {
-              screenCallback(PageEnum.SendCoins, AppBarEnum.Authorized,
-                  wallet.currencyAcronim);
+              screenCallback(
+                  PageModel(
+                      page: PageEnum.Send,
+                      appBar: AppBarEnum.Authorized,
+                      args: null),
+                  true,
+                  PageModel(
+                      page: PageEnum.SendCoins,
+                      appBar: AppBarEnum.Authorized,
+                      args: wallet.currencyAcronim));
             },
           ),
         ))

@@ -1,11 +1,12 @@
 import 'package:ecats/models/enums/app_bar_enum.dart';
+import 'package:ecats/models/enums/page_enum.dart';
+import 'package:ecats/models/shared/page_model.dart';
 import 'package:flutter/material.dart';
 
 import '../../extensions/hex_color.dart';
-import '../../models/enums/page_enum.dart';
 
 class SuccessBodyWidget extends Center {
-  final void Function(PageEnum, AppBarEnum, dynamic) screenCallback;
+  final void Function(PageModel?, bool, PageModel) screenCallback;
 
   SuccessBodyWidget({super.key, required this.screenCallback})
       : super(
@@ -15,10 +16,8 @@ class SuccessBodyWidget extends Center {
             children: [
               Text(
                 "Success",
-                style: TextStyle(
-                    fontFamily: 'Nunito',
-                    fontSize: 25,
-                    color: HexColor.fromHex('#5c6369')),
+                style:
+                    TextStyle(fontSize: 25, color: HexColor.fromHex('#5c6369')),
               ),
               Container(
                 margin: const EdgeInsets.only(top: 20),
@@ -28,13 +27,17 @@ class SuccessBodyWidget extends Center {
                   height: 35,
                   onPressed: () {
                     screenCallback(
-                        PageEnum.Profile, AppBarEnum.Authorized, null);
+                        null,
+                        false,
+                        PageModel(
+                            page: PageEnum.Profile,
+                            appBar: AppBarEnum.Authorized,
+                            args: null));
                   },
                   child: const Text(
                     "Back to Profile",
                     style: TextStyle(
                       color: Colors.white,
-                      fontFamily: 'Nunito',
                       fontSize: 12.6,
                     ),
                   ),

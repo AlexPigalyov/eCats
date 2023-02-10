@@ -2,13 +2,12 @@ import 'dart:convert';
 
 import 'package:ecats/assets/constants.dart' as Constants;
 import 'package:ecats/assets/constants.dart';
-import 'package:ecats/models/enums/app_bar_enum.dart';
-import 'package:ecats/models/enums/page_enum.dart';
 import 'package:ecats/models/requests/crypto_trade_response_request_model.dart';
 import 'package:ecats/models/requests/orders/closed_order_response_request_model.dart';
 import 'package:ecats/models/requests/orders/crypto_create_order.dart';
 import 'package:ecats/models/requests/orders/order_by_desc_price_orderbook_response_request_model.dart';
 import 'package:ecats/models/requests/pair_response_request_model.dart';
+import 'package:ecats/models/shared/page_model.dart';
 import 'package:ecats/services/http_service.dart';
 import 'package:ecats/widgets/shared/loading_body_widget.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +19,7 @@ import 'package:signalr_client/hub_connection.dart';
 import 'package:signalr_client/hub_connection_builder.dart';
 
 class CryptoTradeBodyWidget extends StatefulWidget {
-  final void Function(PageEnum, AppBarEnum, dynamic) screenCallback;
+  final void Function(PageModel?, bool, PageModel) screenCallback;
   late String acronim;
 
   CryptoTradeBodyWidget({super.key, required this.screenCallback});
@@ -122,13 +121,11 @@ class _CryptoTradeBodyWidgetState extends State<CryptoTradeBodyWidget> {
                   style: TextStyle(
                       color: isBuy ? Colors.green : Colors.red,
                       fontSize: 12,
-                      fontFamily: 'Nunito',
                       fontWeight: FontWeight.bold))),
               DataCell(Text(e.amount.toString(),
                   style: const TextStyle(
                       color: Colors.black,
                       fontSize: 12,
-                      fontFamily: 'Nunito',
                       fontWeight: FontWeight.bold))),
             ]))
         .toList();
@@ -139,13 +136,11 @@ class _CryptoTradeBodyWidgetState extends State<CryptoTradeBodyWidget> {
                 DataCell(Text('',
                     style: TextStyle(
                         color: isBuy ? Colors.green : Colors.red,
-                        fontFamily: 'Nunito',
                         fontSize: 12,
                         fontWeight: FontWeight.bold))),
                 const DataCell(Text('',
                     style: TextStyle(
                         color: Colors.black,
-                        fontFamily: 'Nunito',
                         fontSize: 12,
                         fontWeight: FontWeight.bold))),
               ]))
@@ -173,9 +168,7 @@ class _CryptoTradeBodyWidgetState extends State<CryptoTradeBodyWidget> {
                       child: Text(
                           "${_model.firstCurrency}/${_model.secondCurrency}",
                           style: const TextStyle(
-                              fontFamily: 'Nunito',
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold)),
+                              fontSize: 15, fontWeight: FontWeight.bold)),
                     ),
                     Row(
                       children: [
@@ -183,7 +176,6 @@ class _CryptoTradeBodyWidgetState extends State<CryptoTradeBodyWidget> {
                             margin: const EdgeInsets.only(left: 5),
                             child: Text("Amount",
                                 style: TextStyle(
-                                    fontFamily: 'Nunito',
                                     color: Colors.grey[500],
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500))),
@@ -195,7 +187,6 @@ class _CryptoTradeBodyWidgetState extends State<CryptoTradeBodyWidget> {
                             margin: const EdgeInsets.only(left: 5),
                             child: Text("Price",
                                 style: TextStyle(
-                                    fontFamily: 'Nunito',
                                     color: Colors.grey[500],
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500))),
@@ -216,7 +207,6 @@ class _CryptoTradeBodyWidgetState extends State<CryptoTradeBodyWidget> {
                           children: [
                             Text(e.amount.toString(),
                                 style: const TextStyle(
-                                    fontFamily: 'Nunito',
                                     color: Colors.black,
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500))
@@ -226,7 +216,6 @@ class _CryptoTradeBodyWidgetState extends State<CryptoTradeBodyWidget> {
                           children: [
                             Text(e.price.toString(),
                                 style: const TextStyle(
-                                    fontFamily: 'Nunito',
                                     color: Colors.black,
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500)),
@@ -243,7 +232,6 @@ class _CryptoTradeBodyWidgetState extends State<CryptoTradeBodyWidget> {
                           alignment: Alignment.centerRight,
                           child: Text(DateTimeFormat.format(e.createDate),
                               style: TextStyle(
-                                  fontFamily: 'Nunito',
                                   color: Colors.grey[400],
                                   fontSize: 12,
                                   fontWeight: FontWeight.w500)),
@@ -266,7 +254,6 @@ class _CryptoTradeBodyWidgetState extends State<CryptoTradeBodyWidget> {
                               "Cancel",
                               style: TextStyle(
                                 color: Colors.black,
-                                fontFamily: 'Nunito',
                                 fontWeight: FontWeight.bold,
                                 fontSize: 12.6,
                               ),
@@ -303,7 +290,6 @@ class _CryptoTradeBodyWidgetState extends State<CryptoTradeBodyWidget> {
                             child: Text(
                               "${_model.firstCurrency}/${_model.secondCurrency}",
                               style: const TextStyle(
-                                fontFamily: 'Nunito',
                                 fontWeight: FontWeight.bold,
                                 fontSize: 25,
                                 color: Colors.black,
@@ -314,7 +300,6 @@ class _CryptoTradeBodyWidgetState extends State<CryptoTradeBodyWidget> {
                             margin: const EdgeInsets.only(left: 10, top: 5),
                             child: Text("$change24H %",
                                 style: TextStyle(
-                                    fontFamily: 'Nunito',
                                     fontSize: 15,
                                     color: (change24H == 0
                                         ? Colors.grey
@@ -402,10 +387,8 @@ class _CryptoTradeBodyWidgetState extends State<CryptoTradeBodyWidget> {
                                 contentPadding: const EdgeInsets.all(9),
                                 labelText: "Price",
                                 labelStyle: TextStyle(
-                                  fontFamily: 'Nunito',
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey[600]
-                                ),
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey[600]),
                                 floatingLabelAlignment:
                                     FloatingLabelAlignment.center,
                               ),
@@ -436,10 +419,8 @@ class _CryptoTradeBodyWidgetState extends State<CryptoTradeBodyWidget> {
                                 floatingLabelAlignment:
                                     FloatingLabelAlignment.center,
                                 labelStyle: TextStyle(
-                                    fontFamily: 'Nunito',
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.grey[600]
-                                ),
+                                    color: Colors.grey[600]),
                                 border: InputBorder.none,
                                 isDense: true,
                                 contentPadding: const EdgeInsets.all(9),
@@ -471,12 +452,10 @@ class _CryptoTradeBodyWidgetState extends State<CryptoTradeBodyWidget> {
                                     isRadio: true,
                                     options: GroupButtonOptions(
                                       selectedTextStyle: const TextStyle(
-                                        fontFamily: 'Nunito',
                                         fontWeight: FontWeight.bold,
                                         fontSize: 13,
                                       ),
                                       unselectedTextStyle: const TextStyle(
-                                        fontFamily: 'Nunito',
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black,
                                         fontSize: 13,
@@ -506,7 +485,6 @@ class _CryptoTradeBodyWidgetState extends State<CryptoTradeBodyWidget> {
                                 Text(
                                   "Available",
                                   style: TextStyle(
-                                    fontFamily: 'Nunito',
                                     fontWeight: FontWeight.bold,
                                     fontSize: 13,
                                     color: Colors.grey[400],
@@ -518,7 +496,6 @@ class _CryptoTradeBodyWidgetState extends State<CryptoTradeBodyWidget> {
                                         ? "${_model.secondWallet.value!} ${_model.secondCurrency}"
                                         : "${_model.firstWallet.value!} ${_model.firstCurrency}",
                                     style: const TextStyle(
-                                      fontFamily: 'Nunito',
                                       fontWeight: FontWeight.bold,
                                       fontSize: 13,
                                       color: Colors.black,
@@ -535,7 +512,7 @@ class _CryptoTradeBodyWidgetState extends State<CryptoTradeBodyWidget> {
                                     minWidth: constraints.maxWidth,
                                     color: activeTabColor,
                                     height: 50,
-                                    shape:  RoundedRectangleBorder(
+                                    shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(6),
                                     ),
                                     //onPressed: onLogInButtonPressed,
@@ -565,7 +542,6 @@ class _CryptoTradeBodyWidgetState extends State<CryptoTradeBodyWidget> {
                                           : "Sell ${_model.secondCurrency}",
                                       style: const TextStyle(
                                         color: Colors.white,
-                                        fontFamily: 'Nunito',
                                         fontWeight: FontWeight.bold,
                                         fontSize: 15,
                                       ),
@@ -587,7 +563,6 @@ class _CryptoTradeBodyWidgetState extends State<CryptoTradeBodyWidget> {
                                         label: Text(
                                       "Price\n(USDT)",
                                       style: TextStyle(
-                                        fontFamily: 'Nunito',
                                         fontWeight: FontWeight.bold,
                                         fontSize: 13,
                                         color: Colors.grey[400],
@@ -597,7 +572,6 @@ class _CryptoTradeBodyWidgetState extends State<CryptoTradeBodyWidget> {
                                         label: Text(
                                       "Amount\n(${_model.secondCurrency})",
                                       style: TextStyle(
-                                        fontFamily: 'Nunito',
                                         fontWeight: FontWeight.bold,
                                         fontSize: 13,
                                         color: Colors.grey[400],
@@ -616,7 +590,6 @@ class _CryptoTradeBodyWidgetState extends State<CryptoTradeBodyWidget> {
                                             .toString(),
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontFamily: 'Nunito',
                                         fontSize: 20,
                                         color: _model.marketTrades == null ||
                                                 _model.marketTrades!.isEmpty
@@ -637,7 +610,6 @@ class _CryptoTradeBodyWidgetState extends State<CryptoTradeBodyWidget> {
                                         label: Text(
                                       "",
                                       style: TextStyle(
-                                        fontFamily: 'Nunito',
                                         fontWeight: FontWeight.normal,
                                         fontSize: 13,
                                         color: Colors.grey[400],

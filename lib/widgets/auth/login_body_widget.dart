@@ -2,6 +2,7 @@ import 'package:ecats/assets/constants.dart' as Constants;
 import 'package:ecats/models/enums/app_bar_enum.dart';
 import 'package:ecats/models/enums/page_enum.dart';
 import 'package:ecats/models/requests/login_request_model.dart';
+import 'package:ecats/models/shared/page_model.dart';
 import 'package:ecats/services/http_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -9,7 +10,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../extensions/hex_color.dart';
 
 class LoginBodyWidget extends StatefulWidget {
-  final void Function(PageEnum, AppBarEnum, dynamic) screenCallback;
+  final void Function(PageModel?, bool, PageModel) screenCallback;
 
   const LoginBodyWidget({super.key, required this.screenCallback});
 
@@ -43,7 +44,13 @@ class _LoginBodyWidgetState extends State<LoginBodyWidget> {
         await _storage.write(
             key: 'token', value: await response.stream.bytesToString());
 
-        widget.screenCallback(PageEnum.Profile, AppBarEnum.Authorized, null);
+        widget.screenCallback(
+            null,
+            false,
+            PageModel(
+                page: PageEnum.Profile,
+                appBar: AppBarEnum.Authorized,
+                args: null));
       }
     }
   }
@@ -70,7 +77,6 @@ class _LoginBodyWidgetState extends State<LoginBodyWidget> {
                 child: Text(
                   "Log in",
                   style: TextStyle(
-                    fontFamily: 'Nunito',
                     fontWeight: FontWeight.bold,
                     fontSize: 23.7,
                     color: HexColor.fromHex('#6C757D'),
@@ -83,7 +89,6 @@ class _LoginBodyWidgetState extends State<LoginBodyWidget> {
                 child: Text(
                   "Use a local account to log in.",
                   style: TextStyle(
-                    fontFamily: 'Nunito',
                     fontWeight: FontWeight.bold,
                     fontSize: 15.75,
                     color: HexColor.fromHex('#6C757D'),
@@ -99,9 +104,7 @@ class _LoginBodyWidgetState extends State<LoginBodyWidget> {
                 child: Text(
                   "Email or Username",
                   style: TextStyle(
-                      fontFamily: 'Nunito',
-                      fontSize: 12.6,
-                      color: HexColor.fromHex('#5c6369')),
+                      fontSize: 12.6, color: HexColor.fromHex('#5c6369')),
                 ),
               ),
               TextField(
@@ -133,9 +136,7 @@ class _LoginBodyWidgetState extends State<LoginBodyWidget> {
                 child: Text(
                   "Password",
                   style: TextStyle(
-                      fontFamily: 'Nunito',
-                      fontSize: 12.6,
-                      color: HexColor.fromHex('#5c6369')),
+                      fontSize: 12.6, color: HexColor.fromHex('#5c6369')),
                 ),
               ),
               TextField(
@@ -177,7 +178,6 @@ class _LoginBodyWidgetState extends State<LoginBodyWidget> {
               "Log in",
               style: TextStyle(
                 color: Colors.white,
-                fontFamily: 'Nunito',
                 fontSize: 12.6,
               ),
             ),
@@ -191,7 +191,6 @@ class _LoginBodyWidgetState extends State<LoginBodyWidget> {
             child: Text(
               "Forgot your password?",
               style: TextStyle(
-                fontFamily: 'Nunito',
                 fontSize: 12.6,
                 color: HexColor.fromHex('#6C757D'),
               ),
@@ -206,14 +205,18 @@ class _LoginBodyWidgetState extends State<LoginBodyWidget> {
             child: Text(
               "Register as a new user",
               style: TextStyle(
-                fontFamily: 'Nunito',
                 fontSize: 12.6,
                 color: HexColor.fromHex('#6C757D'),
               ),
             ),
             onPressed: () {
               widget.screenCallback(
-                  PageEnum.Register, AppBarEnum.NonAuthorized, null);
+                  null,
+                  false,
+                  PageModel(
+                      page: PageEnum.Register,
+                      appBar: AppBarEnum.NonAuthorized,
+                      args: null));
             },
           ),
         ),
@@ -223,7 +226,6 @@ class _LoginBodyWidgetState extends State<LoginBodyWidget> {
           child: Text(
             "Use another service to log in.",
             style: TextStyle(
-              fontFamily: 'Nunito',
               fontWeight: FontWeight.bold,
               fontSize: 15.75,
               color: HexColor.fromHex('#6C757D'),
@@ -268,7 +270,6 @@ class _LoginBodyWidgetState extends State<LoginBodyWidget> {
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: HexColor.fromHex('#6C757D'),
-                                fontFamily: 'Nunito',
                                 fontSize: 12.6,
                               ),
                             ))
@@ -307,7 +308,6 @@ class _LoginBodyWidgetState extends State<LoginBodyWidget> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.white,
-                              fontFamily: 'Nunito',
                               fontSize: 12.6,
                             ),
                           ))

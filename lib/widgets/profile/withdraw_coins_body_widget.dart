@@ -6,12 +6,14 @@ import 'package:ecats/models/enums/app_bar_enum.dart';
 import 'package:ecats/models/enums/page_enum.dart';
 import 'package:ecats/models/requests/general_withdraw_request_model.dart';
 import 'package:ecats/models/requests/shared/status_response_request_model.dart';
+import 'package:ecats/models/shared/page_model.dart';
 import 'package:ecats/services/http_service.dart';
 import 'package:ecats/widgets/shared/loading_body_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class WithdrawCoinsBodyWidget extends StatefulWidget {
-  final void Function(PageEnum, AppBarEnum, dynamic) screenCallback;
+  final void Function(PageModel?, bool, PageModel) screenCallback;
   late String currency;
 
   WithdrawCoinsBodyWidget({super.key, required this.screenCallback});
@@ -24,7 +26,8 @@ class WithdrawCoinsBodyWidget extends StatefulWidget {
 class _WithdrawCoinsBodyWidgetState extends State<WithdrawCoinsBodyWidget> {
   final _httpService = HttpService();
   bool isLoading = true;
-
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   final TextEditingController recipientController = TextEditingController();
   final TextEditingController amountCoinsController = TextEditingController();
   final TextEditingController commentController = TextEditingController();
@@ -47,7 +50,7 @@ class _WithdrawCoinsBodyWidgetState extends State<WithdrawCoinsBodyWidget> {
     var value = await response.stream.bytesToString();
 
     _model = GeneralWithdrawRequestModel.fromJson(jsonDecode(value));
-
+    _refreshController.refreshCompleted();
     setState(() => isLoading = false);
   }
 
@@ -56,6 +59,10 @@ class _WithdrawCoinsBodyWidgetState extends State<WithdrawCoinsBodyWidget> {
     return isLoading
         ? LoadingBodyWidget()
         : Center(
+            child: SmartRefresher(
+            onRefresh: () => _updateData(),
+            controller: _refreshController,
+            enablePullUp: true,
             child: Padding(
               padding: const EdgeInsets.all(15),
               child: Column(
@@ -65,9 +72,7 @@ class _WithdrawCoinsBodyWidgetState extends State<WithdrawCoinsBodyWidget> {
                     child: Text(
                       "Currency ${_model.currency}",
                       style: TextStyle(
-                          fontFamily: 'Nunito',
-                          fontSize: 15,
-                          color: HexColor.fromHex('#5c6369')),
+                          fontSize: 15, color: HexColor.fromHex('#5c6369')),
                     ),
                   ),
                   Container(
@@ -76,9 +81,7 @@ class _WithdrawCoinsBodyWidgetState extends State<WithdrawCoinsBodyWidget> {
                     child: Text(
                       "Balance ${_model.balance}",
                       style: TextStyle(
-                          fontFamily: 'Nunito',
-                          fontSize: 15,
-                          color: HexColor.fromHex('#5c6369')),
+                          fontSize: 15, color: HexColor.fromHex('#5c6369')),
                     ),
                   ),
                   Container(
@@ -87,9 +90,7 @@ class _WithdrawCoinsBodyWidgetState extends State<WithdrawCoinsBodyWidget> {
                     child: Text(
                       "Address",
                       style: TextStyle(
-                          fontFamily: 'Nunito',
-                          fontSize: 12.6,
-                          color: HexColor.fromHex('#5c6369')),
+                          fontSize: 12.6, color: HexColor.fromHex('#5c6369')),
                     ),
                   ),
                   TextField(
@@ -120,9 +121,7 @@ class _WithdrawCoinsBodyWidgetState extends State<WithdrawCoinsBodyWidget> {
                     child: Text(
                       "Amount",
                       style: TextStyle(
-                          fontFamily: 'Nunito',
-                          fontSize: 12.6,
-                          color: HexColor.fromHex('#5c6369')),
+                          fontSize: 12.6, color: HexColor.fromHex('#5c6369')),
                     ),
                   ),
                   TextField(
@@ -153,9 +152,7 @@ class _WithdrawCoinsBodyWidgetState extends State<WithdrawCoinsBodyWidget> {
                     child: Text(
                       "Minimum amount: ${_model.amountMin ?? 0}",
                       style: TextStyle(
-                          fontFamily: 'Nunito',
-                          fontSize: 15,
-                          color: HexColor.fromHex('#5c6369')),
+                          fontSize: 15, color: HexColor.fromHex('#5c6369')),
                     ),
                   ),
                   Container(
@@ -164,9 +161,7 @@ class _WithdrawCoinsBodyWidgetState extends State<WithdrawCoinsBodyWidget> {
                     child: Text(
                       "Commission: ${_model.currency}",
                       style: TextStyle(
-                          fontFamily: 'Nunito',
-                          fontSize: 15,
-                          color: HexColor.fromHex('#5c6369')),
+                          fontSize: 15, color: HexColor.fromHex('#5c6369')),
                     ),
                   ),
                   Container(
@@ -195,10 +190,26 @@ class _WithdrawCoinsBodyWidgetState extends State<WithdrawCoinsBodyWidget> {
 
                         if (response.statusCode == 200) {
                           widget.screenCallback(
-                              PageEnum.Success, AppBarEnum.Authorized, null);
+                              PageModel(
+                                  page: PageEnum.Withdraw,
+                                  appBar: AppBarEnum.Authorized,
+                                  args: widget.currency),
+                              true,
+                              PageModel(
+                                  page: PageEnum.Success,
+                                  appBar: AppBarEnum.Authorized,
+                                  args: null));
                         } else {
-                          widget.screenCallback(PageEnum.Error,
-                              AppBarEnum.Authorized, res.status);
+                          widget.screenCallback(
+                              PageModel(
+                                  page: PageEnum.Withdraw,
+                                  appBar: AppBarEnum.Authorized,
+                                  args: widget.currency),
+                              true,
+                              PageModel(
+                                  page: PageEnum.Error,
+                                  appBar: AppBarEnum.Authorized,
+                                  args: res.status));
                         }
 
                         setState(() {
@@ -209,7 +220,6 @@ class _WithdrawCoinsBodyWidgetState extends State<WithdrawCoinsBodyWidget> {
                         "Send",
                         style: TextStyle(
                           color: Colors.white,
-                          fontFamily: 'Nunito',
                           fontSize: 12.6,
                         ),
                       ),
@@ -218,6 +228,6 @@ class _WithdrawCoinsBodyWidgetState extends State<WithdrawCoinsBodyWidget> {
                 ],
               ),
             ),
-          );
+          ));
   }
 }

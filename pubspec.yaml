@@ -27,6 +27,8 @@ dependencies:
   input_quantity: ^1.1.4
   group_button: ^5.2.2
   signalr_client: ^0.1.6
+  pull_to_refresh: ^2.0.0
+  getwidget: ^3.0.1
 
 dev_dependencies:
   flutter_test:

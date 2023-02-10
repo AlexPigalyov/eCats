@@ -2,6 +2,7 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:ecats/assets/constants.dart';
 import 'package:ecats/models/requests/wallets/income_wallet_response_request_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class IncomeWalletsByUserDataSource extends DataTableSource {
   IncomeWalletsByUserDataSource.empty(this.context) {
@@ -52,7 +53,12 @@ class IncomeWalletsByUserDataSource extends DataTableSource {
         )),
         DataCell(Container(
           alignment: Alignment.center,
-          child: Text(userWallet.address, textAlign: TextAlign.center),
+          child: TextButton(
+              child: Text(userWallet.address, textAlign: TextAlign.center),
+              onPressed: () async {
+                await Clipboard.setData(
+                    ClipboardData(text: userWallet.address));
+              }),
         )),
         DataCell(Container(
           alignment: Alignment.center,

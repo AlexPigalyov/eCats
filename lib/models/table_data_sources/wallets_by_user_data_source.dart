@@ -2,6 +2,7 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:ecats/models/enums/app_bar_enum.dart';
 import 'package:ecats/models/enums/page_enum.dart';
 import 'package:ecats/models/requests/wallets/user_wallet_response_request_model.dart';
+import 'package:ecats/models/shared/page_model.dart';
 import 'package:flutter/material.dart';
 
 class WalletsByUserDataSource extends DataTableSource {
@@ -14,7 +15,7 @@ class WalletsByUserDataSource extends DataTableSource {
       this.hasRowHeightOverrides = false,
       this.hasZebraStripes = false]);
 
-  late void Function(PageEnum, AppBarEnum, dynamic) screenCallback;
+  late void Function(PageModel?, bool, PageModel) screenCallback;
   final BuildContext context;
   late List<UserWalletResponseRequestModel> userWallets;
   bool hasRowTaps = false;
@@ -68,16 +69,32 @@ class WalletsByUserDataSource extends DataTableSource {
                 TextButton(
                   child: Text("Withdraw ${userWallet.currencyAcronim}"),
                   onPressed: () async {
-                    screenCallback(PageEnum.Withdraw, AppBarEnum.Authorized,
-                        userWallet.currencyAcronim);
+                    screenCallback(
+                        PageModel(
+                            page: PageEnum.Wallets,
+                            appBar: AppBarEnum.Authorized,
+                            args: null),
+                        true,
+                        PageModel(
+                            page: PageEnum.Withdraw,
+                            appBar: AppBarEnum.Authorized,
+                            args: userWallet.currencyAcronim));
                   },
                 ),
                 Container(margin: const EdgeInsets.only(top: 5)),
                 TextButton(
                   child: Text("Send ${userWallet.currencyAcronim}"),
                   onPressed: () async {
-                    screenCallback(PageEnum.SendCoins, AppBarEnum.Authorized,
-                        userWallet.currencyAcronim);
+                    screenCallback(
+                        PageModel(
+                            page: PageEnum.Wallets,
+                            appBar: AppBarEnum.Authorized,
+                            args: null),
+                        true,
+                        PageModel(
+                            page: PageEnum.SendCoins,
+                            appBar: AppBarEnum.Authorized,
+                            args: userWallet.currencyAcronim));
                   },
                 )
               ]),

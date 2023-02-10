@@ -2,6 +2,7 @@ import 'package:ecats/assets/constants.dart' as Constants;
 import 'package:ecats/models/enums/app_bar_enum.dart';
 import 'package:ecats/models/enums/page_enum.dart';
 import 'package:ecats/models/requests/register_request_model.dart';
+import 'package:ecats/models/shared/page_model.dart';
 import 'package:ecats/services/http_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,7 +11,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../Extensions/hex_color.dart';
 
 class RegisterBodyWidget extends StatefulWidget {
-  final void Function(PageEnum, AppBarEnum, dynamic) screenCallback;
+  final void Function(PageModel?, bool, PageModel) screenCallback;
 
   const RegisterBodyWidget({super.key, required this.screenCallback});
 
@@ -49,7 +50,13 @@ class _RegisterBodyWidgetState extends State<RegisterBodyWidget> {
         await _storage.write(
             key: 'token', value: await response.stream.bytesToString());
 
-        widget.screenCallback(PageEnum.Profile, AppBarEnum.Authorized, null);
+        widget.screenCallback(
+            null,
+            false,
+            PageModel(
+                page: PageEnum.Profile,
+                appBar: AppBarEnum.Authorized,
+                args: null));
       }
 
       /*
@@ -99,7 +106,6 @@ class _RegisterBodyWidgetState extends State<RegisterBodyWidget> {
                 child: Text(
                   "Register",
                   style: TextStyle(
-                    fontFamily: 'Nunito',
                     fontWeight: FontWeight.bold,
                     fontSize: 23.7,
                     color: HexColor.fromHex('#6C757D'),
@@ -112,7 +118,6 @@ class _RegisterBodyWidgetState extends State<RegisterBodyWidget> {
                 child: Text(
                   "Create a new account.",
                   style: TextStyle(
-                    fontFamily: 'Nunito',
                     fontWeight: FontWeight.bold,
                     fontSize: 15.75,
                     color: HexColor.fromHex('#6C757D'),
@@ -128,9 +133,7 @@ class _RegisterBodyWidgetState extends State<RegisterBodyWidget> {
                 child: Text(
                   "Email",
                   style: TextStyle(
-                      fontFamily: 'Nunito',
-                      fontSize: 12.6,
-                      color: HexColor.fromHex('#5c6369')),
+                      fontSize: 12.6, color: HexColor.fromHex('#5c6369')),
                 ),
               ),
               TextField(
@@ -162,9 +165,7 @@ class _RegisterBodyWidgetState extends State<RegisterBodyWidget> {
                 child: Text(
                   "Password",
                   style: TextStyle(
-                      fontFamily: 'Nunito',
-                      fontSize: 12.6,
-                      color: HexColor.fromHex('#5c6369')),
+                      fontSize: 12.6, color: HexColor.fromHex('#5c6369')),
                 ),
               ),
               TextField(
@@ -198,9 +199,7 @@ class _RegisterBodyWidgetState extends State<RegisterBodyWidget> {
                 child: Text(
                   "Confirm password",
                   style: TextStyle(
-                      fontFamily: 'Nunito',
-                      fontSize: 12.6,
-                      color: HexColor.fromHex('#5c6369')),
+                      fontSize: 12.6, color: HexColor.fromHex('#5c6369')),
                 ),
               ),
               TextField(
@@ -234,9 +233,7 @@ class _RegisterBodyWidgetState extends State<RegisterBodyWidget> {
                 child: Text(
                   "Referal id",
                   style: TextStyle(
-                      fontFamily: 'Nunito',
-                      fontSize: 12.6,
-                      color: HexColor.fromHex('#5c6369')),
+                      fontSize: 12.6, color: HexColor.fromHex('#5c6369')),
                 ),
               ),
               TextField(
@@ -280,7 +277,6 @@ class _RegisterBodyWidgetState extends State<RegisterBodyWidget> {
               "Register",
               style: TextStyle(
                 color: Colors.white,
-                fontFamily: 'Nunito',
                 fontSize: 12.6,
               ),
             ),
@@ -292,7 +288,6 @@ class _RegisterBodyWidgetState extends State<RegisterBodyWidget> {
           child: Text(
             "Use another service to register.",
             style: TextStyle(
-              fontFamily: 'Nunito',
               fontWeight: FontWeight.bold,
               fontSize: 15.75,
               color: HexColor.fromHex('#6C757D'),
@@ -337,7 +332,6 @@ class _RegisterBodyWidgetState extends State<RegisterBodyWidget> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: HexColor.fromHex('#6C757D'),
-                              fontFamily: 'Nunito',
                               fontSize: 12.6,
                             ),
                           )),
@@ -377,7 +371,6 @@ class _RegisterBodyWidgetState extends State<RegisterBodyWidget> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white,
-                            fontFamily: 'Nunito',
                             fontSize: 12.6,
                           ),
                         ),

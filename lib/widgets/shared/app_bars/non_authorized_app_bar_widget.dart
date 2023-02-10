@@ -1,11 +1,12 @@
 import 'package:ecats/models/enums/app_bar_enum.dart';
+import 'package:ecats/models/enums/page_enum.dart';
+import 'package:ecats/models/shared/page_model.dart';
 import 'package:flutter/material.dart';
 
 import '../../../extensions/hex_color.dart';
-import '../../../models/enums/page_enum.dart';
 
 class NonAuthorizedAppBarWidget extends AppBar {
-  final void Function(PageEnum, AppBarEnum, dynamic) screenCallback;
+  final void Function(PageModel?, bool, PageModel) screenCallback;
 
   NonAuthorizedAppBarWidget({super.key, required this.screenCallback})
       : super(
@@ -35,7 +36,6 @@ class NonAuthorizedAppBarWidget extends AppBar {
                     child: Text(
                       "Login",
                       style: TextStyle(
-                        fontFamily: 'Nunito',
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                         color: HexColor.fromHex('#8391a2'),
@@ -43,7 +43,12 @@ class NonAuthorizedAppBarWidget extends AppBar {
                     ),
                     onPressed: () {
                       screenCallback(
-                          PageEnum.Login, AppBarEnum.NonAuthorized, null);
+                          null,
+                          false,
+                          PageModel(
+                              page: PageEnum.Login,
+                              appBar: AppBarEnum.NonAuthorized,
+                              args: null));
                     },
                   )),
               Flexible(
@@ -52,7 +57,6 @@ class NonAuthorizedAppBarWidget extends AppBar {
                     child: Text(
                       "Register",
                       style: TextStyle(
-                        fontFamily: 'Nunito',
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                         color: HexColor.fromHex('#8391a2'),
@@ -60,7 +64,12 @@ class NonAuthorizedAppBarWidget extends AppBar {
                     ),
                     onPressed: () {
                       screenCallback(
-                          PageEnum.Register, AppBarEnum.NonAuthorized, null);
+                          null,
+                          false,
+                          PageModel(
+                              page: PageEnum.Register,
+                              appBar: AppBarEnum.NonAuthorized,
+                              args: null));
                     },
                   ))
             ]);

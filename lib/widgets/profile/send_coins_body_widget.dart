@@ -7,12 +7,13 @@ import 'package:ecats/models/enums/page_enum.dart';
 import 'package:ecats/models/requests/send_coins_request_model.dart';
 import 'package:ecats/models/requests/send_coins_response_request_model.dart';
 import 'package:ecats/models/requests/shared/status_response_request_model.dart';
+import 'package:ecats/models/shared/page_model.dart';
 import 'package:ecats/services/http_service.dart';
 import 'package:ecats/widgets/shared/loading_body_widget.dart';
 import 'package:flutter/material.dart';
 
 class SendCoinsBodyWidget extends StatefulWidget {
-  final void Function(PageEnum, AppBarEnum, dynamic) screenCallback;
+  final void Function(PageModel?, bool, PageModel) screenCallback;
   late String currency;
 
   SendCoinsBodyWidget({super.key, required this.screenCallback});
@@ -65,9 +66,7 @@ class _SendCoinsBodyWidgetState extends State<SendCoinsBodyWidget> {
                     child: Text(
                       "Currency ${_model.currency}",
                       style: TextStyle(
-                          fontFamily: 'Nunito',
-                          fontSize: 15,
-                          color: HexColor.fromHex('#5c6369')),
+                          fontSize: 15, color: HexColor.fromHex('#5c6369')),
                     ),
                   ),
                   Container(
@@ -76,9 +75,7 @@ class _SendCoinsBodyWidgetState extends State<SendCoinsBodyWidget> {
                     child: Text(
                       "Balance ${_model.balance}",
                       style: TextStyle(
-                          fontFamily: 'Nunito',
-                          fontSize: 15,
-                          color: HexColor.fromHex('#5c6369')),
+                          fontSize: 15, color: HexColor.fromHex('#5c6369')),
                     ),
                   ),
                   Container(
@@ -87,9 +84,7 @@ class _SendCoinsBodyWidgetState extends State<SendCoinsBodyWidget> {
                     child: Text(
                       "User Name, User ID, Email, Phone, Wallet",
                       style: TextStyle(
-                          fontFamily: 'Nunito',
-                          fontSize: 12.6,
-                          color: HexColor.fromHex('#5c6369')),
+                          fontSize: 12.6, color: HexColor.fromHex('#5c6369')),
                     ),
                   ),
                   TextField(
@@ -120,9 +115,7 @@ class _SendCoinsBodyWidgetState extends State<SendCoinsBodyWidget> {
                     child: Text(
                       "Amount coins",
                       style: TextStyle(
-                          fontFamily: 'Nunito',
-                          fontSize: 12.6,
-                          color: HexColor.fromHex('#5c6369')),
+                          fontSize: 12.6, color: HexColor.fromHex('#5c6369')),
                     ),
                   ),
                   TextField(
@@ -153,9 +146,7 @@ class _SendCoinsBodyWidgetState extends State<SendCoinsBodyWidget> {
                     child: Text(
                       "Comment",
                       style: TextStyle(
-                          fontFamily: 'Nunito',
-                          fontSize: 12.6,
-                          color: HexColor.fromHex('#5c6369')),
+                          fontSize: 12.6, color: HexColor.fromHex('#5c6369')),
                     ),
                   ),
                   TextField(
@@ -187,9 +178,7 @@ class _SendCoinsBodyWidgetState extends State<SendCoinsBodyWidget> {
                     child: Text(
                       "Commission: ${_model.commision}",
                       style: TextStyle(
-                          fontFamily: 'Nunito',
-                          fontSize: 15,
-                          color: HexColor.fromHex('#5c6369')),
+                          fontSize: 15, color: HexColor.fromHex('#5c6369')),
                     ),
                   ),
                   Container(
@@ -219,10 +208,26 @@ class _SendCoinsBodyWidgetState extends State<SendCoinsBodyWidget> {
 
                         if (response.statusCode == 200) {
                           widget.screenCallback(
-                              PageEnum.Success, AppBarEnum.Authorized, null);
+                              PageModel(
+                                  page: PageEnum.Send,
+                                  appBar: AppBarEnum.Authorized,
+                                  args: widget.currency),
+                              true,
+                              PageModel(
+                                  page: PageEnum.Success,
+                                  appBar: AppBarEnum.Authorized,
+                                  args: null));
                         } else {
-                          widget.screenCallback(PageEnum.Error,
-                              AppBarEnum.Authorized, res.status);
+                          widget.screenCallback(
+                              PageModel(
+                                  page: PageEnum.Send,
+                                  appBar: AppBarEnum.Authorized,
+                                  args: widget.currency),
+                              true,
+                              PageModel(
+                                  page: PageEnum.Error,
+                                  appBar: AppBarEnum.Authorized,
+                                  args: res.status));
                         }
 
                         setState(() {
@@ -233,7 +238,6 @@ class _SendCoinsBodyWidgetState extends State<SendCoinsBodyWidget> {
                         "Send",
                         style: TextStyle(
                           color: Colors.white,
-                          fontFamily: 'Nunito',
                           fontSize: 12.6,
                         ),
                       ),

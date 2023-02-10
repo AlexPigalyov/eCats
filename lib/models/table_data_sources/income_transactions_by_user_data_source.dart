@@ -52,17 +52,17 @@ class IncomeTransactionsByUserDataSouce extends DataTableSource {
               textAlign: TextAlign.left),
         )),
         DataCell(Container(
-          alignment: Alignment.centerRight,
+          alignment: Alignment.center,
           child: Text(incomeTransaction.amount.toString(),
               textAlign: TextAlign.center),
         )),
         DataCell(Container(
-          alignment: Alignment.centerRight,
+          alignment: Alignment.center,
           child: Text(incomeTransaction.transactionFee.toString(),
               textAlign: TextAlign.center),
         )),
         DataCell(Container(
-          alignment: Alignment.centerRight,
+          alignment: Alignment.center,
           child:
               Text(incomeTransaction.fromAdress, textAlign: TextAlign.center),
         )),

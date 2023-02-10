@@ -4,12 +4,13 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:ecats/extensions/hex_color.dart';
 import 'package:ecats/models/enums/app_bar_enum.dart';
 import 'package:ecats/models/enums/page_enum.dart';
+import 'package:ecats/models/shared/page_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthorizedAppBarWidget extends StatefulWidget
     implements PreferredSizeWidget {
-  final void Function(PageEnum, AppBarEnum, dynamic) screenCallback;
+  final void Function(PageModel?, bool, PageModel) screenCallback;
 
   const AuthorizedAppBarWidget({super.key, required this.screenCallback})
       : preferredSize = const Size.fromHeight(kToolbarHeight);
@@ -73,39 +74,84 @@ class _AuthorizedAppBarWidgetState extends State<AuthorizedAppBarWidget> {
                 switch (newValue) {
                   case 'Markets':
                     widget.screenCallback(
-                        PageEnum.Pairs, AppBarEnum.Authorized, null);
+                        null,
+                        false,
+                        PageModel(
+                            page: PageEnum.Pairs,
+                            appBar: AppBarEnum.Authorized,
+                            args: null));
                     break;
                   case 'Open Orders':
                     widget.screenCallback(
-                        PageEnum.OpenOrders, AppBarEnum.Authorized, null);
+                        null,
+                        false,
+                        PageModel(
+                            page: PageEnum.OpenOrders,
+                            appBar: AppBarEnum.Authorized,
+                            args: null));
                     break;
                   case 'Closed Orders':
                     widget.screenCallback(
-                        PageEnum.ClosedOrders, AppBarEnum.Authorized, null);
+                        null,
+                        false,
+                        PageModel(
+                            page: PageEnum.ClosedOrders,
+                            appBar: AppBarEnum.Authorized,
+                            args: null));
                     break;
                   case 'Wallets':
                     widget.screenCallback(
-                        PageEnum.Wallets, AppBarEnum.Authorized, null);
-                    break;
-                  case 'Income Transactions':
-                    widget.screenCallback(PageEnum.IncomeTransactions,
-                        AppBarEnum.Authorized, null);
+                        null,
+                        false,
+                        PageModel(
+                            page: PageEnum.Wallets,
+                            appBar: AppBarEnum.Authorized,
+                            args: null));
                     break;
                   case 'Income Wallets':
                     widget.screenCallback(
-                        PageEnum.IncomeWallets, AppBarEnum.Authorized, null);
+                        null,
+                        false,
+                        PageModel(
+                            page: PageEnum.IncomeWallets,
+                            appBar: AppBarEnum.Authorized,
+                            args: null));
+                    break;
+                  case 'Income Transactions':
+                    widget.screenCallback(
+                        null,
+                        false,
+                        PageModel(
+                            page: PageEnum.IncomeTransactions,
+                            appBar: AppBarEnum.Authorized,
+                            args: null));
                     break;
                   case 'Withdraws':
                     widget.screenCallback(
-                        PageEnum.Withdraw, AppBarEnum.Authorized, null);
+                        null,
+                        false,
+                        PageModel(
+                            page: PageEnum.Wallets,
+                            appBar: AppBarEnum.Authorized,
+                            args: null));
                     break;
                   case 'Referals':
                     widget.screenCallback(
-                        PageEnum.Refferals, AppBarEnum.Authorized, null);
+                        null,
+                        false,
+                        PageModel(
+                            page: PageEnum.Refferals,
+                            appBar: AppBarEnum.Authorized,
+                            args: null));
                     break;
                   case 'Events':
                     widget.screenCallback(
-                        PageEnum.Events, AppBarEnum.Authorized, null);
+                        null,
+                        false,
+                        PageModel(
+                            page: PageEnum.Events,
+                            appBar: AppBarEnum.Authorized,
+                            args: null));
                     break;
                 }
               }
@@ -156,11 +202,21 @@ class _AuthorizedAppBarWidgetState extends State<AuthorizedAppBarWidget> {
                     if (newValue != null) {
                       if (newValue == 'Logout') {
                         _storage.delete(key: 'token').then((x) =>
-                            widget.screenCallback(PageEnum.Login,
-                                AppBarEnum.NonAuthorized, null));
+                            widget.screenCallback(
+                                null,
+                                false,
+                                PageModel(
+                                    page: PageEnum.Login,
+                                    appBar: AppBarEnum.NonAuthorized,
+                                    args: null)));
                       } else if (newValue == 'Profile') {
                         widget.screenCallback(
-                            PageEnum.Profile, AppBarEnum.Authorized, null);
+                            null,
+                            false,
+                            PageModel(
+                                page: PageEnum.Profile,
+                                appBar: AppBarEnum.Authorized,
+                                args: null));
                       }
                     }
                   },

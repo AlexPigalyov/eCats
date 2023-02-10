@@ -52,17 +52,15 @@ class ClosedOrdersByUserDataSource extends DataTableSource {
         DataCell(Container(
           alignment: Alignment.center,
           child: Text(closedOrder.closedPrice.toString(),
-              textAlign: TextAlign.center),
+              textAlign: TextAlign.left),
         )),
         DataCell(Container(
           alignment: Alignment.center,
-          child:
-              Text(closedOrder.amount.toString(), textAlign: TextAlign.center),
+          child: Text(closedOrder.amount.toString(), textAlign: TextAlign.left),
         )),
         DataCell(Container(
           alignment: Alignment.center,
-          child:
-              Text(closedOrder.total.toString(), textAlign: TextAlign.center),
+          child: Text(closedOrder.total.toString(), textAlign: TextAlign.left),
         )),
         DataCell(Container(
           alignment: Alignment.center,
