@@ -82,8 +82,7 @@ class _MyAppState extends State<MyApp> {
     };
 
     appBars = <AppBarEnum, PreferredSizeWidget>{
-      AppBarEnum.Authorized:
-          AuthorizedAppBarWidget(screenCallback: changeScreen),
+      AppBarEnum.Authorized: AuthorizedAppBarWidget(screenCallback: changeScreen)
     };
 
     previousPages = <PageModel>[];
@@ -101,7 +100,7 @@ class _MyAppState extends State<MyApp> {
     //Set current AppBar
     currentAppBarWidget = (_isAuthorized
         ? appBars[AppBarEnum.Authorized]
-        : appBars[AppBarEnum.NonAuthorized])!;
+        : AppBar())!;
 
     //Set current Body
     currentBodyWidget =
