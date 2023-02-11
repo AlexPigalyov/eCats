@@ -1,7 +1,6 @@
 enum PageEnum {
   Loading,
-  Login,
-  Register,
+  Auth,
   Profile,
   OpenOrders,
   ClosedOrders,

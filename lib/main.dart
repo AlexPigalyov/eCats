@@ -3,8 +3,7 @@ import 'dart:io';
 import 'package:ecats/models/enums/app_bar_enum.dart';
 import 'package:ecats/models/enums/page_enum.dart';
 import 'package:ecats/models/shared/page_model.dart';
-import 'package:ecats/widgets/auth/login_body_widget.dart';
-import 'package:ecats/widgets/auth/register_body_widget.dart';
+import 'package:ecats/widgets/login_body_widget.dart';
 import 'package:ecats/widgets/profile/closed_orders_body_widget.dart';
 import 'package:ecats/widgets/profile/events_body_widget.dart';
 import 'package:ecats/widgets/profile/income_transactions_body_widget.dart';
@@ -17,7 +16,6 @@ import 'package:ecats/widgets/profile/user_refferals_body_widget.dart';
 import 'package:ecats/widgets/profile/wallets_body_widget.dart';
 import 'package:ecats/widgets/profile/withdraw_coins_body_widget.dart';
 import 'package:ecats/widgets/shared/app_bars/authorized_app_bar_widget.dart';
-import 'package:ecats/widgets/shared/app_bars/non_authorized_app_bar_widget.dart';
 import 'package:ecats/widgets/shared/error_body_widget.dart';
 import 'package:ecats/widgets/shared/loading_body_widget.dart';
 import 'package:ecats/widgets/shared/sidebar.dart';
@@ -27,7 +25,6 @@ import 'package:ecats/widgets/trade/pairs_body_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:getwidget/components/drawer/gf_drawer.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 void main() {
@@ -45,7 +42,7 @@ class _MyAppState extends State<MyApp> {
   final _storage = const FlutterSecureStorage();
 
   late Widget currentBodyWidget;
-  late PreferredSizeWidget currentAppBarWidget;
+  late PreferredSizeWidget? currentAppBarWidget;
   late List<PageModel>? previousPages;
   bool _isLoading = true;
   bool _isAuthorized = false;
@@ -65,8 +62,7 @@ class _MyAppState extends State<MyApp> {
     //Initialization AppBars and Bodies
     bodies = <PageEnum, Widget>{
       PageEnum.Loading: LoadingBodyWidget(),
-      PageEnum.Login: LoginBodyWidget(screenCallback: changeScreen),
-      PageEnum.Register: RegisterBodyWidget(screenCallback: changeScreen),
+      PageEnum.Auth: AuthBodyWidget(screenCallback: changeScreen),
       PageEnum.Profile: ProfileBodyWidget(screenCallback: changeScreen),
       PageEnum.OpenOrders: const OpenOrdersBodyWidget(),
       PageEnum.ClosedOrders: const ClosedOrdersBodyWidget(),
@@ -88,8 +84,6 @@ class _MyAppState extends State<MyApp> {
     appBars = <AppBarEnum, PreferredSizeWidget>{
       AppBarEnum.Authorized:
           AuthorizedAppBarWidget(screenCallback: changeScreen),
-      AppBarEnum.NonAuthorized:
-          NonAuthorizedAppBarWidget(screenCallback: changeScreen)
     };
 
     previousPages = <PageModel>[];
@@ -111,7 +105,7 @@ class _MyAppState extends State<MyApp> {
 
     //Set current Body
     currentBodyWidget =
-        (_isAuthorized ? bodies[PageEnum.Profile] : bodies[PageEnum.Login])!;
+        (_isAuthorized ? bodies[PageEnum.Profile] : bodies[PageEnum.Auth])!;
   }
 
   changeScreen(
@@ -143,13 +137,15 @@ class _MyAppState extends State<MyApp> {
             break;
         }
         currentBodyWidget = bodies[toPage.page]!;
-        currentAppBarWidget = appBars[toPage.appBar]!;
+        if(toPage.appBar != AppBarEnum.NonAuthorized) {
+          currentAppBarWidget = appBars[toPage.appBar]!;
+        }
+        else { currentAppBarWidget = null; }
       });
 
   Future<bool> _onBackPressed() {
     if (previousPages!.isNotEmpty) {
-      if (currentBodyWidget == bodies[PageEnum.Register] ||
-          currentBodyWidget == bodies[PageEnum.Login]) {
+      if (currentBodyWidget == bodies[PageEnum.Auth]) {
         Navigator.pop(context, false);
         return Future.value(true);
       } else {
@@ -191,12 +187,14 @@ class _MyAppState extends State<MyApp> {
               child: _isLoading
                   ? Scaffold(body: bodies[PageEnum.Loading])
                   : Scaffold(
-                      appBar: currentAppBarWidget,
+                      appBar: ((currentBodyWidget == bodies[PageEnum.Auth] || currentAppBarWidget == null)
+                          ? null
+                          : appBars[AppBarEnum.Authorized]),
                       body: currentBodyWidget,
-                      drawer: currentAppBarWidget ==
-                              appBars[AppBarEnum.Authorized]
-                          ? SideBar(screenCallback: changeScreen)
-                          : null,
+                      drawer:
+                          currentAppBarWidget == appBars[AppBarEnum.Authorized]
+                              ? SideBar(screenCallback: changeScreen)
+                              : null,
                     )),
         ));
   }

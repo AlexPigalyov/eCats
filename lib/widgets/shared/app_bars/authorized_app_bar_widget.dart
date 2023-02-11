@@ -1,12 +1,8 @@
 import 'dart:core';
 
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:ecats/extensions/hex_color.dart';
-import 'package:ecats/models/enums/app_bar_enum.dart';
-import 'package:ecats/models/enums/page_enum.dart';
 import 'package:ecats/models/shared/page_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthorizedAppBarWidget extends StatefulWidget
     implements PreferredSizeWidget {
@@ -23,7 +19,6 @@ class AuthorizedAppBarWidget extends StatefulWidget
 }
 
 class _AuthorizedAppBarWidgetState extends State<AuthorizedAppBarWidget> {
-  final _storage = const FlutterSecureStorage();
 
   @override
   AppBar build(BuildContext context) {
@@ -40,12 +35,12 @@ class _AuthorizedAppBarWidgetState extends State<AuthorizedAppBarWidget> {
             flex: 1,
             fit: FlexFit.loose,
             child: Container(
-              margin: const EdgeInsets.only(right: 10),
+                margin: const EdgeInsets.only(right: 10),
                 child: IconButton(
-              icon: Image.asset('icons/flags/png/us.png',
-                  package: 'country_icons'),
-              onPressed: () {},
-            )))
+                  icon: Image.asset('icons/flags/png/us.png',
+                      package: 'country_icons'),
+                  onPressed: () {},
+                )))
       ],
     );
   }

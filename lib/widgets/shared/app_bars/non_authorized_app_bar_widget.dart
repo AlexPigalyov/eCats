@@ -46,7 +46,7 @@ class NonAuthorizedAppBarWidget extends AppBar {
                           null,
                           false,
                           PageModel(
-                              page: PageEnum.Login,
+                              page: PageEnum.Auth,
                               appBar: AppBarEnum.NonAuthorized,
                               args: null));
                     },
@@ -67,7 +67,7 @@ class NonAuthorizedAppBarWidget extends AppBar {
                           null,
                           false,
                           PageModel(
-                              page: PageEnum.Register,
+                              page: PageEnum.Auth,
                               appBar: AppBarEnum.NonAuthorized,
                               args: null));
                     },
