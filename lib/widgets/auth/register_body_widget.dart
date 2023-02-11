@@ -7,6 +7,9 @@ import 'package:ecats/services/http_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:getwidget/colors/gf_color.dart';
+import 'package:getwidget/components/toast/gf_toast.dart';
+import 'package:getwidget/position/gf_toast_position.dart';
 
 import '../../Extensions/hex_color.dart';
 
@@ -45,10 +48,10 @@ class _RegisterBodyWidgetState extends State<RegisterBodyWidget> {
           Constants.SERVER_URL, Constants.ServerApiEndpoints.REGISTER);
 
       var response = await _httpService.post(uri, model);
-
+      var result = await response.stream.bytesToString();
       if (response.statusCode == 200) {
         await _storage.write(
-            key: 'token', value: await response.stream.bytesToString());
+            key: 'token', value: result);
 
         widget.screenCallback(
             null,
@@ -57,6 +60,19 @@ class _RegisterBodyWidgetState extends State<RegisterBodyWidget> {
                 page: PageEnum.Profile,
                 appBar: AppBarEnum.Authorized,
                 args: null));
+      }
+      else {
+        GFToast.showToast(
+            result,
+            context,
+            toastPosition: GFToastPosition.BOTTOM,
+            textStyle: TextStyle(fontSize: 16, fontFamily: 'Nunito', fontWeight: FontWeight.bold, color: GFColors.DARK),
+            backgroundColor: GFColors.LIGHT,
+            toastBorderRadius: 5.0,
+            trailing: const Icon(
+              Icons.error,
+              color: GFColors.DANGER,
+            ));
       }
 
       /*

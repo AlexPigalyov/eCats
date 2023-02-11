@@ -20,12 +20,14 @@ import 'package:ecats/widgets/shared/app_bars/authorized_app_bar_widget.dart';
 import 'package:ecats/widgets/shared/app_bars/non_authorized_app_bar_widget.dart';
 import 'package:ecats/widgets/shared/error_body_widget.dart';
 import 'package:ecats/widgets/shared/loading_body_widget.dart';
+import 'package:ecats/widgets/shared/sidebar.dart';
 import 'package:ecats/widgets/shared/success_body_widget.dart';
 import 'package:ecats/widgets/trade/crypto_trade_body_widget.dart';
 import 'package:ecats/widgets/trade/pairs_body_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:getwidget/components/drawer/gf_drawer.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 void main() {
@@ -157,7 +159,7 @@ class _MyAppState extends State<MyApp> {
       }
     }
 
-    if(Platform.isIOS) {
+    if (Platform.isIOS) {
       exit(0);
     }
 
@@ -189,7 +191,13 @@ class _MyAppState extends State<MyApp> {
               child: _isLoading
                   ? Scaffold(body: bodies[PageEnum.Loading])
                   : Scaffold(
-                      appBar: currentAppBarWidget, body: currentBodyWidget)),
+                      appBar: currentAppBarWidget,
+                      body: currentBodyWidget,
+                      drawer: currentAppBarWidget ==
+                              appBars[AppBarEnum.Authorized]
+                          ? SideBar(screenCallback: changeScreen)
+                          : null,
+                    )),
         ));
   }
 }
