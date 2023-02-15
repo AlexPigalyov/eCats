@@ -34,6 +34,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
   late final TextEditingController linkedinTextEditingController;
   late final TextEditingController skypeTextEditingController;
   late final TextEditingController githubTextEditingController;
+  late final TextEditingController refferalIdTextEditingController;
 
   @override
   void initState() {
@@ -59,6 +60,8 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
             TextEditingController(text: model.userInfo.skypeLink);
         githubTextEditingController =
             TextEditingController(text: model.userInfo.githubLink);
+        refferalIdTextEditingController =
+            TextEditingController(text: model.userInfo.refferalId);
       });
     });
   }
@@ -77,9 +80,9 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
     model.userInfo.linkedinLink = linkedinTextEditingController.text;
     model.userInfo.skypeLink = skypeTextEditingController.text;
     model.userInfo.githubLink = githubTextEditingController.text;
+    model.userInfo.refferalId = refferalIdTextEditingController.text;
     model.userInfo.profilePhotoPath = '';
     model.userInfo.location = '';
-    model.userInfo.refferalId = '';
     model.phoneNumber = '';
 
     var response = await _httpService.post(uri, model);
@@ -101,7 +104,7 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
     setState(() => isLoading = false);
   }
 
-  
+
   @override
   Widget build(BuildContext context) {
     return isLoading
@@ -477,6 +480,54 @@ class _ProfileBodyWidgetState extends State<ProfileBodyWidget> {
                                             borderSide: BorderSide(
                                                 color:
                                                     HexColor.fromHex('#dee2e6'),
+                                                width: 1.0),
+                                          ),
+                                        ),
+                                        cursorColor: Colors.black,
+                                        cursorWidth: 0.5,
+                                      ),
+                                      Container(
+                                          margin: const EdgeInsets.only(
+                                              top: 20, bottom: 5),
+                                          alignment:
+                                          FractionalOffset.centerLeft,
+                                          child: Text(
+                                            "Refferal id",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 12.6,
+                                              color:
+                                              HexColor.fromHex('#6C757D'),
+                                            ),
+                                          )),
+                                      TextFormField(
+                                        controller:
+                                        refferalIdTextEditingController,
+                                        style: TextStyle(
+                                            fontSize: 12.6,
+                                            color: HexColor.fromHex('#5c6369'),
+                                            decorationThickness: 0),
+                                        decoration: InputDecoration(
+                                          hintText: 'Enter Refferal id',
+                                          hintStyle: const TextStyle(
+                                              fontSize: 12.6,
+                                              color: Colors.grey,
+                                              decorationThickness: 0),
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                          isDense: true,
+                                          contentPadding:
+                                          const EdgeInsets.all(9),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color:
+                                                HexColor.fromHex('#bdc0c4'),
+                                                width: 1.0),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color:
+                                                HexColor.fromHex('#dee2e6'),
                                                 width: 1.0),
                                           ),
                                         ),

@@ -73,11 +73,12 @@ class UserInfoTableModel {
         profilePhotoPath = json['profilePhotoPath'],
         fullName = json['fullName'],
         aboutMe = json['aboutMe'],
-        refferalId = json['refferalId'],
+        refferalId = json['reffererId'],
         facebookLink = json['facebookLink'],
         instagramLink = json['instagramLink'],
         skypeLink = json['skypeLink'],
         twitterLink = json['twitterLink'],
+        linkedinLink = json['linkedinLink'],
         githubLink = json['githubLink'],
         location = json['location'],
         registrationDate = DateTime.parse(json['registrationDate']);
@@ -87,14 +88,15 @@ class UserInfoTableModel {
         'profilePhotoPath': profilePhotoPath,
         'fullName': fullName,
         'aboutMe': aboutMe,
-        'refferalId': refferalId,
+        'reffererId': refferalId,
         'facebookLink': facebookLink,
         'instagramLink': instagramLink,
         'skypeLink': skypeLink,
         'twitterLink': twitterLink,
+        'linkedinLink': linkedinLink,
         'githubLink': githubLink,
         'location': location,
-        'registrationDate': registrationDate.toString()
+        'registrationDate': registrationDate.toString().replaceAll(" ", "T")
       };
 
   UserInfoTableModel(
@@ -153,8 +155,8 @@ class EventTableModel {
         'resultBalance': resultBalance,
         'platformCommission': platformCommission,
         'comment': comment,
-        'whenDate': whenDate,
-        'currencyAccronim': currencyAccronim
+        'whenDate': whenDate.toString().replaceAll(" ", "T"),
+        'currencyAcronim': currencyAccronim ?? ''
       };
 
   EventTableModel(

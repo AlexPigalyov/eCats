@@ -39,7 +39,6 @@ class _AuthBodyWidgetState extends State<AuthBodyWidget> {
   String userNameRegister = '';
   String passwordRegister = '';
   String passwordConfirmRegister = '';
-  String referalIdRegister = '';
 
   bool _isLoginUsernameFieldActive = false;
   bool _isLoginPasswordFieldActive = false;
@@ -47,7 +46,6 @@ class _AuthBodyWidgetState extends State<AuthBodyWidget> {
   bool _isRegisterUsernameFieldActive = false;
   bool _isRegisterPasswordFieldActive = false;
   bool _isRegisterPasswordConfirmFieldActive = false;
-  bool _isRegisterReferalIdFieldActive = false;
 
   bool isLogin = true;
   Color activeTabColor = Colors.blue;
@@ -115,9 +113,7 @@ class _AuthBodyWidgetState extends State<AuthBodyWidget> {
       model = RegisterRequestModel(
           email: userNameRegister,
           password: passwordRegister,
-          confirmPassword: passwordConfirmRegister,
-          refId: int.tryParse(
-              referalIdRegister.isNotEmpty ? referalIdRegister : '0'));
+          confirmPassword: passwordConfirmRegister);
     }
 
     var uri = Uri.https(
@@ -368,27 +364,6 @@ class _AuthBodyWidgetState extends State<AuthBodyWidget> {
                                       _isRegisterPasswordConfirmFieldActive =
                                           hasFocus ??
                                               _isRegisterPasswordConfirmFieldActive);
-                              },
-                            ),
-                        ),
-                        Txt(
-                          '',
-                          style: inputFieldStyle(
-                              _isRegisterReferalIdFieldActive,
-                              inputFieldActiveStyle)
-                            ..editable(
-                              keyboardType: TextInputType.number,
-                              placeholder: 'Referal Id',
-                              onChange: (String? value) {
-                                setState(() => referalIdRegister =
-                                    value != null ? value! : '');
-                              },
-                              onFocusChange: (hasFocus) {
-                                if (hasFocus != _isRegisterReferalIdFieldActive)
-                                  setState(() =>
-                                      _isRegisterReferalIdFieldActive =
-                                          hasFocus ??
-                                              _isRegisterReferalIdFieldActive);
                               },
                             ),
                         ),
