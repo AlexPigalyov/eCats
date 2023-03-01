@@ -163,7 +163,7 @@ class _AuthBodyWidgetState extends State<AuthBodyWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.only(top: 25),
+        margin: const EdgeInsets.only(top: 75),
         child: DefaultTabController(
             length: 2,
             child: Column(
